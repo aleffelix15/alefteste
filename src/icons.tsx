@@ -194,6 +194,21 @@ export function GitHubIcon({ size = 16, className }: IconProps) {
   );
 }
 
+export function LinkedInIcon({ size = 16, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+    </svg>
+  );
+}
+
 export function VercelIcon({ size = 16, className }: IconProps) {
   return (
     <svg
@@ -309,3 +324,112 @@ export function getTechIcon(name: string, size = 16) {
       return null;
   }
 }
+
+// ============================================================================
+// DOODLES & BRUTALIST COLLAGE SVGS
+// ============================================================================
+
+interface DoodleProps {
+  className?: string;
+  style?: React.CSSProperties;
+}
+
+export function DoodleCrown({ className, style }: DoodleProps) {
+  return (
+    <svg
+      viewBox="0 0 100 70"
+      fill="none"
+      stroke="#0d0d0d"
+      strokeWidth="6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      {/* 3-peak royal crown doodle */}
+      <path d="M12 60 L18 24 L42 42 L52 14 L62 42 L84 24 L90 60 Z" fill="#ffffff" />
+      <path d="M12 60 L18 24 L42 42 L52 14 L62 42 L84 24 L90 60 Z" />
+      <line x1="8" y1="60" x2="94" y2="60" strokeWidth="7" />
+      {/* Circles on peaks */}
+      <circle cx="18" cy="22" r="4" fill="#0d0d0d" />
+      <circle cx="52" cy="12" r="5" fill="#0d0d0d" />
+      <circle cx="84" cy="22" r="4" fill="#0d0d0d" />
+    </svg>
+  );
+}
+
+export function DoodleLightning({ className, style }: DoodleProps) {
+  return (
+    <svg
+      viewBox="0 0 40 60"
+      fill="#d9ff1f"
+      stroke="#0d0d0d"
+      strokeWidth="3.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <polygon points="22 2 4 32 18 32 12 58 36 24 22 24 28 2" />
+    </svg>
+  );
+}
+
+export function DoodleArrow({ className, style }: DoodleProps) {
+  return (
+    <svg
+      viewBox="0 0 80 40"
+      fill="none"
+      stroke="#0d0d0d"
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <path d="M10 28 C 30 35, 55 25, 72 12" />
+      <path d="M60 8 L 74 12 L 68 24" />
+    </svg>
+  );
+}
+
+export function DoodleUnderline({ className, style }: DoodleProps) {
+  return (
+    <svg
+      viewBox="0 0 160 18"
+      fill="none"
+      stroke="#0d0d0d"
+      strokeWidth="3"
+      strokeLinecap="round"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <path d="M3 8 C 45 4, 115 12, 157 7" />
+      <path d="M10 14 C 55 11, 105 16, 145 13" />
+    </svg>
+  );
+}
+
+export function BrutalistLogo() {
+  return (
+    <svg
+      width="34"
+      height="34"
+      viewBox="0 0 34 34"
+      fill="none"
+      aria-hidden="true"
+      style={{ display: "block" }}
+    >
+      <rect width="34" height="34" fill="#0d0d0d" />
+      <path
+        d="M17 5 L7 28 H13.5 L15.5 22.5 H21.5 L23.5 28 H29.5 L19.5 5 H17 Z M17.2 14.5 L19.8 19 H14.6 L17.2 14.5 Z"
+        fill="#d9ff1f"
+      />
+    </svg>
+  );
+}
+

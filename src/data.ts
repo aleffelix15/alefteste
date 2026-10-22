@@ -2,6 +2,7 @@ export const links = {
   github: "https://github.com/aleffelix15",
   linkedin: "https://www.linkedin.com/in/alef-felix-teixeira-a5030b236/",
   email: "", // preencha para exibir o cartão de e-mail na seção de contato
+  disponivel: true, // exibe a etiqueta "Disponível para projetos" no header
 };
 
 export type Project = {
@@ -13,7 +14,7 @@ export type Project = {
   stack: string[];
   live: string;
   repo: string;
-  image?: string;
+  image: string;
   proposal: string;
   does: string[];
   limits: string[];
@@ -28,10 +29,10 @@ export const projects: Project[] = [
     summary:
       "Loja de moda streetwear com identidade própria, catálogo, favoritos, sacola e cálculo de frete.",
     stack: [
-      "React 19",
+      "React",
       "TypeScript",
       "TanStack Start",
-      "Tailwind CSS 4",
+      "Tailwind CSS",
       "Framer Motion",
       "Three.js",
       "Zod",
@@ -52,36 +53,43 @@ export const projects: Project[] = [
     ],
     limits: [
       "Os produtos são dados de exemplo.",
-      "Pedidos reais, webhook e estoque não foram validados em produção; a auditoria do próprio repositório os lista como pendentes.",
+      "Pedidos reais, liquidação no webhook e controle de estoque em produção não foram validados (conforme documentado na auditoria do repositório).",
     ],
   },
   {
     number: "02",
     name: "DECODE",
     status: "Publicado",
-    kind: "Experiência interativa de conscientização (Agosto Lilás)",
+    kind: "Experiência interativa (Agosto Lilás)",
     summary:
       "Projeto interativo sobre violência contra a mulher, com narrativa em capítulos, jogos e telas de ajuda.",
-    stack: ["React 18", "JavaScript", "Vite 5", "Tailwind CSS 3", "Lucide React"],
+    stack: [
+      "React",
+      "JavaScript",
+      "Vite",
+      "Tailwind CSS",
+      "Lucide React",
+    ],
     live: "https://decode-ochre.vercel.app/",
     repo: "https://github.com/aleffelix15/decode",
     image: "/screens/decode.webp",
     proposal:
-      "Experiência interativa para reflexão sobre relacionamentos abusivos, sinais de alerta e canais de ajuda.",
+      "Experiência web imersiva e interativa voltada à conscientização sobre sinais e padrões de violência contra a mulher.",
     does: [
-      "Narrativa interativa dividida em capítulos, com escolhas do usuário.",
-      "Jogos de triagem e de reconhecimento de padrões de comportamento abusivo.",
-      "Cartas de insights desbloqueadas ao longo da história.",
-      "Telas de dados e de canais de ajuda.",
+      "Narrativa dividida em capítulos com tomada de decisões ramificadas.",
+      "Módulo de triagem e reconhecimento de padrões de comportamento tóxico.",
+      "Cartas de insights reflexivos e canais oficiais de apoio.",
+      "Execução 100% no navegador (SPA), sem requisições a servidores externos.",
     ],
     limits: [
-      "Não tem backend nem integrações externas: roda inteiramente no navegador.",
+      "Não possui autenticação, banco de dados ou backend próprio.",
+      "Todo o progresso é mantido estritamente em memória/sessão local do usuário.",
     ],
   },
 ];
 
 export const techGroups = {
-  projects: [
+  proven: [
     "React",
     "TypeScript",
     "JavaScript",
@@ -103,52 +111,64 @@ export const processSteps = [
   {
     number: "01",
     title: "Entender",
-    description: "Analiso as necessidades e o objetivo do projeto.",
+    description: "Analiso o problema, o público e os requisitos essenciais.",
   },
   {
     number: "02",
     title: "Planejar",
-    description: "Defino a melhor solução, estrutura e tecnologias.",
+    description: "Defino a arquitetura, o fluxo de navegação e as escolhas técnicas.",
   },
   {
     number: "03",
     title: "Desenvolver",
-    description: "Transformo o planejamento em código com qualidade.",
+    description: "Codifico com rigor, tipagem sólida e padrões acessíveis.",
   },
   {
     number: "04",
     title: "Testar",
-    description: "Verifico o funcionamento, performance e ajustes.",
+    description: "Valido em múltiplos dispositivos, performance e estabilidade.",
   },
   {
     number: "05",
     title: "Evoluir",
-    description: "Melhorias contínuas sempre que possível.",
+    description: "Refatoro e implemento melhorias contínuas no ciclo de vida.",
   },
 ];
 
 export const heroData = {
-  label: "00 / ESTUDANTE DE ENGENHARIA DE SOFTWARE",
-  firstName: "ÁLEF FELIX",
-  lastName: "TEIXEIRA",
-  description:
-    "Estudante de Engenharia de Software. Desenvolvo aplicações web com foco em interface, performance e código organizado.",
+  counter: "01 / 05",
+  name: "ÁLEF FELIX TEIXEIRA",
+  highlight: "Estudante de Engenharia de Software • Desenvolvedor web",
+  bio: "Desenvolvo aplicações web e soluções digitais com foco em performance, boas práticas e experiências que fazem sentido.",
+  codeSnippet: "const dev = {\n  estudante: true,\n  foco: ['web', 'performance',\n         'boas-praticas']\n}",
+  areasTitle: "ÁREAS DE ATUAÇÃO",
   areas: ["Web", "Aplicações", "Interfaces"],
-  ctaProjects: "Ver projetos ↓",
-  ctaContact: "Entrar em contato",
+  ctaProjects: "Ver projetos →",
+  ctaContact: "Entrar em contato →",
+  handwrittenHero: "IDEIAS\nCÓDIGO /\nRESULTADOS",
 };
 
 export const aboutData = {
-  label: "02 / SOBRE",
-  title: "Quem eu sou",
+  tag: "02 / SOBRE",
+  title: "SOBRE MIM",
   paragraph1:
     "Sou estudante de Engenharia de Software e desenvolvedor web. Meu trabalho é centrado na criação de interfaces eficientes, acessíveis e focadas na experiência do usuário.",
   paragraph2:
     "Desenvolvo aplicações front-end utilizando ecossistemas modernos em React e TypeScript, prezando por arquitetura limpa, código legível e documentação honesta.",
-  cta: "Ver processo ↓",
+  handwritten: "DISCIPLINA\nFOCO\nEVOLUÇÃO",
+  cta: "Ver processo →",
+  image: "/images/about-setup.webp",
+  imageCaption: "Ambiente de desenvolvimento e estudo.",
+};
+
+export const contactData = {
+  tag: "04 / CONTATO",
+  title: "VAMOS CONVERSAR?",
+  text: "Se você tem um projeto em mente, uma oportunidade ou quer trocar ideias sobre desenvolvimento front-end, entre em contato.",
+  handwritten: "Bora\nconstruir algo\nincrível!",
 };
 
 export const footerData = {
-  author: "Álef Felix Teixeira",
-  tagline: "Desenvolvimento • Ideias • Soluções",
+  author: "Álef Felix",
+  copyright: `© ${new Date().getFullYear()} Álef Felix. Todos os direitos reservados.`,
 };
