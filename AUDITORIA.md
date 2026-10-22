@@ -19,10 +19,11 @@ Escopo: Verificação de código-fonte, dependências, rotas e status dos servi�
 ### Projeto 1: VERSO
 - **Status declarado**: Demo (demonstração).
 - **Repositório**: https://github.com/aleffelix15/verso (acesso confirmado).
-- **URL de Deploy**: https://verso-sable.vercel.app/
+- **URL de Deploy**: https://verso-five-psi.vercel.app/
 - **Resultado do Teste de Acesso (21/10/2026)**:
-  - **Status HTTP**: `404 Not Found` (Vercel deployment não encontrado ou pausado).
-  - **Ação adotada**: O link foi mantido para a URL correta, porém a captura de tela foi tratada com espaço reservado identificado (`Captura de tela pendente — site indisponível em 21/10/2026`), conforme regra estrita anti-invenção.
+  - **Status HTTP**: `200 OK` (no ar e operacional).
+  - **Título da Página**: `"Fé que veste. — VERSO"`
+  - **Captura real realizada**: Captura de tela real obtida em 1440x900 e otimizada em `public/screens/verso.webp` (proporção 16:10, 1200x750px). Interface com catálogo, banner promocional, tipografia editorial de streetwear e hero section completa.
 - **Stack comprovada em `package.json`**:
   - React 19 (`react: ^19.2.0`, `react-dom: ^19.2.0`)
   - TypeScript (`typescript: ^5.8.3`)

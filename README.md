@@ -30,7 +30,7 @@ Construído sob uma rigorosa política de **verdade em dados**, **fidelidade té
 ### 1. VERSO
 - **Status**: Demo (demonstração).
 - **Repositório**: [github.com/aleffelix15/verso](https://github.com/aleffelix15/verso)
-- **Deploy**: [verso-sable.vercel.app](https://verso-sable.vercel.app/) *(Nota de auditoria: em 21/10/2026, o endpoint retornava HTTP 404 Vercel Deployment Not Found; o portfólio documenta honestamente a necessidade de novo deploy)*.
+- **Deploy**: [verso-five-psi.vercel.app](https://verso-five-psi.vercel.app/) *(100% operacional no ar)*.
 - **Stack Comprovada**: React 19, TypeScript, TanStack Start/Router, Tailwind CSS 4, Framer Motion, Three.js, Zod, Vitest.
 - **Escopo**: Loja streetwear com catálogo dinâmico, visualização 3D, sacola de compras com cálculo de frete no servidor e integração planejada com Mercado Pago.
 

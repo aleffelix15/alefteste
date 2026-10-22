@@ -38,9 +38,9 @@ export const projects: Project[] = [
       "Vitest",
       "Vercel",
     ],
-    live: "https://verso-sable.vercel.app/",
+    live: "https://verso-five-psi.vercel.app/",
     repo: "https://github.com/aleffelix15/verso",
-    image: "", // Site indisponível (HTTP 404 em 21/10/2026); mantido espaço neutro identificado
+    image: "/screens/verso.webp",
     proposal:
       "Loja de moda streetwear com catálogo completo, experiência de compra dinâmica e elementos visuais 3D.",
     does: [
