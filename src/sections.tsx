@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Menu, X } from "lucide-react";
 import {
   links,
@@ -9,332 +9,474 @@ import {
   aboutData,
   contactData,
   footerData,
-  type Project,
 } from "./data";
 import {
   getTechIcon,
   GitHubIcon,
   LinkedInIcon,
-  ModernLogo,
-  ArrowUpRight,
 } from "./icons";
 
+const NAV_ITEMS = [
+  { id: "projetos", index: "01", label: "Projetos" },
+  { id: "sobre", index: "02", label: "Sobre" },
+  { id: "tecnologias", index: "03", label: "Stack" },
+  { id: "processo", index: "04", label: "Método" },
+  { id: "contato", index: "05", label: "Contato" },
+] as const;
+
 // ============================================================================
-// 1. HEADER
+// 1. BARRA SUPERIOR (HEADER 76px)
 // ============================================================================
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("inicio");
+  const [activeSection, setActiveSection] = useState<string>("projetos");
+  const navRef = useRef<HTMLElement | null>(null);
+  const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+
+  const updatePillPosition = useCallback((sectionId: string) => {
+    const navEl = navRef.current;
+    const activeEl = linkRefs.current[sectionId];
+    if (!navEl || !activeEl) return;
+
+    const x = activeEl.offsetLeft;
+    const w = activeEl.offsetWidth;
+    navEl.style.setProperty("--pill-x", `${x}px`);
+    navEl.style.setProperty("--pill-w", `${w}px`);
+    navEl.style.setProperty("--pill-opacity", "1");
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["inicio", "projetos", "sobre", "tecnologias", "processo", "contato"];
-      const scrollPos = window.scrollY + 180;
+      const scrollPos = window.scrollY + 220;
+      const docBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 40;
 
-      for (const section of sections) {
-        const el = document.getElementById(section);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPos >= top && scrollPos < top + height) {
-            setActiveSection(section);
-            break;
-          }
+      if (docBottom) {
+        setActiveSection("contato");
+        return;
+      }
+
+      let current = "projetos";
+      for (const item of NAV_ITEMS) {
+        const el = document.getElementById(item.id);
+        if (el && scrollPos >= el.offsetTop) {
+          current = item.id;
         }
       }
+      setActiveSection(current);
     };
 
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    updatePillPosition(activeSection);
+    const onResize = () => updatePillPosition(activeSection);
+    window.addEventListener("resize", onResize, { passive: true });
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => updatePillPosition(activeSection));
+    }
+    return () => window.removeEventListener("resize", onResize);
+  }, [activeSection, updatePillPosition]);
+
+  // Trava de scroll do body e tecla Escape quando o menu mobile está aberto
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && mobileOpen) {
+        setMobileOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [mobileOpen]);
+
   return (
-    <header className="site-header">
+    <header className="site-header" data-header>
       <div className="container header-inner">
-        <a href="#inicio" className="brand" aria-label="Álef Felix - Início">
-          <ModernLogo />
-          <span className="brand-text">Álef Felix</span>
+        <a href="#inicio" className="brand" aria-label="Álef Felix — Ir para o início">
+          <span className="brand-name">Álef Felix</span>
+          <span className="brand-dot" aria-hidden="true">
+            .
+          </span>
         </a>
 
-        <nav className="nav-desktop" aria-label="Navegação principal">
-          <a
-            href="#inicio"
-            className={`nav-link ${activeSection === "inicio" ? "active" : ""}`}
-          >
-            Início
-          </a>
-          <a
-            href="#projetos"
-            className={`nav-link ${activeSection === "projetos" ? "active" : ""}`}
-          >
-            Projetos
-          </a>
-          <a
-            href="#sobre"
-            className={`nav-link ${activeSection === "sobre" ? "active" : ""}`}
-          >
-            Sobre
-          </a>
-          <a
-            href="#tecnologias"
-            className={`nav-link ${activeSection === "tecnologias" ? "active" : ""}`}
-          >
-            Tecnologias
-          </a>
-          <a
-            href="#processo"
-            className={`nav-link ${activeSection === "processo" ? "active" : ""}`}
-          >
-            Processo
-          </a>
-          <a
-            href="#contato"
-            className={`nav-link ${activeSection === "contato" ? "active" : ""}`}
-          >
-            Contato
-          </a>
+        <nav
+          ref={navRef}
+          className="nav-desktop"
+          aria-label="Navegação principal"
+        >
+          <span className="nav-pill-indicator" aria-hidden="true" />
+          {NAV_ITEMS.map((item) => {
+            const isActive = activeSection === item.id;
+            return (
+              <a
+                key={item.id}
+                ref={(el) => {
+                  linkRefs.current[item.id] = el;
+                }}
+                href={`#${item.id}`}
+                className={`nav-link ${isActive ? "is-active" : ""}`}
+                aria-current={isActive ? "location" : undefined}
+                onClick={() => setActiveSection(item.id)}
+              >
+                <span className="nav-link-num">{item.index}</span>
+                <span>{item.label}</span>
+              </a>
+            );
+          })}
         </nav>
 
         <div className="header-right">
           {links.disponivel && (
-            <div className="badge-status" title="Aberto a novas oportunidades">
-              <span className="badge-status-dot" aria-hidden="true"></span>
-              Disponível
+            <div className="status-indicator" role="status">
+              <span className="status-dot" aria-hidden="true" />
+              <span className="status-label">Disponível</span>
             </div>
           )}
 
           <button
             type="button"
             className="btn-mobile-toggle"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
+            onClick={() => setMobileOpen((prev) => !prev)}
+            aria-label={mobileOpen ? "Fechar menu de navegação" : "Abrir menu de navegação"}
             aria-expanded={mobileOpen}
+            aria-controls="mobile-nav-drawer"
           >
-            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            {mobileOpen ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
-      <div className={`mobile-nav-panel ${mobileOpen ? "open" : ""}`}>
-        <a
-          href="#inicio"
-          className="mobile-nav-link"
-          onClick={() => setMobileOpen(false)}
-        >
-          Início
-        </a>
-        <a
-          href="#projetos"
-          className="mobile-nav-link"
-          onClick={() => setMobileOpen(false)}
-        >
-          Projetos
-        </a>
-        <a
-          href="#sobre"
-          className="mobile-nav-link"
-          onClick={() => setMobileOpen(false)}
-        >
-          Sobre
-        </a>
-        <a
-          href="#tecnologias"
-          className="mobile-nav-link"
-          onClick={() => setMobileOpen(false)}
-        >
-          Tecnologias
-        </a>
-        <a
-          href="#processo"
-          className="mobile-nav-link"
-          onClick={() => setMobileOpen(false)}
-        >
-          Processo
-        </a>
-        <a
-          href="#contato"
-          className="mobile-nav-link"
-          onClick={() => setMobileOpen(false)}
-        >
-          Contato
-        </a>
+      <div
+        id="mobile-nav-drawer"
+        className={`mobile-nav-drawer ${mobileOpen ? "is-open" : ""}`}
+        aria-hidden={!mobileOpen}
+      >
+        <nav className="container mobile-nav-list" aria-label="Menu móvel">
+          {NAV_ITEMS.map((item) => {
+            const isActive = activeSection === item.id;
+            return (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                className={`mobile-nav-link ${isActive ? "is-active" : ""}`}
+                aria-current={isActive ? "location" : undefined}
+                tabIndex={mobileOpen ? 0 : -1}
+                onClick={() => {
+                  setActiveSection(item.id);
+                  setMobileOpen(false);
+                }}
+              >
+                <span className="mobile-nav-num">{item.index}</span>
+                <span className="mobile-nav-text">{item.label}</span>
+                <span className="mobile-nav-arrow" aria-hidden="true">
+                  ↗
+                </span>
+              </a>
+            );
+          })}
+        </nav>
       </div>
     </header>
   );
 }
 
 // ============================================================================
-// 2. HERO SECTION
+// 2. HERO (GRADE 1,4fr / 0,6fr)
 // ============================================================================
 export function Hero() {
   return (
-    <section id="inicio" className="hero-section">
+    <section id="inicio" className="hero-section" aria-labelledby="hero-heading">
       <div className="container hero-grid">
-        <div className="hero-content">
-          <div className="hero-status-pill">
-            <span className="badge-status-dot" aria-hidden="true"></span>
-            {heroData.statusText}
-          </div>
+        <div className="hero-main" data-reveal>
+          <p className="hero-eyebrow">{heroData.role}</p>
 
-          <h1 className="hero-title">
-            {heroData.firstName}{" "}
-            <span className="hero-title-highlight">{heroData.lastName}</span>
+          <h1 id="hero-heading" className="hero-title">
+            <span className="hero-name-strong">{heroData.firstName}</span>{" "}
+            <span className="hero-name-muted">{heroData.lastName}</span>
           </h1>
-
-          <div className="hero-role">{heroData.role}</div>
 
           <p className="hero-bio">{heroData.bio}</p>
 
           <div className="hero-actions">
-            <a href="#projetos" className="btn-primary">
-              {heroData.ctaProjects}
-              <ArrowUpRight size={16} />
+            <a href="#projetos" className="btn-pill btn-primary">
+              <span>{heroData.ctaProjects}</span>
+              <span aria-hidden="true">↗</span>
             </a>
-            <a href="#contato" className="btn-secondary">
-              {heroData.ctaContact}
+            <a href="#contato" className="btn-pill btn-outline">
+              <span>{heroData.ctaContact}</span>
             </a>
           </div>
         </div>
 
-        {/* Right Column: Sleek Focus Areas Panel */}
-        <div className="hero-card" aria-label="Áreas de foco técnico">
-          <div className="hero-card-header">
-            <span className="hero-card-title">Foco &amp; Especialidades</span>
-            <span className="hero-card-badge">Em formação</span>
+        <aside
+          className="hero-focus-col"
+          aria-label="Áreas de foco técnico"
+          data-reveal
+          style={{ ["--stagger-index" as string]: 1 }}
+        >
+          <div className="focus-col-header">
+            <span className="mono-label">Foco</span>
           </div>
 
-          {heroData.areas.map((area, idx) => (
-            <div key={idx} className="focus-item">
-              <span className="focus-item-title">{area.title}</span>
-              <span className="focus-item-desc">{area.desc}</span>
-            </div>
-          ))}
-        </div>
+          <ol className="focus-list">
+            {heroData.areas.map((area, idx) => (
+              <li key={area.title} className="focus-item">
+                <span className="focus-index">
+                  {String(idx + 1).padStart(2, "0")}
+                </span>
+                <div className="focus-content">
+                  <h2 className="focus-title">{area.title}</h2>
+                  <p className="focus-desc">{area.desc}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </aside>
       </div>
     </section>
   );
 }
 
 // ============================================================================
-// 3. PROJECTS SECTION
+// 3. FAIXA DE STACK (MARQUEE EM DM MONO COM CONTROLE DE PAUSA WCAG 2.2.2)
+// ============================================================================
+export function StackMarquee() {
+  const [paused, setPaused] = useState(false);
+
+  return (
+    <section
+      className={`stack-strip ${paused ? "is-paused" : ""}`}
+      aria-label="Tecnologias comprovadas em projetos"
+    >
+      <div className="container stack-strip-inner">
+        <div className="marquee-viewport">
+          <div className="marquee-track">
+            <ul className="marquee-list">
+              {techGroups.proven.map((tech, idx) => (
+                <li key={tech} className="marquee-item">
+                  <span className="marquee-num" aria-hidden="true">
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
+                  <span className="marquee-tech">{tech}</span>
+                  <span className="marquee-sep" aria-hidden="true">
+                    ·
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            <ul className="marquee-list marquee-duplicate" aria-hidden="true">
+              {techGroups.proven.map((tech, idx) => (
+                <li key={`dup-${tech}`} className="marquee-item">
+                  <span className="marquee-num">
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
+                  <span className="marquee-tech">{tech}</span>
+                  <span className="marquee-sep">·</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          className="marquee-pause-btn"
+          onClick={() => setPaused((prev) => !prev)}
+          aria-pressed={paused}
+          aria-label={
+            paused
+              ? "Retomar animação da faixa de tecnologias"
+              : "Pausar animação da faixa de tecnologias"
+          }
+        >
+          <span className="marquee-pause-icon" aria-hidden="true">
+            {paused ? "▶" : "❚❚"}
+          </span>
+          <span>{paused ? "Retomar" : "Pausar"}</span>
+        </button>
+      </div>
+    </section>
+  );
+}
+
+// ============================================================================
+// 4. PROJETOS (LINHAS LARGAS ALTERNADAS 1,15fr / 0,85fr)
 // ============================================================================
 export function Projects() {
   return (
-    <section id="projetos" className="section-projects">
+    <section
+      id="projetos"
+      className="section-block section-projects"
+      aria-labelledby="projects-heading"
+    >
       <div className="container">
-        <div className="projects-header">
+        <div className="section-header-row" data-reveal>
           <div>
-            <span className="section-tag">01 / Projetos</span>
-            <h2 className="section-title">Projetos em Destaque</h2>
-            <p className="section-subtitle">
-              Aplicações web desenvolvidas com rigor técnico, código aberto e deploys em produção.
-            </p>
+            <div className="section-kicker">
+              <span className="kicker-num">01</span>
+              <span className="kicker-sep" aria-hidden="true">
+                /
+              </span>
+              <span>Projetos</span>
+            </div>
+            <h2 id="projects-heading" className="section-title">
+              Projetos em destaque
+            </h2>
           </div>
+
           <a
             href={links.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-secondary"
+            className="btn-pill btn-outline"
           >
-            <GitHubIcon size={16} />
-            Ver todos no GitHub
-            <ArrowUpRight size={14} />
+            <span>Ver todos no GitHub</span>
+            <span aria-hidden="true">↗</span>
+            <span className="sr-only"> (abre em nova aba)</span>
           </a>
         </div>
 
-        <div className="projects-grid">
-          {projects.map((project) => (
-            <article key={project.number} className="project-card">
-              <div className="project-media">
-                <span
-                  className={`project-badge-tag ${
-                    project.status === "Publicado" ? "published" : "demo"
-                  }`}
-                >
-                  {project.status}
-                </span>
-                <img
-                  src={project.image}
-                  alt={`Captura real do projeto ${project.name}`}
-                  width={600}
-                  height={375}
-                  loading="lazy"
-                  className="project-img"
-                />
-              </div>
+        <div className="projects-list">
+          {projects.map((project, idx) => {
+            const isReversed = idx % 2 === 1;
+            const isPublished = project.status === "Publicado";
+            const imgHeight = project.name === "VERSO" ? 750 : 641;
 
-              <div className="project-body">
-                <div className="project-header-row">
-                  <h3 className="project-name">{project.name}</h3>
+            return (
+              <article
+                key={project.number}
+                className={`project-row ${isReversed ? "is-reversed" : ""}`}
+                data-reveal
+              >
+                <div className="project-media-col">
+                  <div className="project-media-tilt" data-tilt-media>
+                    <div className="project-media-frame">
+                      <img
+                        src={project.image}
+                        alt={`Captura de tela real da aplicação ${project.name}`}
+                        width={1200}
+                        height={imgHeight}
+                        loading={idx === 0 ? "eager" : "lazy"}
+                        decoding="async"
+                        className="project-img"
+                      />
+                      <div className="project-spotlight" aria-hidden="true" />
+                    </div>
+                  </div>
                 </div>
-                <div className="project-kind">{project.kind}</div>
-                <p className="project-summary">{project.summary}</p>
 
-                <div className="project-stack" aria-label="Tecnologias utilizadas">
-                  {project.stack.map((tech) => (
-                    <span key={tech} className="tech-tag">
-                      {tech}
+                <div className="project-info-col">
+                  <div className="project-meta-top">
+                    <span className="project-index">{project.number}</span>
+                    <span
+                      className={`status-chip ${
+                        isPublished ? "is-published" : "is-demo"
+                      }`}
+                    >
+                      <span className="status-chip-dot" aria-hidden="true" />
+                      {project.status}
                     </span>
-                  ))}
-                </div>
+                  </div>
 
-                <div className="project-actions">
-                  <a
-                    href={project.live}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-project-visit"
-                  >
-                    Visitar projeto
-                    <ArrowUpRight size={14} />
-                  </a>
-                  <a
-                    href={project.repo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-project-code"
-                  >
-                    <GitHubIcon size={16} />
-                    Código
-                  </a>
-                </div>
+                  <h3 className="project-name">{project.name}</h3>
+                  <div className="project-kind">{project.kind}</div>
+                  <p className="project-summary">{project.summary}</p>
 
-                <div className="project-details">
-                  <details>
-                    <summary>
+                  <ul
+                    className="project-stack-list"
+                    aria-label={`Tecnologias utilizadas no projeto ${project.name}`}
+                  >
+                    {project.stack.map((tech) => (
+                      <li key={tech} className="stack-chip">
+                        {tech}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="project-actions">
+                    <a
+                      href={project.live}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-pill btn-primary"
+                    >
+                      <span>Visitar</span>
+                      <span aria-hidden="true">↗</span>
+                      <span className="sr-only">
+                        {" "}
+                        {project.name} (abre em nova aba)
+                      </span>
+                    </a>
+
+                    <a
+                      href={project.repo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-pill btn-outline"
+                    >
+                      <GitHubIcon size={15} />
+                      <span>Código</span>
+                      <span className="sr-only">
+                        {" "}
+                        de {project.name} no GitHub (abre em nova aba)
+                      </span>
+                    </a>
+                  </div>
+
+                  <details className="project-details" data-animated-details>
+                    <summary className="project-details-summary">
                       <span>Auditoria técnica &amp; limitações</span>
-                      <span aria-hidden="true">↓</span>
+                      <span className="details-indicator" aria-hidden="true">
+                        +
+                      </span>
                     </summary>
+
                     <div className="details-drawer">
-                      <div>
-                        <div className="details-title">Proposta:</div>
-                        <p>{project.proposal}</p>
+                      <div className="details-group">
+                        <h4 className="details-heading">Proposta</h4>
+                        <p className="details-text">{project.proposal}</p>
                       </div>
 
-                      <div>
-                        <div className="details-title">Comprovado no código:</div>
+                      <div className="details-group">
+                        <h4 className="details-heading">Comprovado no código</h4>
                         <ul className="details-list">
-                          {project.does.map((item, idx) => (
-                            <li key={idx}>{item}</li>
+                          {project.does.map((item) => (
+                            <li key={item}>{item}</li>
                           ))}
                         </ul>
                       </div>
 
-                      <div>
-                        <div className="details-title">Limitações reais registradas:</div>
+                      <div className="details-group">
+                        <h4 className="details-heading">
+                          Limitações reais registradas
+                        </h4>
                         <ul className="details-list">
-                          {project.limits.map((limit, idx) => (
-                            <li key={idx}>{limit}</li>
+                          {project.limits.map((limit) => (
+                            <li key={limit}>{limit}</li>
                           ))}
                         </ul>
                       </div>
                     </div>
                   </details>
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -342,33 +484,63 @@ export function Projects() {
 }
 
 // ============================================================================
-// 4. ABOUT SECTION
+// 5. SOBRE (02 SOBRE)
 // ============================================================================
 export function About() {
   return (
-    <section id="sobre" className="section-about">
-      <div className="container about-grid">
-        <div>
-          <span className="section-tag">{aboutData.label}</span>
-          <h2 className="section-title">{aboutData.title}</h2>
-          <p className="about-p">{aboutData.paragraph1}</p>
-          <p className="about-p">{aboutData.paragraph2}</p>
-          <a href="#processo" className="btn-secondary">
-            {aboutData.cta}
-            <ArrowUpRight size={16} />
-          </a>
+    <section
+      id="sobre"
+      className="section-block section-about"
+      aria-labelledby="about-heading"
+    >
+      <div className="container">
+        <div className="section-kicker" data-reveal>
+          <span className="kicker-num">02</span>
+          <span className="kicker-sep" aria-hidden="true">
+            /
+          </span>
+          <span>Sobre</span>
         </div>
 
-        <div className="about-media">
-          <img
-            src={aboutData.image}
-            alt="Ambiente de desenvolvimento e estudo de Álef Felix"
-            width={440}
-            height={330}
-            loading="lazy"
-            className="about-img"
-          />
-          <div className="about-caption">{aboutData.imageCaption}</div>
+        <div className="about-editorial-grid">
+          <div className="about-copy-col" data-reveal>
+            <h2 id="about-heading" className="section-title about-title">
+              {aboutData.title}
+            </h2>
+            <p className="about-paragraph">{aboutData.paragraph1}</p>
+            <p className="about-paragraph">{aboutData.paragraph2}</p>
+
+            <div className="about-cta-wrap">
+              <a href="#processo" className="btn-pill btn-outline">
+                <span>{aboutData.cta}</span>
+                <span aria-hidden="true">↓</span>
+              </a>
+            </div>
+          </div>
+
+          <figure
+            className="about-media-col"
+            data-reveal
+            style={{ ["--stagger-index" as string]: 1 }}
+          >
+            <div className="about-img-frame">
+              <img
+                src={aboutData.image}
+                alt="Ambiente de desenvolvimento e estudo de Álef Felix Teixeira"
+                width={800}
+                height={600}
+                loading="lazy"
+                decoding="async"
+                className="about-img"
+              />
+            </div>
+            <figcaption className="about-caption">
+              <span className="caption-index" aria-hidden="true">
+                FIG. 01
+              </span>
+              <span>{aboutData.imageCaption}</span>
+            </figcaption>
+          </figure>
         </div>
       </div>
     </section>
@@ -376,41 +548,84 @@ export function About() {
 }
 
 // ============================================================================
-// 5. TECHNOLOGIES SECTION
+// 6. TECNOLOGIAS / STACK (03 STACK)
 // ============================================================================
 export function Technologies() {
   return (
-    <section id="tecnologias" className="section-tech">
+    <section
+      id="tecnologias"
+      className="section-block section-stack"
+      aria-labelledby="stack-heading"
+    >
       <div className="container">
-        <span className="section-tag">03 / Tecnologias</span>
-        <h2 className="section-title">Ferramentas &amp; Tecnologias</h2>
-        <p className="section-subtitle">
-          Ecossistema técnico utilizado em projetos práticos e tópicos contínuos de estudo.
-        </p>
-
-        {/* Grupo 1: Comprovadas */}
-        <div className="tech-group">
-          <h3 className="tech-group-title">Comprovadas nos projetos auditados</h3>
-          <div className="tech-grid">
-            {techGroups.proven.map((tech) => (
-              <div key={tech} className="tech-card" title={`Tecnologia: ${tech}`}>
-                <div className="tech-card-icon">{getTechIcon(tech, 24)}</div>
-                <span className="tech-card-name">{tech}</span>
-              </div>
-            ))}
+        <div className="section-header-row" data-reveal>
+          <div>
+            <div className="section-kicker">
+              <span className="kicker-num">03</span>
+              <span className="kicker-sep" aria-hidden="true">
+                /
+              </span>
+              <span>Stack</span>
+            </div>
+            <h2 id="stack-heading" className="section-title">
+              Ferramentas &amp; tecnologias
+            </h2>
           </div>
+          <p className="section-lead">
+            Ecossistema técnico comprovado nos repositórios auditados e frentes
+            ativas de estudo em Engenharia de Software.
+          </p>
         </div>
 
-        {/* Grupo 2: Estudo */}
-        <div className="tech-group">
-          <h3 className="tech-group-title">Também estudo e utilizo</h3>
-          <div className="tech-grid">
-            {techGroups.study.map((tech) => (
-              <div key={tech} className="tech-card" title={`Estudo: ${tech}`}>
-                <div className="tech-card-icon">{getTechIcon(tech, 24)}</div>
-                <span className="tech-card-name">{tech}</span>
-              </div>
-            ))}
+        <div className="stack-ledger" data-reveal>
+          <div className="stack-ledger-group">
+            <div className="stack-ledger-header">
+              <span className="ledger-index">03.1</span>
+              <h3 className="ledger-title">
+                Comprovadas nos projetos auditados
+              </h3>
+              <span className="ledger-count">
+                {String(techGroups.proven.length).padStart(2, "0")} tecnologias
+              </span>
+            </div>
+
+            <ul className="stack-matrix" aria-label="Tecnologias comprovadas nos projetos">
+              {techGroups.proven.map((tech, idx) => (
+                <li key={tech} className="stack-cell">
+                  <span className="stack-cell-num" aria-hidden="true">
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
+                  <span className="stack-cell-icon" aria-hidden="true">
+                    {getTechIcon(tech, 18)}
+                  </span>
+                  <span className="stack-cell-name">{tech}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="stack-ledger-group">
+            <div className="stack-ledger-header">
+              <span className="ledger-index">03.2</span>
+              <h3 className="ledger-title">Também estudo e utilizo</h3>
+              <span className="ledger-count">
+                {String(techGroups.study.length).padStart(2, "0")} tecnologias
+              </span>
+            </div>
+
+            <ul className="stack-matrix stack-matrix-study" aria-label="Tecnologias em estudo">
+              {techGroups.study.map((tech, idx) => (
+                <li key={tech} className="stack-cell">
+                  <span className="stack-cell-num" aria-hidden="true">
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
+                  <span className="stack-cell-icon" aria-hidden="true">
+                    {getTechIcon(tech, 18)}
+                  </span>
+                  <span className="stack-cell-name">{tech}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
@@ -419,26 +634,53 @@ export function Technologies() {
 }
 
 // ============================================================================
-// 6. PROCESS SECTION
+// 7. MÉTODO (04 MÉTODO — TIMELINE HORIZONTAL DE 5 PASSOS)
 // ============================================================================
 export function Process() {
   return (
-    <section id="processo" className="section-process">
+    <section
+      id="processo"
+      className="section-block section-method"
+      aria-labelledby="method-heading"
+      data-timeline-section
+    >
       <div className="container">
-        <span className="section-tag">04 / Método</span>
-        <h2 className="section-title">Como Eu Trabalho</h2>
-        <p className="section-subtitle">
-          Fluxo de engenharia centrado em clareza, validação contínua e foco em qualidade.
-        </p>
-
-        <div className="process-grid">
-          {processSteps.map((step) => (
-            <div key={step.number} className="process-card">
-              <span className="process-number">{step.number}</span>
-              <h3 className="process-step-title">{step.title}</h3>
-              <p className="process-step-desc">{step.description}</p>
+        <div className="section-header-row" data-reveal>
+          <div>
+            <div className="section-kicker">
+              <span className="kicker-num">04</span>
+              <span className="kicker-sep" aria-hidden="true">
+                /
+              </span>
+              <span>Método</span>
             </div>
-          ))}
+            <h2 id="method-heading" className="section-title">
+              Como eu trabalho
+            </h2>
+          </div>
+          <p className="section-lead">
+            Fluxo de engenharia enxuto, da definição do problema à entrega
+            verificável e documentada.
+          </p>
+        </div>
+
+        <div className="timeline-wrapper" data-reveal>
+          <div className="timeline-line-track" aria-hidden="true">
+            <div className="timeline-line-progress" data-timeline-progress />
+          </div>
+
+          <ol className="timeline-steps">
+            {processSteps.map((step) => (
+              <li key={step.number} className="timeline-step">
+                <div className="timeline-node" aria-hidden="true">
+                  <span className="timeline-dot" />
+                </div>
+                <span className="timeline-num">{step.number}</span>
+                <h3 className="timeline-title">{step.title}</h3>
+                <p className="timeline-desc">{step.description}</p>
+              </li>
+            ))}
+          </ol>
         </div>
       </div>
     </section>
@@ -446,68 +688,62 @@ export function Process() {
 }
 
 // ============================================================================
-// 7. CONTACT SECTION
+// 8. CONTATO (05 CONTATO — TÍTULO CENTRALIZADO ≈104px)
 // ============================================================================
 export function Contact() {
   return (
-    <section id="contato" className="section-contact">
-      <div className="container contact-layout">
-        <div>
-          <span className="section-tag">{contactData.label}</span>
-          <h2 className="section-title">{contactData.title}</h2>
-          <p className="contact-text">{contactData.text}</p>
+    <section
+      id="contato"
+      className="section-block section-contact"
+      aria-labelledby="contact-heading"
+    >
+      <div className="container contact-centered" data-reveal>
+        <div className="section-kicker contact-kicker">
+          <span className="kicker-num">05</span>
+          <span className="kicker-sep" aria-hidden="true">
+            /
+          </span>
+          <span>Contato</span>
         </div>
 
-        <div className="contact-cards">
+        <h2 id="contact-heading" className="contact-giant-title">
+          {contactData.title}
+        </h2>
+
+        <p className="contact-lead">{contactData.text}</p>
+
+        <div className="contact-actions">
           <a
             href={links.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="contact-card"
+            className="btn-pill btn-primary btn-lg"
           >
-            <div className="contact-card-left">
-              <div className="contact-card-icon">
-                <GitHubIcon size={22} />
-              </div>
-              <div>
-                <div className="contact-card-title">GitHub</div>
-                <div className="contact-card-sub">github.com/aleffelix15</div>
-              </div>
-            </div>
-            <ArrowUpRight size={18} className="contact-card-arrow" />
+            <GitHubIcon size={17} />
+            <span>GitHub</span>
+            <span aria-hidden="true">↗</span>
+            <span className="sr-only"> (abre em nova aba)</span>
           </a>
 
           <a
             href={links.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="contact-card"
+            className="btn-pill btn-outline btn-lg"
           >
-            <div className="contact-card-left">
-              <div className="contact-card-icon">
-                <LinkedInIcon size={22} />
-              </div>
-              <div>
-                <div className="contact-card-title">LinkedIn</div>
-                <div className="contact-card-sub">Álef Felix Teixeira</div>
-              </div>
-            </div>
-            <ArrowUpRight size={18} className="contact-card-arrow" />
+            <LinkedInIcon size={17} />
+            <span>LinkedIn</span>
+            <span aria-hidden="true">↗</span>
+            <span className="sr-only"> (abre em nova aba)</span>
           </a>
 
           {links.email && (
             <a
               href={`mailto:${links.email}`}
-              className="contact-card"
+              className="btn-pill btn-outline btn-lg"
             >
-              <div className="contact-card-left">
-                <div className="contact-card-icon">✉</div>
-                <div>
-                  <div className="contact-card-title">E-mail</div>
-                  <div className="contact-card-sub">{links.email}</div>
-                </div>
-              </div>
-              <ArrowUpRight size={18} className="contact-card-arrow" />
+              <span>E-mail</span>
+              <span aria-hidden="true">↗</span>
             </a>
           )}
         </div>
@@ -517,42 +753,28 @@ export function Contact() {
 }
 
 // ============================================================================
-// 8. FOOTER
+// 9. RODAPÉ (FOOTER)
 // ============================================================================
 export function Footer() {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
   };
 
   return (
     <footer className="site-footer">
       <div className="container footer-inner">
-        <div className="footer-brand">
-          <ModernLogo size={24} />
-          <span>{footerData.author}</span>
-        </div>
+        <p className="footer-copy">{footerData.copyright}</p>
 
-        <nav className="footer-nav" aria-label="Navegação do rodapé">
-          <a href="#inicio">Início</a>
-          <a href="#projetos">Projetos</a>
-          <a href="#sobre">Sobre</a>
-          <a href="#tecnologias">Tecnologias</a>
-          <a href="#processo">Processo</a>
-          <a href="#contato">Contato</a>
-        </nav>
-
-        <div className="footer-right">
-          <span className="footer-copy">{footerData.copyright}</span>
-          <button
-            type="button"
-            onClick={scrollToTop}
-            className="btn-scroll-top"
-            aria-label="Voltar ao topo da página"
-            title="Voltar ao topo"
-          >
-            ↑
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={scrollToTop}
+          className="btn-back-top"
+          aria-label="Voltar ao topo da página"
+        >
+          <span>Voltar ao topo</span>
+          <span aria-hidden="true">↑</span>
+        </button>
       </div>
     </footer>
   );

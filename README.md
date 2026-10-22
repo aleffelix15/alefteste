@@ -2,16 +2,16 @@
 
 Portfólio pessoal e técnico de **Álef Felix Teixeira**, estudante de Engenharia de Software e desenvolvedor web.
 
-Construído sob uma rigorosa política de **verdade em dados**, **fidelidade técnica** e **estética Editorial Claro (Light Editorial)** inspirada em tipografia de imprensa e design editorial suíço, sem bibliotecas de animação ou estilização externas.
+Construído sob uma rigorosa política de **verdade em dados**, **fidelidade técnica** e direção visual **Editorial Escuro** inspirada em tipografia de imprensa e sistemas editoriais de engenharia, sem bibliotecas de animação ou estilização externas.
 
 ---
 
-## 🎨 Filosofia Visual & Design System
+## 🎨 Filosofia Visual & Design System (Editorial Escuro)
 
-- **Estética Editorial Claro**: Paleta de alto contraste baseada em papel e tinta (`#f1f1ee` fundo, `#111111` texto e traços estruturais, `#55555b` secundário, `#d63a0a` acento editorial quente).
-- **Tipografia**: `Bricolage Grotesque` para títulos e corpo; `DM Mono` para rótulos, índices numéricos e chips técnicos.
-- **Pure CSS**: Sem Tailwind, sem CSS-in-JS, sem bibliotecas pesadas de animação. 100% tokens nativos em variáveis CSS.
-- **Zero AI Slop**: Sem gradientes neon roxos/azuis genéricos, sem métricas falsas ("+50 projetos", "100% satisfação"), sem janelas simuladas com bolinhas de macOS e sem links mortos (`href="#"`).
+- **Paleta Editorial Escuro**: Fundo `#0a0a0b`, divisores estruturais de `1px` em `#26262b` / `#3a3a42`, texto forte `#f4f4f5`, corpo `#a8a8b0`, rótulos `#8a8a93`, sobrenome em `#686872` (contraste validado $\ge 3:1$ WCAG 2.2 AA), acento único `#ff6a3d` e status `#4ade80`.
+- **Tipografia Local (Self-Hosted WOFF2)**: `Bricolage Grotesque` (pesos 400–800, `opsz`) para títulos e corpo; `DM Mono` (`12px`, maiúsculas, `letter-spacing: .08em`) para rótulos, índices numéricos e chips técnicos, hospedadas em `public/fonts/` com `preload` e `font-display: swap`.
+- **Pure CSS & Movimento Nativo**: Sem Tailwind, sem CSS-in-JS e sem bibliotecas pesadas de animação. Tokens em variáveis CSS e interações via `IntersectionObserver`, `Web Animations API` e `requestAnimationFrame` (`src/motion.ts`), respeitando `prefers-reduced-motion: reduce`.
+- **Zero AI Slop**: Sem gradientes neon roxos/azuis genéricos, sem métricas inventadas, sem janelas falsas de macOS e sem links mortos (`href="#"`).
 
 ---
 
@@ -20,8 +20,8 @@ Construído sob uma rigorosa política de **verdade em dados**, **fidelidade té
 - **Framework**: React 18
 - **Linguagem**: TypeScript
 - **Bundler & Build Tool**: Vite 5
-- **Ícones**: Simple Icons SVG inline + Lucide React
-- **Estilização**: CSS Puro com Design Tokens
+- **Ícones**: SVG técnicos inline + Lucide React
+- **Estilização**: CSS Puro com Design Tokens (`src/styles.css`)
 
 ---
 
@@ -51,7 +51,7 @@ Construído sob uma rigorosa política de **verdade em dados**, **fidelidade té
 
 ### Instalação
 ```bash
-git clone https://github.com/aleffelix15/portfolio-alef-felix.git
+git clone https://github.com/aleffelix15/alefteste.git
 cd portfolio-alef-felix
 npm install
 ```
@@ -72,27 +72,19 @@ npm run preview
 
 ## 🌐 Publicação na Vercel
 
-O projeto está totalmente configurado para a Vercel com SPA rewrites em `vercel.json`:
+O projeto está configurado para a Vercel com SPA rewrites em `vercel.json`:
 
-### Opção 1: Via Vercel CLI
-```bash
-npx vercel
-# Para produção:
-npx vercel --prod
-```
-
-### Opção 2: Conexão Git Automática
-1. Crie o repositório no seu GitHub: `aleffelix15/portfolio-alef-felix`.
-2. Conecte o repositório na dashboard da Vercel.
-3. Configurações de build padrão do Vite:
+1. Conecte o repositório na dashboard da Vercel.
+2. Configurações de build padrão do Vite:
    - **Framework Preset**: Vite
    - **Build Command**: `npm run build`
    - **Output Directory**: `dist`
-4. Deploys serão acionados automaticamente a cada `git push main`.
+3. Deploys serão acionados automaticamente a cada `git push main`.
 
 ---
 
-## 📄 Licença e Direitos
+## 📄 Conformidade e Auditoria
 
 Projeto pessoal e autoral desenvolvido por **Álef Felix Teixeira**.
-Documentação de conformidade e auditoria de código disponível em [`AUDITORIA.md`](./AUDITORIA.md).
+- Auditoria de código e fatos: [`AUDITORIA.md`](./AUDITORIA.md)
+- Verificação de disponibilidade e links externos: [`VERIFICACAO.md`](./VERIFICACAO.md)

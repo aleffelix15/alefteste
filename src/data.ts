@@ -1,8 +1,9 @@
 export const links = {
+  siteUrl: "", // configure a URL final de produção quando definida (ex.: "https://seu-dominio.com")
   github: "https://github.com/aleffelix15",
   linkedin: "https://www.linkedin.com/in/alef-felix-teixeira-a5030b236/",
   email: "", // preencha para exibir o botão de e-mail na seção de contato
-  disponivel: true, // exibe o status "Disponível para projetos"
+  disponivel: true, // exibe o status "Disponível"
 };
 
 export type Project = {
@@ -163,7 +164,7 @@ export const aboutData = {
 };
 
 export const contactData = {
-  label: "04 / Contato",
+  label: "05 / Contato",
   title: "Vamos construir algo juntos?",
   text: "Se você tem uma oportunidade, projeto ou gostaria de trocar ideias sobre desenvolvimento e engenharia de software, fique à vontade para entrar em contato.",
 };
