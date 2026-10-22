@@ -326,108 +326,42 @@ export function getTechIcon(name: string, size = 16) {
 }
 
 // ============================================================================
-// DOODLES & BRUTALIST COLLAGE SVGS
+// MODERN MINIMALIST / UI ICONS
 // ============================================================================
 
-interface DoodleProps {
-  className?: string;
-  style?: React.CSSProperties;
-}
-
-export function DoodleCrown({ className, style }: DoodleProps) {
+export function ArrowUpRight({ size = 16, className }: IconProps) {
   return (
     <svg
-      viewBox="0 0 100 70"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
       fill="none"
-      stroke="#0d0d0d"
-      strokeWidth="6"
+      stroke="currentColor"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
-      style={style}
       aria-hidden="true"
     >
-      {/* 3-peak royal crown doodle */}
-      <path d="M12 60 L18 24 L42 42 L52 14 L62 42 L84 24 L90 60 Z" fill="#ffffff" />
-      <path d="M12 60 L18 24 L42 42 L52 14 L62 42 L84 24 L90 60 Z" />
-      <line x1="8" y1="60" x2="94" y2="60" strokeWidth="7" />
-      {/* Circles on peaks */}
-      <circle cx="18" cy="22" r="4" fill="#0d0d0d" />
-      <circle cx="52" cy="12" r="5" fill="#0d0d0d" />
-      <circle cx="84" cy="22" r="4" fill="#0d0d0d" />
+      <line x1="7" y1="17" x2="17" y2="7" />
+      <polyline points="7 7 17 7 17 17" />
     </svg>
   );
 }
 
-export function DoodleLightning({ className, style }: DoodleProps) {
+export function ModernLogo({ size = 28 }: { size?: number }) {
   return (
     <svg
-      viewBox="0 0 40 60"
-      fill="#d9ff1f"
-      stroke="#0d0d0d"
-      strokeWidth="3.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      style={style}
-      aria-hidden="true"
-    >
-      <polygon points="22 2 4 32 18 32 12 58 36 24 22 24 28 2" />
-    </svg>
-  );
-}
-
-export function DoodleArrow({ className, style }: DoodleProps) {
-  return (
-    <svg
-      viewBox="0 0 80 40"
-      fill="none"
-      stroke="#0d0d0d"
-      strokeWidth="3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      style={style}
-      aria-hidden="true"
-    >
-      <path d="M10 28 C 30 35, 55 25, 72 12" />
-      <path d="M60 8 L 74 12 L 68 24" />
-    </svg>
-  );
-}
-
-export function DoodleUnderline({ className, style }: DoodleProps) {
-  return (
-    <svg
-      viewBox="0 0 160 18"
-      fill="none"
-      stroke="#0d0d0d"
-      strokeWidth="3"
-      strokeLinecap="round"
-      className={className}
-      style={style}
-      aria-hidden="true"
-    >
-      <path d="M3 8 C 45 4, 115 12, 157 7" />
-      <path d="M10 14 C 55 11, 105 16, 145 13" />
-    </svg>
-  );
-}
-
-export function BrutalistLogo() {
-  return (
-    <svg
-      width="34"
-      height="34"
-      viewBox="0 0 34 34"
+      width={size}
+      height={size}
+      viewBox="0 0 32 32"
       fill="none"
       aria-hidden="true"
-      style={{ display: "block" }}
     >
-      <rect width="34" height="34" fill="#0d0d0d" />
+      <rect width="32" height="32" rx="8" fill="#18181b" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
       <path
-        d="M17 5 L7 28 H13.5 L15.5 22.5 H21.5 L23.5 28 H29.5 L19.5 5 H17 Z M17.2 14.5 L19.8 19 H14.6 L17.2 14.5 Z"
-        fill="#d9ff1f"
+        d="M16 8L9.5 24H13.2L14.7 20H17.3L18.8 24H22.5L16 8ZM16 12.2L16.8 17H15.2L16 12.2Z"
+        fill="#ffffff"
       />
     </svg>
   );

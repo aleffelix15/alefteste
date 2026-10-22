@@ -1,8 +1,8 @@
 export const links = {
   github: "https://github.com/aleffelix15",
   linkedin: "https://www.linkedin.com/in/alef-felix-teixeira-a5030b236/",
-  email: "", // preencha para exibir o cartão de e-mail na seção de contato
-  disponivel: true, // exibe a etiqueta "Disponível para projetos" no header
+  email: "", // preencha para exibir o botão de e-mail na seção de contato
+  disponivel: true, // exibe o status "Disponível para projetos"
 };
 
 export type Project = {
@@ -25,14 +25,14 @@ export const projects: Project[] = [
     number: "01",
     name: "VERSO",
     status: "Demo",
-    kind: "E-commerce de streetwear (demonstração)",
+    kind: "E-commerce de Streetwear",
     summary:
-      "Loja de moda streetwear com identidade própria, catálogo, favoritos, sacola e cálculo de frete.",
+      "Loja de moda streetwear com identidade visual própria, catálogo dinâmico, favoritos salvos no navegador, sacola e cálculo de frete.",
     stack: [
-      "React",
+      "React 19",
       "TypeScript",
       "TanStack Start",
-      "Tailwind CSS",
+      "Tailwind CSS 4",
       "Framer Motion",
       "Three.js",
       "Zod",
@@ -60,14 +60,14 @@ export const projects: Project[] = [
     number: "02",
     name: "DECODE",
     status: "Publicado",
-    kind: "Experiência interativa (Agosto Lilás)",
+    kind: "Experiência Interativa (Agosto Lilás)",
     summary:
-      "Projeto interativo sobre violência contra a mulher, com narrativa em capítulos, jogos e telas de ajuda.",
+      "Aplicação web interativa para conscientização sobre violência contra a mulher, com narrativa ramificada em capítulos, jogos de triagem e dados de apoio.",
     stack: [
-      "React",
+      "React 18",
       "JavaScript",
-      "Vite",
-      "Tailwind CSS",
+      "Vite 5",
+      "Tailwind CSS 3",
       "Lucide React",
     ],
     live: "https://decode-ochre.vercel.app/",
@@ -111,64 +111,64 @@ export const processSteps = [
   {
     number: "01",
     title: "Entender",
-    description: "Analiso o problema, o público e os requisitos essenciais.",
+    description: "Mapeamento aprofundado do problema, objetivos e necessidades do usuário final.",
   },
   {
     number: "02",
     title: "Planejar",
-    description: "Defino a arquitetura, o fluxo de navegação e as escolhas técnicas.",
+    description: "Estruturação da arquitetura de informação, fluxos de navegação e escolhas tecnológicas.",
   },
   {
     number: "03",
     title: "Desenvolver",
-    description: "Codifico com rigor, tipagem sólida e padrões acessíveis.",
+    description: "Codificação modular, tipagem estrita, boas práticas de componentização e acessibilidade.",
   },
   {
     number: "04",
     title: "Testar",
-    description: "Valido em múltiplos dispositivos, performance e estabilidade.",
+    description: "Verificação de consistência visual, performance e responsividade em múltiplos dispositivos.",
   },
   {
     number: "05",
     title: "Evoluir",
-    description: "Refatoro e implemento melhorias contínuas no ciclo de vida.",
+    description: "Refatoração contínua, documentação técnica transparente e melhorias de usabilidade.",
   },
 ];
 
 export const heroData = {
-  counter: "01 / 05",
-  name: "ÁLEF FELIX TEIXEIRA",
-  highlight: "Estudante de Engenharia de Software • Desenvolvedor web",
-  bio: "Desenvolvo aplicações web e soluções digitais com foco em performance, boas práticas e experiências que fazem sentido.",
-  codeSnippet: "const dev = {\n  estudante: true,\n  foco: ['web', 'performance',\n         'boas-praticas']\n}",
-  areasTitle: "ÁREAS DE ATUAÇÃO",
-  areas: ["Web", "Aplicações", "Interfaces"],
-  ctaProjects: "Ver projetos →",
-  ctaContact: "Entrar em contato →",
-  handwrittenHero: "IDEIAS\nCÓDIGO /\nRESULTADOS",
+  statusText: "Disponível para novos projetos",
+  role: "Estudante de Engenharia de Software",
+  firstName: "Álef Felix",
+  lastName: "Teixeira",
+  bio: "Desenvolvo aplicações web modernas com foco em performance, interfaces fluidas e arquitetura de código limpa.",
+  areas: [
+    { title: "Front-end Moderno", desc: "React, TypeScript, Next.js / TanStack, componentes reutilizáveis." },
+    { title: "Design Systems & UI", desc: "Interfaces acessíveis, microinterações e fidelidade estética." },
+    { title: "Código & Boas Práticas", desc: "Arquitetura limpa, tipagem consistente e documentação honesta." },
+  ],
+  ctaProjects: "Ver projetos",
+  ctaContact: "Entrar em contato",
 };
 
 export const aboutData = {
-  tag: "02 / SOBRE",
-  title: "SOBRE MIM",
+  label: "02 / Sobre",
+  title: "Construindo experiências digitais com foco em engenharia e usabilidade",
   paragraph1:
-    "Sou estudante de Engenharia de Software e desenvolvedor web. Meu trabalho é centrado na criação de interfaces eficientes, acessíveis e focadas na experiência do usuário.",
+    "Sou estudante de Engenharia de Software e desenvolvedor web. Meu trabalho é centrado na criação de interfaces eficientes, acessíveis e focadas na experiência real do usuário.",
   paragraph2:
-    "Desenvolvo aplicações front-end utilizando ecossistemas modernos em React e TypeScript, prezando por arquitetura limpa, código legível e documentação honesta.",
-  handwritten: "DISCIPLINA\nFOCO\nEVOLUÇÃO",
-  cta: "Ver processo →",
+    "Desenvolvo aplicações front-end utilizando ecossistemas modernos em React e TypeScript, prezando por arquitetura limpa, código legível, boas práticas de performance e documentação transparente.",
+  cta: "Conhecer meu processo",
   image: "/images/about-setup.webp",
   imageCaption: "Ambiente de desenvolvimento e estudo.",
 };
 
 export const contactData = {
-  tag: "04 / CONTATO",
-  title: "VAMOS CONVERSAR?",
-  text: "Se você tem um projeto em mente, uma oportunidade ou quer trocar ideias sobre desenvolvimento front-end, entre em contato.",
-  handwritten: "Bora\nconstruir algo\nincrível!",
+  label: "04 / Contato",
+  title: "Vamos construir algo juntos?",
+  text: "Se você tem uma oportunidade, projeto ou gostaria de trocar ideias sobre desenvolvimento e engenharia de software, fique à vontade para entrar em contato.",
 };
 
 export const footerData = {
-  author: "Álef Felix",
-  copyright: `© ${new Date().getFullYear()} Álef Felix. Todos os direitos reservados.`,
+  author: "Álef Felix Teixeira",
+  copyright: `© ${new Date().getFullYear()} Álef Felix Teixeira. Todos os direitos reservados.`,
 };

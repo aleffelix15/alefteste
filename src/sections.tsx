@@ -15,11 +15,8 @@ import {
   getTechIcon,
   GitHubIcon,
   LinkedInIcon,
-  BrutalistLogo,
-  DoodleCrown,
-  DoodleLightning,
-  DoodleArrow,
-  DoodleUnderline,
+  ModernLogo,
+  ArrowUpRight,
 } from "./icons";
 
 // ============================================================================
@@ -31,8 +28,8 @@ export function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["inicio", "projetos", "sobre", "tecnologias", "contato"];
-      const scrollPos = window.scrollY + 200;
+      const sections = ["inicio", "projetos", "sobre", "tecnologias", "processo", "contato"];
+      const scrollPos = window.scrollY + 180;
 
       for (const section of sections) {
         const el = document.getElementById(section);
@@ -55,71 +52,71 @@ export function Header() {
     <header className="site-header">
       <div className="container header-inner">
         <a href="#inicio" className="brand" aria-label="Álef Felix - Início">
-          <span className="brand-logo-wrap">
-            <BrutalistLogo />
-          </span>
+          <ModernLogo />
           <span className="brand-text">Álef Felix</span>
         </a>
 
         <nav className="nav-desktop" aria-label="Navegação principal">
           <a
             href="#inicio"
-            className={`nav-link ${activeSection === "inicio" ? "active-highlight" : ""}`}
+            className={`nav-link ${activeSection === "inicio" ? "active" : ""}`}
           >
             Início
           </a>
           <a
             href="#projetos"
-            className={`nav-link ${activeSection === "projetos" ? "active-highlight" : ""}`}
+            className={`nav-link ${activeSection === "projetos" ? "active" : ""}`}
           >
             Projetos
           </a>
           <a
             href="#sobre"
-            className={`nav-link ${activeSection === "sobre" ? "active-highlight" : ""}`}
+            className={`nav-link ${activeSection === "sobre" ? "active" : ""}`}
           >
             Sobre
           </a>
           <a
             href="#tecnologias"
-            className={`nav-link ${activeSection === "tecnologias" ? "active-highlight" : ""}`}
+            className={`nav-link ${activeSection === "tecnologias" ? "active" : ""}`}
           >
             Tecnologias
           </a>
           <a
+            href="#processo"
+            className={`nav-link ${activeSection === "processo" ? "active" : ""}`}
+          >
+            Processo
+          </a>
+          <a
             href="#contato"
-            className={`nav-link ${activeSection === "contato" ? "active-highlight" : ""}`}
+            className={`nav-link ${activeSection === "contato" ? "active" : ""}`}
           >
             Contato
           </a>
         </nav>
 
-        {links.disponivel && (
-          <div className="badge-disponivel" title="Aberto a novas oportunidades">
-            <span className="badge-dot" aria-hidden="true"></span>
-            Disponível para projetos
-          </div>
-        )}
+        <div className="header-right">
+          {links.disponivel && (
+            <div className="badge-status" title="Aberto a novas oportunidades">
+              <span className="badge-status-dot" aria-hidden="true"></span>
+              Disponível
+            </div>
+          )}
 
-        <button
-          type="button"
-          className="btn-mobile-toggle"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
-          aria-expanded={mobileOpen}
-        >
-          {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
+          <button
+            type="button"
+            className="btn-mobile-toggle"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={mobileOpen}
+          >
+            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Drawer */}
       <div className={`mobile-nav-panel ${mobileOpen ? "open" : ""}`}>
-        {links.disponivel && (
-          <div className="badge-disponivel" style={{ display: "inline-flex", alignSelf: "flex-start", marginBottom: "0.5rem" }}>
-            <span className="badge-dot" aria-hidden="true"></span>
-            Disponível para projetos
-          </div>
-        )}
         <a
           href="#inicio"
           className="mobile-nav-link"
@@ -149,6 +146,13 @@ export function Header() {
           Tecnologias
         </a>
         <a
+          href="#processo"
+          className="mobile-nav-link"
+          onClick={() => setMobileOpen(false)}
+        >
+          Processo
+        </a>
+        <a
           href="#contato"
           className="mobile-nav-link"
           onClick={() => setMobileOpen(false)}
@@ -164,102 +168,48 @@ export function Header() {
 // 2. HERO SECTION
 // ============================================================================
 export function Hero() {
-  const [photoError, setPhotoError] = useState(false);
-
   return (
     <section id="inicio" className="hero-section">
       <div className="container hero-grid">
-        {/* Left Column */}
-        <div className="hero-left">
-          <div className="hero-quote-mark" aria-hidden="true">
-            “
+        <div className="hero-content">
+          <div className="hero-status-pill">
+            <span className="badge-status-dot" aria-hidden="true"></span>
+            {heroData.statusText}
           </div>
 
-          <div className="hero-title-wrap">
-            <h1 className="hero-name">{heroData.name}</h1>
-            <DoodleLightning className="hero-lightning-doodle" />
-          </div>
+          <h1 className="hero-title">
+            {heroData.firstName}{" "}
+            <span className="hero-title-highlight">{heroData.lastName}</span>
+          </h1>
 
-          <div className="hero-highlighter-strip">
-            {heroData.highlight}
-          </div>
+          <div className="hero-role">{heroData.role}</div>
 
           <p className="hero-bio">{heroData.bio}</p>
 
           <div className="hero-actions">
-            <a href="#projetos" className="btn-brutalist btn-lime">
+            <a href="#projetos" className="btn-primary">
               {heroData.ctaProjects}
+              <ArrowUpRight size={16} />
             </a>
-            <a href="#contato" className="btn-brutalist btn-outline">
+            <a href="#contato" className="btn-secondary">
               {heroData.ctaContact}
             </a>
           </div>
-
-          <div className="hero-counter-bar">
-            <span className="hero-counter-num">{heroData.counter}</span>
-            <span className="hero-counter-line" aria-hidden="true"></span>
-          </div>
         </div>
 
-        {/* Right Column: Brutalist Collage */}
-        <div className="hero-collage-wrap">
-          {/* Lime backing rectangle */}
-          <div className="collage-lime-backing" aria-hidden="true"></div>
-
-          {/* Crown doodle over head */}
-          <DoodleCrown className="collage-crown" />
-
-          {/* Main frame: Photo or Identified Fallback */}
-          <div className="collage-main-frame">
-            {!photoError ? (
-              <img
-                src="/images/alef.webp"
-                alt="Foto de Álef Felix Teixeira"
-                width={440}
-                height={550}
-                className="collage-photo"
-                onError={() => setPhotoError(true)}
-              />
-            ) : (
-              <div className="collage-photo-placeholder">
-                <span className="placeholder-badge">[ FOTO PENDENTE ]</span>
-                <p className="placeholder-note">
-                  Espaço reservado para a foto real de Álef Felix.
-                  <br />
-                  Insira o arquivo em:
-                  <br />
-                  <code>public/images/alef.webp</code>
-                </p>
-              </div>
-            )}
+        {/* Right Column: Sleek Focus Areas Panel */}
+        <div className="hero-card" aria-label="Áreas de foco técnico">
+          <div className="hero-card-header">
+            <span className="hero-card-title">Foco &amp; Especialidades</span>
+            <span className="hero-card-badge">Em formação</span>
           </div>
 
-          {/* Black tape element at bottom */}
-          <div className="collage-tape-bottom" aria-hidden="true"></div>
-
-          {/* Floating code snippet card */}
-          <aside className="collage-code-card" aria-label="Ilustração de código">
-            <pre className="code-card-pre">{heroData.codeSnippet}</pre>
-          </aside>
-
-          {/* Floating Áreas de Atuação card */}
-          <aside className="collage-areas-card" aria-label={heroData.areasTitle}>
-            <div className="areas-card-header">{heroData.areasTitle}</div>
-            {heroData.areas.map((area) => (
-              <a key={area} href="#projetos" className="areas-card-row">
-                <span>{area}</span>
-                <span aria-hidden="true">→</span>
-              </a>
-            ))}
-          </aside>
-
-          {/* Handwritten Annotation */}
-          <div className="collage-handwritten" aria-hidden="true">
-            <div>IDEIAS</div>
-            <div>CÓDIGO /</div>
-            <div>RESULTADOS</div>
-            <DoodleUnderline style={{ width: "130px", marginTop: "-4px" }} />
-          </div>
+          {heroData.areas.map((area, idx) => (
+            <div key={idx} className="focus-item">
+              <span className="focus-item-title">{area.title}</span>
+              <span className="focus-item-desc">{area.desc}</span>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -267,28 +217,43 @@ export function Hero() {
 }
 
 // ============================================================================
-// 3. SECTION: PROJETOS EM DESTAQUE
+// 3. PROJECTS SECTION
 // ============================================================================
 export function Projects() {
   return (
     <section id="projetos" className="section-projects">
       <div className="container">
-        <div className="projects-header-row">
+        <div className="projects-header">
           <div>
-            <span className="section-badge">01 / PROJETOS</span>
-            <h2 className="section-title">PROJETOS EM DESTAQUE</h2>
+            <span className="section-tag">01 / Projetos</span>
+            <h2 className="section-title">Projetos em Destaque</h2>
+            <p className="section-subtitle">
+              Aplicações web desenvolvidas com rigor técnico, código aberto e deploys em produção.
+            </p>
           </div>
-          <a href={links.github} target="_blank" rel="noopener noreferrer" className="projects-subtext">
-            Código aberto &amp; demonstrações reais →
+          <a
+            href={links.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-secondary"
+          >
+            <GitHubIcon size={16} />
+            Ver todos no GitHub
+            <ArrowUpRight size={14} />
           </a>
         </div>
 
         <div className="projects-grid">
           {projects.map((project) => (
             <article key={project.number} className="project-card">
-              {/* Screenshot Media */}
-              <div className="project-media-wrap">
-                <span className="project-status-tag">{project.status}</span>
+              <div className="project-media">
+                <span
+                  className={`project-badge-tag ${
+                    project.status === "Publicado" ? "published" : "demo"
+                  }`}
+                >
+                  {project.status}
+                </span>
                 <img
                   src={project.image}
                   alt={`Captura real do projeto ${project.name}`}
@@ -299,30 +264,30 @@ export function Projects() {
                 />
               </div>
 
-              {/* Body */}
               <div className="project-body">
-                <h3 className="project-name">{project.name}</h3>
+                <div className="project-header-row">
+                  <h3 className="project-name">{project.name}</h3>
+                </div>
                 <div className="project-kind">{project.kind}</div>
                 <p className="project-summary">{project.summary}</p>
 
-                {/* Tech Chips */}
-                <div className="project-stack-wrap" aria-label="Tecnologias utilizadas">
+                <div className="project-stack" aria-label="Tecnologias utilizadas">
                   {project.stack.map((tech) => (
-                    <span key={tech} className="tech-chip">
+                    <span key={tech} className="tech-tag">
                       {tech}
                     </span>
                   ))}
                 </div>
 
-                {/* Action Buttons */}
-                <div className="project-actions-row">
+                <div className="project-actions">
                   <a
                     href={project.live}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-brutalist btn-project-primary"
+                    className="btn-project-visit"
                   >
-                    Visitar projeto →
+                    Visitar projeto
+                    <ArrowUpRight size={14} />
                   </a>
                   <a
                     href={project.repo}
@@ -331,26 +296,25 @@ export function Projects() {
                     className="btn-project-code"
                   >
                     <GitHubIcon size={16} />
-                    Ver código
+                    Código
                   </a>
                 </div>
 
-                {/* Native Accordion for Code Proof & Limits */}
-                <div className="project-accordion">
+                <div className="project-details">
                   <details>
                     <summary>
-                      <span>Detalhes técnicos &amp; limitações</span>
+                      <span>Auditoria técnica &amp; limitações</span>
                       <span aria-hidden="true">↓</span>
                     </summary>
-                    <div className="accordion-content">
+                    <div className="details-drawer">
                       <div>
-                        <div className="accordion-block-title">Proposta:</div>
+                        <div className="details-title">Proposta:</div>
                         <p>{project.proposal}</p>
                       </div>
 
                       <div>
-                        <div className="accordion-block-title">Comprovado no código:</div>
-                        <ul className="accordion-list">
+                        <div className="details-title">Comprovado no código:</div>
+                        <ul className="details-list">
                           {project.does.map((item, idx) => (
                             <li key={idx}>{item}</li>
                           ))}
@@ -358,8 +322,8 @@ export function Projects() {
                       </div>
 
                       <div>
-                        <div className="accordion-block-title">Limitações reais registradas:</div>
-                        <ul className="accordion-list">
+                        <div className="details-title">Limitações reais registradas:</div>
+                        <ul className="details-list">
                           {project.limits.map((limit, idx) => (
                             <li key={idx}>{limit}</li>
                           ))}
@@ -378,49 +342,33 @@ export function Projects() {
 }
 
 // ============================================================================
-// 4. SECTION: SOBRE MIM
+// 4. ABOUT SECTION
 // ============================================================================
 export function About() {
   return (
     <section id="sobre" className="section-about">
       <div className="container about-grid">
-        {/* Left Column */}
-        <div className="about-text-col">
-          <span className="section-badge">{aboutData.tag}</span>
+        <div>
+          <span className="section-tag">{aboutData.label}</span>
           <h2 className="section-title">{aboutData.title}</h2>
           <p className="about-p">{aboutData.paragraph1}</p>
           <p className="about-p">{aboutData.paragraph2}</p>
-
-          <div className="about-actions-wrap">
-            <a href="#processo" className="btn-brutalist btn-dark">
-              {aboutData.cta}
-            </a>
-
-            <div className="about-handwritten-block" aria-hidden="true">
-              <div className="about-handwritten-text">
-                <div>DISCIPLINA</div>
-                <div>FOCO</div>
-                <div>EVOLUÇÃO</div>
-              </div>
-              <DoodleArrow style={{ width: "50px", transform: "rotate(-10deg)" }} />
-            </div>
-          </div>
+          <a href="#processo" className="btn-secondary">
+            {aboutData.cta}
+            <ArrowUpRight size={16} />
+          </a>
         </div>
 
-        {/* Right Column: Setup Photo with Lime Backing */}
-        <div className="about-media-col">
-          <div className="about-lime-backing" aria-hidden="true"></div>
-          <div className="about-frame">
-            <img
-              src={aboutData.image}
-              alt="Ambiente de desenvolvimento e estudo de Álef Felix"
-              width={420}
-              height={315}
-              loading="lazy"
-              className="about-img"
-            />
-            <div className="about-caption-box">{aboutData.imageCaption}</div>
-          </div>
+        <div className="about-media">
+          <img
+            src={aboutData.image}
+            alt="Ambiente de desenvolvimento e estudo de Álef Felix"
+            width={440}
+            height={330}
+            loading="lazy"
+            className="about-img"
+          />
+          <div className="about-caption">{aboutData.imageCaption}</div>
         </div>
       </div>
     </section>
@@ -428,36 +376,38 @@ export function About() {
 }
 
 // ============================================================================
-// 5. SECTION: TECNOLOGIAS (FERRAMENTAS QUE UTILIZO)
+// 5. TECHNOLOGIES SECTION
 // ============================================================================
 export function Technologies() {
   return (
     <section id="tecnologias" className="section-tech">
       <div className="container">
-        <span className="section-badge">03 / TECNOLOGIAS</span>
-        <h2 className="section-title">FERRAMENTAS QUE UTILIZO</h2>
-        <p className="tech-subheading">Principais tecnologias usadas nos meus projetos.</p>
+        <span className="section-tag">03 / Tecnologias</span>
+        <h2 className="section-title">Ferramentas &amp; Tecnologias</h2>
+        <p className="section-subtitle">
+          Ecossistema técnico utilizado em projetos práticos e tópicos contínuos de estudo.
+        </p>
 
-        {/* Category 1: Comprovadas */}
-        <div className="tech-group-block">
-          <h3 className="tech-group-title">Comprovadas nos projetos</h3>
-          <div className="tech-grid-5">
+        {/* Grupo 1: Comprovadas */}
+        <div className="tech-group">
+          <h3 className="tech-group-title">Comprovadas nos projetos auditados</h3>
+          <div className="tech-grid">
             {techGroups.proven.map((tech) => (
               <div key={tech} className="tech-card" title={`Tecnologia: ${tech}`}>
-                {getTechIcon(tech, 24)}
+                <div className="tech-card-icon">{getTechIcon(tech, 24)}</div>
                 <span className="tech-card-name">{tech}</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Category 2: Também estudo e uso */}
-        <div className="tech-group-block">
-          <h3 className="tech-group-title">Também estudo e uso</h3>
-          <div className="tech-grid-5">
+        {/* Grupo 2: Estudo */}
+        <div className="tech-group">
+          <h3 className="tech-group-title">Também estudo e utilizo</h3>
+          <div className="tech-grid">
             {techGroups.study.map((tech) => (
               <div key={tech} className="tech-card" title={`Estudo: ${tech}`}>
-                {getTechIcon(tech, 24)}
+                <div className="tech-card-icon">{getTechIcon(tech, 24)}</div>
                 <span className="tech-card-name">{tech}</span>
               </div>
             ))}
@@ -469,20 +419,22 @@ export function Technologies() {
 }
 
 // ============================================================================
-// 6. SECTION: PROCESSO (COMO EU TRABALHO)
+// 6. PROCESS SECTION
 // ============================================================================
 export function Process() {
   return (
     <section id="processo" className="section-process">
       <div className="container">
-        <span className="section-badge">MÉTODO</span>
-        <h2 className="section-title">COMO EU TRABALHO</h2>
-        <p className="tech-subheading">Fluxo estruturado de concepção, desenvolvimento e entrega contínua.</p>
+        <span className="section-tag">04 / Método</span>
+        <h2 className="section-title">Como Eu Trabalho</h2>
+        <p className="section-subtitle">
+          Fluxo de engenharia centrado em clareza, validação contínua e foco em qualidade.
+        </p>
 
-        <div className="process-grid-5">
+        <div className="process-grid">
           {processSteps.map((step) => (
-            <div key={step.number} className="process-step-card">
-              <span className="process-step-num">{step.number}</span>
+            <div key={step.number} className="process-card">
+              <span className="process-number">{step.number}</span>
               <h3 className="process-step-title">{step.title}</h3>
               <p className="process-step-desc">{step.description}</p>
             </div>
@@ -494,80 +446,70 @@ export function Process() {
 }
 
 // ============================================================================
-// 7. SECTION: CONTATO (VAMOS CONVERSAR?)
+// 7. CONTACT SECTION
 // ============================================================================
 export function Contact() {
   return (
     <section id="contato" className="section-contact">
       <div className="container contact-layout">
-        {/* Left Column */}
-        <div className="contact-left-col">
-          <span className="section-badge">{contactData.tag}</span>
+        <div>
+          <span className="section-tag">{contactData.label}</span>
           <h2 className="section-title">{contactData.title}</h2>
           <p className="contact-text">{contactData.text}</p>
-
-          <div className="contact-cards-wrap">
-            <a
-              href={links.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="contact-channel-card"
-            >
-              <div className="channel-info-group">
-                <div className="channel-icon-wrap">
-                  <GitHubIcon size={32} />
-                </div>
-                <div className="channel-meta">
-                  <span className="channel-name">GitHub</span>
-                  <span className="channel-handle">github.com/aleffelix15</span>
-                </div>
-              </div>
-              <span className="channel-arrow" aria-hidden="true">→</span>
-            </a>
-
-            <a
-              href={links.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="contact-channel-card"
-            >
-              <div className="channel-info-group">
-                <div className="channel-icon-wrap">
-                  <LinkedInIcon size={32} />
-                </div>
-                <div className="channel-meta">
-                  <span className="channel-name">LinkedIn</span>
-                  <span className="channel-handle">Álef Felix Teixeira</span>
-                </div>
-              </div>
-              <span className="channel-arrow" aria-hidden="true">→</span>
-            </a>
-
-            {links.email && (
-              <a
-                href={`mailto:${links.email}`}
-                className="contact-channel-card"
-              >
-                <div className="channel-info-group">
-                  <div className="channel-meta">
-                    <span className="channel-name">E-mail</span>
-                    <span className="channel-handle">{links.email}</span>
-                  </div>
-                </div>
-                <span className="channel-arrow" aria-hidden="true">→</span>
-              </a>
-            )}
-          </div>
         </div>
 
-        {/* Right Column: Handwritten Note */}
-        <div className="contact-right-col" aria-hidden="true">
-          <div className="contact-handwritten-note">
-            <div>Bora</div>
-            <div>construir algo</div>
-            <div>incrível!</div>
-            <DoodleUnderline style={{ width: "200px", marginTop: "4px" }} />
-          </div>
+        <div className="contact-cards">
+          <a
+            href={links.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="contact-card"
+          >
+            <div className="contact-card-left">
+              <div className="contact-card-icon">
+                <GitHubIcon size={22} />
+              </div>
+              <div>
+                <div className="contact-card-title">GitHub</div>
+                <div className="contact-card-sub">github.com/aleffelix15</div>
+              </div>
+            </div>
+            <ArrowUpRight size={18} className="contact-card-arrow" />
+          </a>
+
+          <a
+            href={links.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="contact-card"
+          >
+            <div className="contact-card-left">
+              <div className="contact-card-icon">
+                <LinkedInIcon size={22} />
+              </div>
+              <div>
+                <div className="contact-card-title">LinkedIn</div>
+                <div className="contact-card-sub">Álef Felix Teixeira</div>
+              </div>
+            </div>
+            <ArrowUpRight size={18} className="contact-card-arrow" />
+          </a>
+
+          {links.email && (
+            <a
+              href={`mailto:${links.email}`}
+              className="contact-card"
+            >
+              <div className="contact-card-left">
+                <div className="contact-card-icon">✉</div>
+                <div>
+                  <div className="contact-card-title">E-mail</div>
+                  <div className="contact-card-sub">{links.email}</div>
+                </div>
+              </div>
+              <ArrowUpRight size={18} className="contact-card-arrow" />
+            </a>
+          )}
         </div>
       </div>
     </section>
@@ -585,16 +527,17 @@ export function Footer() {
   return (
     <footer className="site-footer">
       <div className="container footer-inner">
-        <div className="footer-left">
-          <BrutalistLogo />
-          <span className="brand-text">{footerData.author}</span>
+        <div className="footer-brand">
+          <ModernLogo size={24} />
+          <span>{footerData.author}</span>
         </div>
 
-        <nav className="footer-nav" aria-label="Navegação secundária">
+        <nav className="footer-nav" aria-label="Navegação do rodapé">
           <a href="#inicio">Início</a>
           <a href="#projetos">Projetos</a>
           <a href="#sobre">Sobre</a>
           <a href="#tecnologias">Tecnologias</a>
+          <a href="#processo">Processo</a>
           <a href="#contato">Contato</a>
         </nav>
 
@@ -603,8 +546,9 @@ export function Footer() {
           <button
             type="button"
             onClick={scrollToTop}
-            className="btn-back-to-top"
+            className="btn-scroll-top"
             aria-label="Voltar ao topo da página"
+            title="Voltar ao topo"
           >
             ↑
           </button>
