@@ -5,10 +5,13 @@ import {
   projectsIntro,
   projects,
   aboutData,
+  techCategories,
   techChapterData,
   techIndexData,
   contactData,
   footerData,
+  type TechCategory,
+  type AuditedRepoName,
 } from "./data";
 import { GithubIcon, LinkedinIcon, ArrowUpIcon, getColorTechEmblem } from "./icons";
 
@@ -803,12 +806,27 @@ export function AboutChapter() {
 }
 
 export function TechChapter() {
-  const [selectedProject, setSelectedProject] = useState<"ALL" | "VERSO" | "DECODE">("ALL");
+  const [selectedCategory, setSelectedCategory] = useState<"ALL" | TechCategory>("ALL");
+  const [selectedRepo, setSelectedRepo] = useState<"ALL" | AuditedRepoName>("ALL");
 
-  const visibleTechs =
-    selectedProject === "ALL"
-      ? techIndexData
-      : techIndexData.filter((t) => t.projects.includes(selectedProject));
+  const repoFilters: { id: "ALL" | AuditedRepoName; label: string }[] = [
+    { id: "ALL", label: "Todos os Projetos" },
+    { id: "VERSO", label: "Verso" },
+    { id: "DECODE", label: "DECODE" },
+    { id: "BANKTEF", label: "BANKTEF (Java/Spring)" },
+    { id: "BioStudy", label: "BioStudy (Supabase)" },
+    { id: "Loja de Roupa", label: "Loja & ConektaCell (Next.js)" },
+  ];
+
+  const filteredTechs = techIndexData.filter((item) => {
+    const matchCategory = selectedCategory === "ALL" || item.category === selectedCategory;
+    const matchRepo = selectedRepo === "ALL" || item.projects.includes(selectedRepo);
+    return matchCategory && matchRepo;
+  });
+
+  const activeCategories = techCategories.filter(
+    (cat) => selectedCategory === "ALL" || cat.id === selectedCategory
+  );
 
   return (
     <section
@@ -820,7 +838,7 @@ export function TechChapter() {
       <div className="tech-ambient-glow" aria-hidden="true" />
 
       <div className="container" data-reveal>
-        {/* Top Header Row inspired by reference image */}
+        {/* Top Header Row */}
         <div className="tech-showcase-top">
           <div className="tech-top-left">
             <div className="tech-kicker-row mono">
@@ -859,82 +877,173 @@ export function TechChapter() {
           </aside>
         </div>
 
-        {/* Repository Filter Pills */}
+        {/* Dual Filter Bar: Categories + Audited Repositories */}
         <div className="tech-filter-toolbar">
-          <div className="tech-filter-pills" role="group" aria-label="Filtrar tecnologias por projeto">
-            <button
-              type="button"
-              className={`tech-filter-pill mono ${selectedProject === "ALL" ? "is-active" : ""}`}
-              aria-pressed={selectedProject === "ALL"}
-              data-magnetic
-              onClick={() => setSelectedProject("ALL")}
-            >
-              TODAS ({techIndexData.length})
-            </button>
-            <button
-              type="button"
-              className={`tech-filter-pill mono ${selectedProject === "VERSO" ? "is-active" : ""}`}
-              aria-pressed={selectedProject === "VERSO"}
-              data-magnetic
-              onClick={() => setSelectedProject("VERSO")}
-            >
-              VERSO ({techIndexData.filter((t) => t.projects.includes("VERSO")).length})
-            </button>
-            <button
-              type="button"
-              className={`tech-filter-pill mono ${selectedProject === "DECODE" ? "is-active" : ""}`}
-              aria-pressed={selectedProject === "DECODE"}
-              data-magnetic
-              onClick={() => setSelectedProject("DECODE")}
-            >
-              DECODE ({techIndexData.filter((t) => t.projects.includes("DECODE")).length})
-            </button>
+          <div className="tech-filter-group">
+            <span className="tech-filter-group-label mono">CATEGORIA</span>
+            <div className="tech-filter-pills" role="group" aria-label="Filtrar tecnologias por categoria">
+              <button
+                type="button"
+                className={`tech-filter-pill mono ${selectedCategory === "ALL" ? "is-active" : ""}`}
+                aria-pressed={selectedCategory === "ALL"}
+                onClick={() => setSelectedCategory("ALL")}
+              >
+                TODAS ({techIndexData.length})
+              </button>
+              {techCategories.map((cat) => {
+                const count = techIndexData.filter((t) => t.category === cat.id).length;
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    className={`tech-filter-pill mono ${selectedCategory === cat.id ? "is-active" : ""}`}
+                    aria-pressed={selectedCategory === cat.id}
+                    onClick={() => setSelectedCategory(cat.id)}
+                  >
+                    {cat.number} · {cat.title.split("&")[0].trim().toUpperCase()} ({count})
+                  </button>
+                );
+              })}
+            </div>
           </div>
-          <span className="tech-audit-tag mono">
-            SÍMBOLOS VERIFICADOS NOS REPOSITÓRIOS VERSO &amp; DECODE
-          </span>
+
+          <div className="tech-filter-group">
+            <span className="tech-filter-group-label mono">REPOSITÓRIO AUDITADO</span>
+            <div className="tech-filter-pills" role="group" aria-label="Filtrar tecnologias por repositório">
+              {repoFilters.map((repo) => {
+                const isActive = selectedRepo === repo.id;
+                const isPrimary = repo.id === "VERSO" || repo.id === "DECODE";
+                return (
+                  <button
+                    key={repo.id}
+                    type="button"
+                    className={`tech-filter-pill mono ${isActive ? "is-active" : ""} ${
+                      isPrimary ? "is-primary-repo" : ""
+                    }`}
+                    aria-pressed={isActive}
+                    onClick={() => setSelectedRepo(repo.id)}
+                  >
+                    {repo.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
-        {/* Colorful Official Symbols Grid with Float, Brand Halo & 3D Hover */}
-        <ul
-          key={selectedProject}
-          className="tech-symbols-grid"
-          aria-label="Grade de tecnologias utilizadas"
-        >
-          {visibleTechs.map((item, idx) => (
-            <li
-              key={item.name}
-              className="tech-symbol-card"
-              data-tilt-card
-              data-cursor-label={item.projects.join(" · ")}
-              style={
-                {
-                  "--stagger-index": idx,
-                  "--float-delay": `${(idx % 6) * 0.42}s`,
-                  "--brand-color": item.brandColor,
-                } as React.CSSProperties
-              }
-            >
-              <div className="tech-symbol-halo" aria-hidden="true" />
-              <div className="project-plate-spotlight" aria-hidden="true" />
+        {/* Categorized Symbols Showcase */}
+        <div className="tech-categories-stack" key={`${selectedCategory}-${selectedRepo}`}>
+          {activeCategories.map((cat) => {
+            const itemsInCat = filteredTechs.filter((t) => t.category === cat.id);
+            if (itemsInCat.length === 0) return null;
 
-              <div className="tech-symbol-emblem-wrap">
-                {getColorTechEmblem(item.name, 58)}
+            return (
+              <div key={cat.id} className="tech-category-block">
+                <div className="tech-category-header">
+                  <div className="tech-category-title-wrap">
+                    <span className="tech-category-num mono">{cat.number}</span>
+                    <h3 className="tech-category-title">{cat.title}</h3>
+                    <span className="tech-category-count mono">
+                      {itemsInCat.length} {itemsInCat.length === 1 ? "ITEM" : "ITENS"}
+                    </span>
+                  </div>
+                  <p className="tech-category-desc">{cat.description}</p>
+                </div>
+
+                <ul className="tech-symbols-grid" aria-label={`Tecnologias de ${cat.title}`}>
+                  {itemsInCat.map((item, idx) => (
+                    <li
+                      key={item.name}
+                      className="tech-symbol-card"
+                      data-tilt-card
+                      data-cursor-label={item.projects.slice(0, 2).join(" · ")}
+                      style={
+                        {
+                          "--stagger-index": idx,
+                          "--float-delay": `${(idx % 6) * 0.42}s`,
+                          "--brand-color": item.brandColor,
+                        } as React.CSSProperties
+                      }
+                    >
+                      <div className="tech-symbol-halo" aria-hidden="true" />
+                      <div className="project-plate-spotlight" aria-hidden="true" />
+
+                      <div className="tech-symbol-emblem-wrap">
+                        {getColorTechEmblem(item.name, 54)}
+                      </div>
+
+                      <span className="tech-symbol-name">{item.name}</span>
+                      <span className="tech-symbol-role">{item.role}</span>
+
+                      <div
+                        className="tech-symbol-badges"
+                        aria-label={`Comprovado em ${item.projects.join(", ")}`}
+                      >
+                        {item.projects.slice(0, 3).map((proj) => {
+                          const isMain = proj === "VERSO" || proj === "DECODE";
+                          return (
+                            <span
+                              key={proj}
+                              className={`tech-symbol-badge mono ${
+                                isMain ? "is-featured-badge" : ""
+                              }`}
+                            >
+                              {proj}
+                            </span>
+                          );
+                        })}
+                        {item.projects.length > 3 && (
+                          <span className="tech-symbol-badge mono">
+                            +{item.projects.length - 3}
+                          </span>
+                        )}
+                      </div>
+
+                      <span className="tech-symbol-provenance mono">{item.provenanceNote}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
+            );
+          })}
+        </div>
 
-              <span className="tech-symbol-name">{item.name}</span>
-              <span className="tech-symbol-role">{item.role}</span>
-
-              <div className="tech-symbol-badges" aria-label={`Aplicado em ${item.projects.join(" e ")}`}>
-                {item.projects.map((proj) => (
-                  <span key={proj} className="tech-symbol-badge mono">
-                    {proj}
-                  </span>
+        {/* Audit & Provenance Transparency Dossier */}
+        <details className="tech-audit-dossier" data-animated-details>
+          <summary className="audit-summary mono" data-cursor-label="ORIGEM">
+            <span>ORIGEM AUDITADA NOS REPOSITÓRIOS GITHUB &amp; NOTA DE TRANSPARÊNCIA</span>
+            <span className="audit-plus" aria-hidden="true">+</span>
+          </summary>
+          <div className="audit-drawer tech-audit-drawer-grid">
+            <div className="tech-audit-repos-col">
+              <h4 className="audit-subhead mono">REPOSITÓRIOS VERIFICADOS (PACKAGE.JSON / POM.XML / SQL)</h4>
+              <ul className="tech-repo-evidence-list">
+                {techChapterData.auditTransparency.verifiedRepos.map((repo) => (
+                  <li key={repo.name} className="tech-repo-evidence-item">
+                    <a
+                      href={repo.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="tech-repo-evidence-link mono"
+                    >
+                      {repo.name} ↗
+                    </a>
+                    <span className="tech-repo-evidence-focus">{repo.focus}</span>
+                  </li>
                 ))}
-              </div>
-            </li>
-          ))}
-        </ul>
+              </ul>
+            </div>
+
+            <div className="tech-audit-note-col">
+              <h4 className="audit-subhead audit-subhead-warn mono">
+                DIFERENCIAÇÃO ENTRE PROJETOS, AMBIENTE E NÃO VERIFICADOS
+              </h4>
+              <p className="audit-arch-note">
+                {techChapterData.auditTransparency.excludedFromReferenceNote}
+              </p>
+            </div>
+          </div>
+        </details>
 
         {/* Bottom Architectural Signature Bar matching reference image */}
         <div className="tech-showcase-footer mono" aria-hidden="true">

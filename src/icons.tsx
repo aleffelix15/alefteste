@@ -271,6 +271,292 @@ export function GitHubColorEmblem({ size = 56 }: IconProps) {
   );
 }
 
+export function NextjsColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <defs>
+        <linearGradient id="nextDiag" x1="36" y1="36" x2="50" y2="54" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#FFFFFF" />
+          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id="nextRight" x1="42" y1="20" x2="42" y2="44" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#FFFFFF" />
+          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <circle cx="32" cy="32" r="24" fill="#0B0F17" stroke="#94A3B8" strokeWidth="1.6" />
+      <path d="M23 44V20H26.6L46.5 49.2C45.3 50.2 43.9 51 42.4 51.6L26.5 27.6V44H23Z" fill="url(#nextDiag)" />
+      <rect x="40" y="20" width="3.6" height="24" fill="url(#nextRight)" />
+    </svg>
+  );
+}
+
+export function ReactRouterColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <circle cx="20" cy="42" r="6" fill="#F43F5E" />
+      <circle cx="44" cy="42" r="6" fill="#F43F5E" />
+      <circle cx="32" cy="18" r="6" fill="#38BDF8" />
+      <path d="M24 38L30 23M40 38L34 23M26 42H38" stroke="#E2E8F0" strokeWidth="3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function LucideColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <path
+        d="M32 10C32 22.15 22.15 32 10 32C22.15 32 32 41.85 32 54C32 41.85 41.85 32 54 32C41.85 32 32 22.15 32 10Z"
+        stroke="#FB7185"
+        strokeWidth="4"
+        strokeLinejoin="round"
+        fill="rgba(251, 113, 133, 0.16)"
+      />
+      <circle cx="32" cy="32" r="4" fill="#FDA4AF" />
+    </svg>
+  );
+}
+
+export function JavaColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      {/* Red/Orange Steam */}
+      <path
+        d="M34 10C37 14 30 18 33 23C36 27 41 22 39 17C38 14 34 10 34 10ZM26 14C28 18 22 21 25 26C27 29 31 25 29 21C28 18 26 14 26 14Z"
+        fill="#E76F00"
+      />
+      <path
+        d="M33 8C37 13 28 19 32 26M25 13C28 17 21 21 25 27"
+        stroke="#EF4444"
+        strokeWidth="3.2"
+        strokeLinecap="round"
+      />
+      {/* Blue Cup & Saucer Waves */}
+      <path
+        d="M18 34C26 37 38 37 44 34M20 40C27 42.5 37 42.5 42 40M15 47C25 50.5 41 50.5 49 46.5"
+        stroke="#5382A1"
+        strokeWidth="3.4"
+        strokeLinecap="round"
+      />
+      <path
+        d="M44 33C48 33 50 35 50 37.5C50 40 47.5 41.5 44 41.5"
+        stroke="#5382A1"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+export function SpringBootColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <polygon
+        points="32,7 54,19.5 54,44.5 32,57 10,44.5 10,19.5"
+        fill="#6DB33F"
+      />
+      <path d="M32 18V32" stroke="#FFFFFF" strokeWidth="4.2" strokeLinecap="round" />
+      <path
+        d="M23.5 23.5C19.5 27.5 19.5 34.5 23.5 39C28 43.5 36 43.5 40.5 39C44.5 34.5 44.5 27.5 40.5 23.5"
+        stroke="#FFFFFF"
+        strokeWidth="4.2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+export function SpringSecurityColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <path
+        d="M32 7L52 15V31C52 44.5 43.4 53.6 32 57C20.6 53.6 12 44.5 12 31V15L32 7Z"
+        fill="#6DB33F"
+      />
+      <path
+        d="M32 11V53C41.2 49.8 48 42.1 48 31V17.8L32 11Z"
+        fill="#5A9E2F"
+      />
+      <path
+        d="M24 32L29.5 37.5L40.5 26.5"
+        stroke="#FFFFFF"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function JwtColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg emblem-spin-hover">
+      <g strokeWidth="5.2" strokeLinecap="round">
+        <line x1="32" y1="8" x2="32" y2="23" stroke="#00F2FE" />
+        <line x1="32" y1="41" x2="32" y2="56" stroke="#38BDF8" />
+        <line x1="11.2" y1="20" x2="24.2" y2="27.5" stroke="#FB7185" />
+        <line x1="39.8" y1="36.5" x2="52.8" y2="44" stroke="#D946EF" />
+        <line x1="52.8" y1="20" x2="39.8" y2="27.5" stroke="#A855F7" />
+        <line x1="24.2" y1="36.5" x2="11.2" y2="44" stroke="#F43F5E" />
+      </g>
+      <circle cx="32" cy="32" r="4.5" fill="#F8FAFC" />
+    </svg>
+  );
+}
+
+export function JpaHibernateColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <polygon points="20,10 38,10 29,26 11,26" fill="#BCAE79" />
+      <polygon points="26,38 44,38 53,54 35,54" fill="#BCAE79" />
+      <polygon points="38,10 53,36 44,52 29,26" fill="#59666C" />
+      <polygon points="11,26 26,52 35,36 20,10" fill="#59666C" fillOpacity="0.85" />
+    </svg>
+  );
+}
+
+export function PostgresColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <path
+        d="M32 10C18 10 11 19 13 33C14.5 43 22 49 28 49V55C28 57 35 57 36 53V45C45 45 52 37 51 25C50 14 43 10 32 10Z"
+        fill="#336791"
+        stroke="#E2E8F0"
+        strokeWidth="2.2"
+      />
+      <path
+        d="M24 22C20 24 19 32 23 36M40 22C44 24 45 32 41 36M32 24V44"
+        stroke="#E2E8F0"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+      />
+      <circle cx="27" cy="26" r="2" fill="#FFFFFF" />
+      <circle cx="37" cy="26" r="2" fill="#FFFFFF" />
+    </svg>
+  );
+}
+
+export function SupabaseColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <defs>
+        <linearGradient id="supaGrad1" x1="14" y1="10" x2="38" y2="42" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#3ECF8E" />
+          <stop offset="100%" stopColor="#10B981" />
+        </linearGradient>
+        <linearGradient id="supaGrad2" x1="28" y1="26" x2="50" y2="56" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#3ECF8E" />
+          <stop offset="100%" stopColor="#047857" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M35.5 8.5C33.9 6.5 30.8 7.6 30.8 10.2V34H50.2C52.9 34 54.4 30.9 52.7 28.8L35.5 8.5Z"
+        fill="url(#supaGrad2)"
+      />
+      <path
+        d="M28.5 55.5C30.1 57.5 33.2 56.4 33.2 53.8V30H13.8C11.1 30 9.6 33.1 11.3 35.2L28.5 55.5Z"
+        fill="url(#supaGrad1)"
+      />
+    </svg>
+  );
+}
+
+export function H2ColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <ellipse cx="32" cy="16" rx="20" ry="7" fill="#0284C7" />
+      <path d="M12 16V46C12 50 21 53 32 53C43 53 52 50 52 46V16" fill="#0369A1" />
+      <ellipse cx="32" cy="16" rx="20" ry="7" fill="#38BDF8" />
+      <text x="32" y="41" textAnchor="middle" fill="#FFFFFF" fontFamily="monospace" fontWeight="700" fontSize="17">
+        H2
+      </text>
+    </svg>
+  );
+}
+
+export function MavenColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <defs>
+        <linearGradient id="mavenFeather" x1="12" y1="52" x2="52" y2="12" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#9333EA" />
+          <stop offset="50%" stopColor="#E11D48" />
+          <stop offset="100%" stopColor="#F97316" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M14 50C20 32 34 16 52 10C48 26 36 42 14 50Z"
+        fill="url(#mavenFeather)"
+      />
+      <path d="M12 52L36 28" stroke="#FFFFFF" strokeWidth="2.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function DockerColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      {/* Containers */}
+      <g fill="#38BDF8">
+        <rect x="16" y="25" width="6" height="5.5" rx="1" />
+        <rect x="23.5" y="25" width="6" height="5.5" rx="1" />
+        <rect x="31" y="25" width="6" height="5.5" rx="1" />
+        <rect x="38.5" y="25" width="6" height="5.5" rx="1" />
+        <rect x="23.5" y="18" width="6" height="5.5" rx="1" />
+        <rect x="31" y="18" width="6" height="5.5" rx="1" />
+        <rect x="31" y="11" width="6" height="5.5" rx="1" />
+      </g>
+      {/* Whale Body */}
+      <path
+        d="M56 30C53 28.5 49.5 29 48 31C46.5 28 43 27 43 27H10C9 36 13 48 27 48C42 48 51 39 53 33.5C55.5 33.5 58 32 59 29.5C58 29.5 57 29.8 56 30Z"
+        fill="#2496ED"
+      />
+    </svg>
+  );
+}
+
+export function AxiosColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <polygon points="32,8 52,26 38,26 38,44 26,34 26,26 12,26" fill="#671DDF" />
+      <polygon points="32,56 12,38 26,38 38,28 38,38 52,38" fill="#38BDF8" />
+    </svg>
+  );
+}
+
+export function PrettierColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <g strokeLinecap="round" strokeWidth="4">
+        <line x1="14" y1="14" x2="36" y2="14" stroke="#38BDF8" />
+        <line x1="42" y1="14" x2="50" y2="14" stroke="#64748B" />
+        <line x1="14" y1="21" x2="26" y2="21" stroke="#F43F5E" />
+        <line x1="32" y1="21" x2="48" y2="21" stroke="#A855F7" />
+        <line x1="14" y1="28" x2="42" y2="28" stroke="#FACC15" />
+        <line x1="14" y1="35" x2="34" y2="35" stroke="#10B981" />
+        <line x1="14" y1="42" x2="24" y2="42" stroke="#F97316" />
+        <line x1="30" y1="42" x2="42" y2="42" stroke="#38BDF8" />
+        <line x1="14" y1="49" x2="28" y2="49" stroke="#EC4899" />
+      </g>
+    </svg>
+  );
+}
+
+export function PythonColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <path
+        d="M31.6 10C21.2 10 21.8 14.5 21.8 14.5V19.2H31.8V20.8H17.8C17.8 20.8 11 20 11 30.8C11 41.6 16.9 41.2 16.9 41.2H20.4V36.2C20.4 36.2 20.2 30.3 26.2 30.3H36.4C36.4 30.3 41.8 30.4 41.8 25.1V15.8C41.8 15.8 42.6 10 31.6 10ZM26.2 13.2C27.3 13.2 28.2 14.1 28.2 15.2C28.2 16.3 27.3 17.2 26.2 17.2C25.1 17.2 24.2 16.3 24.2 15.2C24.2 14.1 25.1 13.2 26.2 13.2Z"
+        fill="#3776AB"
+      />
+      <path
+        d="M32.4 54C42.8 54 42.2 49.5 42.2 49.5V44.8H32.2V43.2H46.2C46.2 43.2 53 44 53 33.2C53 22.4 47.1 22.8 47.1 22.8H43.6V27.8C43.6 27.8 43.8 33.7 37.8 33.7H27.6C27.6 33.7 22.2 33.6 22.2 38.9V48.2C22.2 48.2 21.4 54 32.4 54ZM37.8 50.8C36.7 50.8 35.8 49.9 35.8 48.8C35.8 47.7 36.7 46.8 37.8 46.8C38.9 46.8 39.8 47.7 39.8 48.8C39.8 49.9 38.9 50.8 37.8 50.8Z"
+        fill="#FFD43B"
+      />
+    </svg>
+  );
+}
+
 export function VercelColorEmblem({ size = 56 }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
@@ -302,10 +588,36 @@ export function getColorTechEmblem(name: string, size = 56) {
       return <TsColorEmblem size={size} />;
     case "React":
       return <ReactColorEmblem size={size} />;
+    case "Next.js":
+      return <NextjsColorEmblem size={size} />;
     case "Vite":
       return <ViteColorEmblem size={size} />;
     case "Tailwind CSS":
       return <TailwindColorEmblem size={size} />;
+    case "React Router":
+      return <ReactRouterColorEmblem size={size} />;
+    case "Lucide React":
+      return <LucideColorEmblem size={size} />;
+    case "Java":
+      return <JavaColorEmblem size={size} />;
+    case "Python":
+      return <PythonColorEmblem size={size} />;
+    case "Spring Boot":
+      return <SpringBootColorEmblem size={size} />;
+    case "Spring Security":
+      return <SpringSecurityColorEmblem size={size} />;
+    case "JWT":
+      return <JwtColorEmblem size={size} />;
+    case "Spring Data JPA":
+      return <JpaHibernateColorEmblem size={size} />;
+    case "PostgreSQL":
+      return <PostgresColorEmblem size={size} />;
+    case "Supabase":
+      return <SupabaseColorEmblem size={size} />;
+    case "H2 Database":
+      return <H2ColorEmblem size={size} />;
+    case "Maven":
+      return <MavenColorEmblem size={size} />;
     case "TanStack":
     case "TanStack Query":
       return <TanStackColorEmblem size={size} />;
@@ -313,6 +625,12 @@ export function getColorTechEmblem(name: string, size = 56) {
       return <ZodColorEmblem size={size} />;
     case "Vitest":
       return <VitestColorEmblem size={size} />;
+    case "Docker":
+      return <DockerColorEmblem size={size} />;
+    case "Axios":
+      return <AxiosColorEmblem size={size} />;
+    case "Prettier":
+      return <PrettierColorEmblem size={size} />;
     case "Three.js":
       return <ThreeColorEmblem size={size} />;
     case "Framer Motion":
