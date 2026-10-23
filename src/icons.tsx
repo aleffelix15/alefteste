@@ -5,179 +5,338 @@ interface IconProps {
   className?: string;
 }
 
-export function ReactIcon({ size = 16, className }: IconProps) {
+// ============================================================================
+// FULL-COLOR OFFICIAL BRAND EMBLEMS (FOR THE TECHNOLOGIES SHOWCASE GRID)
+// ============================================================================
+
+export function HtmlColorEmblem({ size = 56 }: IconProps) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="-11.5 -10.23 23 20.46"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.2"
-      className={className}
-      aria-hidden="true"
-    >
-      <circle cx="0" cy="0" r="2.05" fill="currentColor" stroke="none" />
-      <ellipse rx="11" ry="4.2" />
-      <ellipse rx="11" ry="4.2" transform="rotate(60)" />
-      <ellipse rx="11" ry="4.2" transform="rotate(120)" />
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <path d="M10 6H54L50 51L32 58L14 51L10 6Z" fill="#E44D26" />
+      <path d="M32 10V54L46.5 48.3L49.8 10H32Z" fill="#F16529" />
+      <path
+        d="M19.5 18H44.5L43.5 24H26L26.6 30.5H42.9L41.4 45.5L32 48.5L22.6 45.5L22 38H28L28.4 41.8L32 43L35.6 41.8L36.2 36H20.8L19.5 18Z"
+        fill="#FFFFFF"
+      />
     </svg>
   );
 }
 
-export function TypeScriptIcon({ size = 16, className }: IconProps) {
+export function CssColorEmblem({ size = 56 }: IconProps) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="M1.5 0h21l-1.9 21.6-8.6 2.4-8.6-2.4zm17.5 8H5v2.8h4.6V20h3.2v-9.2H19zm-8.8 6.6c-.6 0-1.2.2-1.7.5l.8 2.2c.4-.3.9-.4 1.4-.4.8 0 1.2.4 1.2.9 0 .6-.4.9-1.3 1.2-1.5.6-2.5 1.3-2.5 2.7 0 1.6 1.3 2.7 3.3 2.7 1 0 1.9-.3 2.6-.7l-.8-2.2c-.5.3-1.1.5-1.7.5-.8 0-1.2-.4-1.2-.9 0-.5.4-.8 1.4-1.2 1.6-.6 2.4-1.4 2.4-2.7 0-1.7-1.4-2.7-3.2-2.7z" />
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <path d="M10 6H54L50 51L32 58L14 51L10 6Z" fill="#1572B6" />
+      <path d="M32 10V54L46.5 48.3L49.8 10H32Z" fill="#33A9DC" />
+      <path
+        d="M19.5 18H44.5L43.4 30.5H27.5L28 36H42.8L41.4 45.5L32 48.5L22.6 45.5L22 38H28L28.4 41.8L32 43L35.8 41.8L36.3 36H21.2L20.4 24H37.8L38.3 18H19.5Z"
+        fill="#FFFFFF"
+      />
     </svg>
   );
 }
 
-export function JavaScriptIcon({ size = 16, className }: IconProps) {
+export function JsColorEmblem({ size = 56 }: IconProps) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="M0 0h24v24H0V0zm22.034 18.276c-.175-1.017-.892-1.642-2.164-2.162l-.7-.294c-.742-.315-1.127-.638-1.127-1.144 0-.472.368-.821.996-.821.657 0 1.05.28 1.295.77l1.785-1.14c-.56-1.103-1.54-1.68-3.08-1.68-1.908 0-3.238 1.155-3.238 2.853 0 1.348.805 2.188 2.38 2.8l.683.272c.875.368 1.243.718 1.243 1.243 0 .543-.49.91-1.243.91-.98 0-1.505-.49-1.803-1.243l-1.82 1.05c.578 1.278 1.715 1.943 3.623 1.943 2.118 0 3.395-1.12 3.395-2.853v-.005zm-8.75 2.118v-8.05h-2.205v8.19c0 1.838-.98 2.625-2.52 2.625-.56 0-1.085-.105-1.47-.28l-.35 1.89c.56.245 1.295.385 2.135.385 2.66 0 4.41-1.33 4.41-4.76z" />
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <rect x="8" y="8" width="48" height="48" rx="6" fill="#F7DF1E" />
+      <path
+        d="M29.8 45.2C29.8 49.4 27.3 51.4 23.4 51.4C20.1 51.4 18.1 49.7 17.1 47.7L20.6 45.6C21.3 46.9 22.1 47.8 23.5 47.8C25 47.8 25.9 47.1 25.9 44.9V31.5H29.8V45.2ZM43.5 51.4C39.2 51.4 36.5 49.3 35.2 46.6L38.7 44.6C39.6 46.3 41 47.7 43.4 47.7C45.4 47.7 46.7 46.7 46.7 45.3C46.7 43.6 45.3 43 42.9 42L41.6 41.4C37.8 39.8 35.9 37.8 35.9 34.4C35.9 30.9 38.6 28.2 42.9 28.2C46 28.2 48.2 29.3 49.8 32L46.4 34.2C45.6 32.8 44.5 32 42.9 32C41.2 32 40.1 33 40.1 34.3C40.1 35.9 41.2 36.5 43.7 37.6L45 38.2C49.3 40 51.2 42 51.2 45.5C51.2 49.5 48.1 51.4 43.5 51.4Z"
+        fill="#111113"
+      />
     </svg>
   );
 }
 
-export function ViteIcon({ size = 16, className }: IconProps) {
+export function TsColorEmblem({ size = 56 }: IconProps) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="m23.6 3.6-11.8 20.4L0 3.6h4.5l7.3 12.8L19.1 3.6zM15 1.4 7.6 9.6h4.8l-1.9 6.8 7.4-8.2h-4.8z" />
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <rect x="8" y="8" width="48" height="48" rx="6" fill="#3178C6" />
+      <path
+        d="M25.5 34.2V50H21.2V34.2H15.4V30.6H31.3V34.2H25.5ZM43.2 50.4C39.3 50.4 36.4 48.7 35 46.2L38.3 44.2C39.3 45.9 40.9 46.9 43.2 46.9C45.3 46.9 46.7 45.9 46.7 44.5C46.7 42.9 45.3 42.3 42.8 41.3L41.4 40.7C37.7 39.2 35.8 37.3 35.8 34.1C35.8 30.7 38.5 28.2 42.8 28.2C45.9 28.2 48.3 29.3 49.8 31.8L46.5 33.9C45.7 32.5 44.4 31.7 42.8 31.7C41 31.7 39.9 32.7 39.9 34C39.9 35.5 41 36.1 43.5 37.1L44.9 37.7C49.1 39.4 51 41.4 51 44.8C51 48.6 47.9 50.4 43.2 50.4Z"
+        fill="#FFFFFF"
+      />
     </svg>
   );
 }
 
-export function TailwindIcon({ size = 16, className }: IconProps) {
+export function ReactColorEmblem({ size = 56 }: IconProps) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.336 6.182 14.975 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.336 13.382 8.975 12 6.001 12z" />
+    <svg width={size} height={size} viewBox="-14 -14 28 28" fill="none" aria-hidden="true" className="tech-emblem-svg emblem-spin-hover">
+      <circle cx="0" cy="0" r="2.4" fill="#00D8FF" />
+      <g stroke="#00D8FF" strokeWidth="1.35">
+        <ellipse rx="11.5" ry="4.4" />
+        <ellipse rx="11.5" ry="4.4" transform="rotate(60)" />
+        <ellipse rx="11.5" ry="4.4" transform="rotate(120)" />
+      </g>
     </svg>
   );
 }
 
-export function TanStackIcon({ size = 16, className }: IconProps) {
+export function ViteColorEmblem({ size = 56 }: IconProps) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <defs>
+        <linearGradient id="viteBgGrad" x1="8" y1="8" x2="48" y2="56" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#41D1FF" />
+          <stop offset="100%" stopColor="#BD34FE" />
+        </linearGradient>
+        <linearGradient id="viteBoltGrad" x1="28" y1="8" x2="38" y2="48" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#FFEA83" />
+          <stop offset="8.3%" stopColor="#FFDD35" />
+          <stop offset="100%" stopColor="#FFA800" />
+        </linearGradient>
+      </defs>
+      <path d="M56.5 12.2L33.4 56.2C32.6 57.7 30.4 57.7 29.6 56.2L6.5 12.2C5.6 10.5 7.1 8.5 9 8.9L31.6 13.4C31.9 13.5 32.2 13.5 32.5 13.4L54 8.9C55.9 8.5 57.4 10.5 56.5 12.2Z" fill="url(#viteBgGrad)" />
+      <path d="M42.8 6.5L25.6 9.9C25 10 24.6 10.5 24.5 11.1L22.5 34.4C22.4 35.4 23.4 36.1 24.3 35.8L29.5 34.2C30.3 33.9 31.1 34.6 31 35.5L29.5 47.4C29.4 48.4 30.6 49 31.3 48.2L45.8 25.4C46.4 24.5 45.6 23.3 44.5 23.6L38.9 25C38 25.2 37.2 24.4 37.5 23.5L44.2 8.1C44.6 7.2 43.8 6.3 42.8 6.5Z" fill="url(#viteBoltGrad)" />
     </svg>
   );
 }
 
-export function ThreeIcon({ size = 16, className }: IconProps) {
+export function TailwindColorEmblem({ size = 56 }: IconProps) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="m21.6 17.8-8.8-15.2a1 1 0 0 0-1.6 0L2.4 17.8a1 1 0 0 0 .8 1.5h17.6a1 1 0 0 0 .8-1.5zm-9.6-11 5.9 10.2H6.1z" />
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <defs>
+        <linearGradient id="twGrad" x1="8" y1="16" x2="56" y2="48" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#38BDF8" />
+          <stop offset="100%" stopColor="#0284C7" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M32 16C24.5 16 19.8 19.7 18 27.2C20.8 23.5 24.1 22.1 27.8 23C30 23.5 31.5 25.1 33.2 26.8C36 29.6 39.2 32.8 46 32.8C53.5 32.8 58.2 29.1 60 21.6C57.2 25.3 53.9 26.7 50.2 25.8C48 25.3 46.5 23.7 44.8 22C42 19.2 38.8 16 32 16ZM18 32.8C10.5 32.8 5.8 36.5 4 44C6.8 40.3 10.1 38.9 13.8 39.8C16 40.3 17.5 41.9 19.2 43.6C22 46.4 25.2 49.6 32 49.6C39.5 49.6 44.2 45.9 46 38.4C43.2 42.1 39.9 43.5 36.2 42.6C34 42.1 32.5 40.5 30.8 38.8C28 36 24.8 32.8 18 32.8Z"
+        fill="url(#twGrad)"
+      />
     </svg>
   );
 }
 
-export function FramerMotionIcon({ size = 16, className }: IconProps) {
+export function TanStackColorEmblem({ size = 56 }: IconProps) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="M4 0h16v8h-8zM4 8h8l8 8H4zm0 8h8v8l-8-8z" />
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg emblem-spin-hover">
+      {/* Outer Teal Petals */}
+      <g fill="#10B981">
+        <circle cx="32" cy="12" r="9.5" />
+        <circle cx="49" cy="22" r="9.5" />
+        <circle cx="49" cy="42" r="9.5" />
+        <circle cx="32" cy="52" r="9.5" />
+        <circle cx="15" cy="42" r="9.5" />
+        <circle cx="15" cy="22" r="9.5" />
+      </g>
+      {/* Inner Coral / Red-Orange Petals */}
+      <g fill="#FF4154">
+        <circle cx="32" cy="19" r="7.5" />
+        <circle cx="43" cy="25.5" r="7.5" />
+        <circle cx="43" cy="38.5" r="7.5" />
+        <circle cx="32" cy="45" r="7.5" />
+        <circle cx="21" cy="38.5" r="7.5" />
+        <circle cx="21" cy="25.5" r="7.5" />
+      </g>
+      {/* Warm Highlights */}
+      <circle cx="32" cy="32" r="9" fill="#FB923C" />
+      <circle cx="32" cy="32" r="4.8" fill="#18181B" />
     </svg>
   );
 }
 
-export function ZodIcon({ size = 16, className }: IconProps) {
+export function ZodColorEmblem({ size = 56 }: IconProps) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="M4 4h16L4 20h16" />
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <defs>
+        <linearGradient id="zodHexGrad" x1="10" y1="8" x2="54" y2="56" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#8B5CF6" />
+          <stop offset="100%" stopColor="#5B21B6" />
+        </linearGradient>
+      </defs>
+      <polygon points="32,6 55,19 55,45 32,58 9,45 9,19" fill="url(#zodHexGrad)" />
+      <polygon points="32,6 55,19 32,32 9,19" fill="#A78BFA" fillOpacity="0.24" />
+      <path
+        d="M23 22H41V26.4L29.2 38.2H41.4V43H22.6V38.6L34.4 26.8H23V22Z"
+        fill="#FFFFFF"
+      />
     </svg>
   );
 }
 
-export function VitestIcon({ size = 16, className }: IconProps) {
+export function VitestColorEmblem({ size = 56 }: IconProps) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="m18.775 2.158-5.32 9.215-2.274-3.938 3.04-5.277H8.847l-6.38 11.05 4.29 7.432h5.374l-4.29-7.432 2.083-3.608 4.316 7.478a1.2 1.2 0 0 0 2.08-.002l7.73-13.388a1.2 1.2 0 0 0-1.04-1.802h-4.235z" />
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      {/* Neon Green V */}
+      <path
+        d="M10 18L32 56L54 18H44.5L32 40L19.5 18H10Z"
+        fill="#4ADE80"
+      />
+      <path
+        d="M19.5 18L32 40V56L10 18H19.5Z"
+        fill="#22C55E"
+      />
+      {/* Golden Lightning Bolt */}
+      <path
+        d="M36 6L23 25H32.5L28 41L43 20H33.5L36 6Z"
+        fill="#FACC15"
+      />
     </svg>
   );
 }
 
-export function GitIcon({ size = 16, className }: IconProps) {
+export function ThreeColorEmblem({ size = 56 }: IconProps) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="M23.546 10.93L13.067.452a1.5 1.5 0 0 0-2.126 0L8.808 2.585l2.83 2.829a2.5 2.5 0 0 1 3.167 3.176l2.723 2.724a2.5 2.5 0 1 1-1.06 1.06l-2.73-2.731a2.5 2.5 0 0 1-2.923-.393L8.03 12.037v4.618a2.5 2.5 0 1 1-1.5 0V10.55a2.5 2.5 0 0 1 .655-4.48L4.357 3.242.454 7.144a1.5 1.5 0 0 0 0 2.126l10.479 10.479a1.5 1.5 0 0 0 2.126 0l10.487-10.488a1.5 1.5 0 0 0 0-2.126z" />
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <g stroke="#F4F4F5" strokeWidth="1.6" strokeLinejoin="round">
+        <polygon points="12,10 54,22 24,56" />
+        <polygon points="33,16 39,39 18,33" />
+        <line x1="12" y1="10" x2="33" y2="16" />
+        <line x1="54" y1="22" x2="39" y2="39" />
+        <line x1="24" y1="56" x2="18" y2="33" />
+        <polygon points="22.5,13 36,27.5 15,21.5" />
+        <polygon points="43.5,19 46.5,30.5 36,27.5" />
+        <polygon points="21,44.5 31.5,47.5 28.5,36" />
+      </g>
     </svg>
   );
 }
+
+export function FramerMotionColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <defs>
+        <linearGradient id="fmWaveGrad" x1="8" y1="48" x2="56" y2="16" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#A855F7" />
+          <stop offset="55%" stopColor="#6366F1" />
+          <stop offset="100%" stopColor="#38BDF8" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M11 45L23 23L33 41L45 19L53 45"
+        stroke="url(#fmWaveGrad)"
+        strokeWidth="6.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle cx="45" cy="19" r="4" fill="#38BDF8" />
+      <circle cx="53" cy="45" r="4" fill="#3B82F6" />
+    </svg>
+  );
+}
+
+export function EslintColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <polygon
+        points="32,6 56,19.8 56,44.2 32,58 8,44.2 8,19.8"
+        stroke="#4B32C3"
+        strokeWidth="6.5"
+        strokeLinejoin="round"
+      />
+      <polygon
+        points="32,19 44,26 44,38 32,45 20,38 20,26"
+        fill="#8080F2"
+      />
+    </svg>
+  );
+}
+
+export function GitColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <rect
+        x="32"
+        y="6"
+        width="36.8"
+        height="36.8"
+        rx="5"
+        transform="rotate(45 32 6)"
+        fill="#F05032"
+      />
+      <path
+        d="M25 19L39 33M31 25V41"
+        stroke="#18181B"
+        strokeWidth="3.6"
+        strokeLinecap="round"
+      />
+      <circle cx="31" cy="25" r="3.6" fill="#18181B" />
+      <circle cx="39" cy="33" r="3.6" fill="#18181B" />
+      <circle cx="31" cy="41" r="3.6" fill="#18181B" />
+    </svg>
+  );
+}
+
+export function GitHubColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <circle cx="32" cy="32" r="24" fill="#E2E8F0" />
+      <path
+        d="M32 12C20.95 12 12 20.95 12 32C12 40.85 17.72 48.32 25.68 50.98C26.68 51.15 27.05 50.55 27.05 50.02C27.05 49.55 27.02 47.98 27.02 46.3C21.99 47.22 20.69 44.18 20.29 43.95C20.06 43.38 19.09 41.6 18.24 41.12C17.54 40.75 16.54 39.82 18.21 39.8C19.79 39.78 20.91 41.25 21.29 41.85C23.09 44.88 25.96 44.02 27.11 43.5C27.29 42.2 27.81 41.32 28.39 40.82C23.94 40.32 19.29 38.6 19.29 30.95C19.29 28.78 20.06 26.98 21.34 25.58C21.14 25.08 20.44 23.02 21.54 20.28C21.54 20.28 23.21 19.75 27.04 22.32C28.64 21.88 30.34 21.65 32.04 21.65C33.74 21.65 35.44 21.88 37.04 22.32C40.86 19.72 42.54 20.28 42.54 20.28C43.64 23.02 42.94 25.08 42.74 25.58C44.01 26.98 44.79 28.75 44.79 30.95C44.79 38.62 40.11 40.32 35.66 40.82C36.39 41.45 37.01 42.65 37.01 44.52C37.01 47.2 36.99 49.35 36.99 50.02C36.99 50.55 37.36 51.18 38.36 50.98C46.28 48.32 52 40.82 52 32C52 20.95 43.05 12 32 12Z"
+        fill="#090D16"
+      />
+    </svg>
+  );
+}
+
+export function VercelColorEmblem({ size = 56 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
+      <defs>
+        <linearGradient id="vercelLeft" x1="16" y1="12" x2="38" y2="52" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#FFFFFF" />
+          <stop offset="100%" stopColor="#CBD5E1" />
+        </linearGradient>
+        <linearGradient id="vercelRight" x1="32" y1="12" x2="54" y2="52" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#CBD5E1" />
+          <stop offset="100%" stopColor="#475569" />
+        </linearGradient>
+      </defs>
+      <polygon points="32,11 56,53 8,53" fill="url(#vercelLeft)" />
+      <polygon points="32,11 56,53 42,53" fill="url(#vercelRight)" />
+    </svg>
+  );
+}
+
+export function getColorTechEmblem(name: string, size = 56) {
+  switch (name) {
+    case "HTML":
+      return <HtmlColorEmblem size={size} />;
+    case "CSS":
+      return <CssColorEmblem size={size} />;
+    case "JavaScript":
+      return <JsColorEmblem size={size} />;
+    case "TypeScript":
+      return <TsColorEmblem size={size} />;
+    case "React":
+      return <ReactColorEmblem size={size} />;
+    case "Vite":
+      return <ViteColorEmblem size={size} />;
+    case "Tailwind CSS":
+      return <TailwindColorEmblem size={size} />;
+    case "TanStack":
+    case "TanStack Query":
+      return <TanStackColorEmblem size={size} />;
+    case "Zod":
+      return <ZodColorEmblem size={size} />;
+    case "Vitest":
+      return <VitestColorEmblem size={size} />;
+    case "Three.js":
+      return <ThreeColorEmblem size={size} />;
+    case "Framer Motion":
+      return <FramerMotionColorEmblem size={size} />;
+    case "ESLint":
+      return <EslintColorEmblem size={size} />;
+    case "Git":
+      return <GitColorEmblem size={size} />;
+    case "GitHub":
+      return <GitHubColorEmblem size={size} />;
+    case "Vercel":
+      return <VercelColorEmblem size={size} />;
+    default:
+      return <ReactColorEmblem size={size} />;
+  }
+}
+
+export function getTechIcon(name: string, size = 16) {
+  return getColorTechEmblem(name, size);
+}
+
+// ============================================================================
+// MODERN MINIMALIST / UI ICONS
+// ============================================================================
 
 export function GitHubIcon({ size = 16, className }: IconProps) {
   return (
@@ -208,126 +367,6 @@ export function LinkedInIcon({ size = 16, className }: IconProps) {
     </svg>
   );
 }
-
-export function VercelIcon({ size = 16, className }: IconProps) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="M24 22.525H0l12-21.05 12 21.05z" />
-    </svg>
-  );
-}
-
-export function HtmlIcon({ size = 16, className }: IconProps) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="M1.5 0h21l-1.9 21.6-8.6 2.4-8.6-2.4zm17.5 8H5v2.8h4.6V20h3.2v-9.2H19z" />
-    </svg>
-  );
-}
-
-export function CssIcon({ size = 16, className }: IconProps) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="M1.5 0h21l-1.9 21.6-8.6 2.4-8.6-2.4L1.5 0zm16.9 4.7H5.6l.4 4.5h9.4l-.4 4.5-3 .9-3-.9-.2-2.3H5.8l.4 4.6 5.8 1.6 5.8-1.6 1-11.3z" />
-    </svg>
-  );
-}
-
-export function JavaIcon({ size = 16, className }: IconProps) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="M9.1 19.3c3.5.2 6.5-.4 8.7-1.4 0 0-1.8 1-5.1 1.4-3.5.3-6.8-.1-8.1-.8 1.1.5 2.7.7 4.5.8zm-1.8-3.1c3.1.2 5.8-.3 7.7-1.2 0 0-1.6.9-4.5 1.2-3.1.3-6-.1-7.2-.7 1 .4 2.4.6 4 .7zm8.1-5.8c-.8.8-1.7 1.4-2.8 1.9 2.1-.2 3.8-1.1 4.5-2.2-.4.1-1.1.2-1.7.3zm-6-2.9c.7 1.1 1.7 2 2.9 2.8 1.2.8 2.5 1.5 3.9 1.9-1.1-.3-2.1-.9-3-1.6-1-1-1.6-2-1.9-3.1-.2-1.2 0-2.4.6-3.4-.9.9-1.3 2.1-1.3 3.4 0 1 .4 2.1 1.2 3.1z" />
-    </svg>
-  );
-}
-
-export function PythonIcon({ size = 16, className }: IconProps) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="M11.9 0C5.5 0 5.9 2.8 5.9 2.8v2.9h6.1v.9H3.4S0 6.2 0 12.6s3 6.3 3 6.3h1.8v-2.5s-.1-3 3-3h6.1s2.9-.1 2.9-2.9V2.8S17.4 0 11.9 0zm-3.3 1.8a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2zm10 4.8s-3 .1-3 2.9v2.5s.1 3-3 3H6.5s-2.9.1-2.9 2.9v7.7S3.2 24 8.7 24c6.4 0 6-2.8 6-2.8v-2.9h-6.1v-.9h8.6s3.4.4 3.4-6-3-6.3-3-6.3h-1.8v2.5zM15.4 20a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2z" />
-    </svg>
-  );
-}
-
-export function getTechIcon(name: string, size = 16) {
-  switch (name) {
-    case "React":
-      return <ReactIcon size={size} />;
-    case "TypeScript":
-      return <TypeScriptIcon size={size} />;
-    case "JavaScript":
-      return <JavaScriptIcon size={size} />;
-    case "Vite":
-      return <ViteIcon size={size} />;
-    case "Tailwind CSS":
-      return <TailwindIcon size={size} />;
-    case "TanStack":
-      return <TanStackIcon size={size} />;
-    case "Three.js":
-      return <ThreeIcon size={size} />;
-    case "Framer Motion":
-      return <FramerMotionIcon size={size} />;
-    case "Zod":
-      return <ZodIcon size={size} />;
-    case "Vitest":
-      return <VitestIcon size={size} />;
-    case "Git":
-      return <GitIcon size={size} />;
-    case "GitHub":
-      return <GitHubIcon size={size} />;
-    case "Vercel":
-      return <VercelIcon size={size} />;
-    case "HTML":
-      return <HtmlIcon size={size} />;
-    case "CSS":
-      return <CssIcon size={size} />;
-    case "Java":
-      return <JavaIcon size={size} />;
-    case "Python":
-      return <PythonIcon size={size} />;
-    default:
-      return null;
-  }
-}
-
-// ============================================================================
-// MODERN MINIMALIST / UI ICONS
-// ============================================================================
 
 export function ArrowUpRight({ size = 16, className }: IconProps) {
   return (
@@ -413,22 +452,3 @@ export function CloseIcon({ size = 20, className }: IconProps) {
     </svg>
   );
 }
-
-export function ModernLogo({ size = 28 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 32 32"
-      fill="none"
-      aria-hidden="true"
-    >
-      <rect width="32" height="32" rx="8" fill="#18181b" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
-      <path
-        d="M16 8L9.5 24H13.2L14.7 20H17.3L18.8 24H22.5L16 8ZM16 12.2L16.8 17H15.2L16 12.2Z"
-        fill="#ffffff"
-      />
-    </svg>
-  );
-}
-

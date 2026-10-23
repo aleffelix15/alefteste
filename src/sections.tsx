@@ -10,7 +10,7 @@ import {
   contactData,
   footerData,
 } from "./data";
-import { GithubIcon, LinkedinIcon, ArrowUpIcon, getTechIcon } from "./icons";
+import { GithubIcon, LinkedinIcon, ArrowUpIcon, getColorTechEmblem } from "./icons";
 
 const navItems = [
   { id: "abertura", label: "Início" },
@@ -812,132 +812,141 @@ export function TechChapter() {
 
   return (
     <section
-      className="editorial-chapter tech-and-contact-Band"
+      className="editorial-chapter tech-showcase-section"
       id="tecnologias"
       aria-labelledby="tech-heading"
       data-chapter-section
     >
-      <div className="container">
-        <div className="tech-editorial-layout" data-reveal>
-          {/* Left Header & Monochrome Keyboard Visual */}
-          <div className="tech-header-column">
-            <div className="section-marker">
-              <span className="marker-num mono" data-scramble={techChapterData.spineNumber}>
-                {techChapterData.spineNumber}
-              </span>
-              <span className="marker-label mono" data-scramble={techChapterData.spineLabel}>
-                {techChapterData.spineLabel}
-              </span>
-              <span className="marker-line" aria-hidden="true" />
+      <div className="tech-ambient-glow" aria-hidden="true" />
+
+      <div className="container" data-reveal>
+        {/* Top Header Row inspired by reference image */}
+        <div className="tech-showcase-top">
+          <div className="tech-top-left">
+            <div className="tech-kicker-row mono">
+              <span className="tech-bracket-icon" aria-hidden="true">∏</span>
+              <span data-scramble={techChapterData.spineLabel}>{techChapterData.spineLabel}</span>
             </div>
 
-            <h2 id="tech-heading" className="section-serif-heading">
-              <span className="line-mask">
-                <span className="line-inner" style={{ "--line-delay": "40ms" } as React.CSSProperties}>
-                  Ferramentas que
-                </span>
-              </span>
-              <span className="line-mask">
-                <span className="line-inner" style={{ "--line-delay": "140ms" } as React.CSSProperties}>
-                  me acompanham.
-                </span>
-              </span>
-            </h2>
+            <div className="tech-headline-split">
+              <span className="tech-left-accent-bar" aria-hidden="true" />
 
-            <p className="section-intro-copy">{techChapterData.subtitle}</p>
+              <h2 id="tech-heading" className="tech-display-heading">
+                <span className="line-mask">
+                  <span className="line-inner" style={{ "--line-delay": "40ms" } as React.CSSProperties}>
+                    {techChapterData.headlineLine1}
+                  </span>
+                </span>
+                <span className="line-mask">
+                  <span
+                    className="line-inner tech-heading-blue"
+                    style={{ "--line-delay": "140ms" } as React.CSSProperties}
+                  >
+                    {techChapterData.headlineAccent}
+                  </span>
+                </span>
+              </h2>
 
-            {/* Filter by repository */}
-            <div className="tech-filter-pills" role="group" aria-label="Filtrar tecnologias por projeto">
-              <button
-                type="button"
-                className={`tech-filter-pill mono ${selectedProject === "ALL" ? "is-active" : ""}`}
-                aria-pressed={selectedProject === "ALL"}
-                data-magnetic
-                onClick={() => setSelectedProject("ALL")}
-              >
-                TODAS ({techIndexData.length})
-              </button>
-              <button
-                type="button"
-                className={`tech-filter-pill mono ${selectedProject === "VERSO" ? "is-active" : ""}`}
-                aria-pressed={selectedProject === "VERSO"}
-                data-magnetic
-                onClick={() => setSelectedProject("VERSO")}
-              >
-                VERSO ({techIndexData.filter((t) => t.projects.includes("VERSO")).length})
-              </button>
-              <button
-                type="button"
-                className={`tech-filter-pill mono ${selectedProject === "DECODE" ? "is-active" : ""}`}
-                aria-pressed={selectedProject === "DECODE"}
-                data-magnetic
-                onClick={() => setSelectedProject("DECODE")}
-              >
-                DECODE ({techIndexData.filter((t) => t.projects.includes("DECODE")).length})
-              </button>
+              <span className="tech-vertical-divider" aria-hidden="true" />
+
+              <p className="tech-split-subtitle">{techChapterData.subtitle}</p>
             </div>
-
-            {/* Atmospheric B&W Detail Plate */}
-            <figure className="tech-detail-plate" data-tilt-card data-cursor-label="AUDITORIA">
-              <div className="photo-curtain-wrap">
-                <picture>
-                  <source type="image/avif" srcSet="/images/about-setup-440.avif" />
-                  <source type="image/webp" srcSet="/images/about-setup-440.webp" />
-                  <img
-                    src="/images/about-setup.webp"
-                    alt="Detalhe em preto e branco de notebook e bancada de desenvolvimento."
-                    width={520}
-                    height={549}
-                    decoding="async"
-                    className="tech-detail-img"
-                  />
-                </picture>
-                <div className="project-plate-spotlight" aria-hidden="true" />
-              </div>
-              <figcaption className="photo-micro-caption mono">
-                ÍNDICE AUDITADO NOS ARQUIVOS PACKAGE.JSON
-              </figcaption>
-            </figure>
           </div>
 
-          {/* Right Typographic Index Grid */}
-          <div className="tech-index-column">
-            <ul
-              key={selectedProject}
-              className="tech-editorial-matrix"
-              aria-label="Índice de tecnologias verificadas"
+          <aside className="tech-epigraph-aside" aria-label="Citação sobre código">
+            <span className="tech-epigraph-bracket" aria-hidden="true" />
+            <p className="tech-epigraph-text mono">{techChapterData.epigraph}</p>
+          </aside>
+        </div>
+
+        {/* Repository Filter Pills */}
+        <div className="tech-filter-toolbar">
+          <div className="tech-filter-pills" role="group" aria-label="Filtrar tecnologias por projeto">
+            <button
+              type="button"
+              className={`tech-filter-pill mono ${selectedProject === "ALL" ? "is-active" : ""}`}
+              aria-pressed={selectedProject === "ALL"}
+              data-magnetic
+              onClick={() => setSelectedProject("ALL")}
             >
-              {visibleTechs.map((item, idx) => (
-                <li
-                  key={item.index}
-                  className="tech-matrix-row"
-                  style={{ "--stagger-index": idx } as React.CSSProperties}
-                >
-                  <span className="tech-matrix-num mono">{item.index}</span>
+              TODAS ({techIndexData.length})
+            </button>
+            <button
+              type="button"
+              className={`tech-filter-pill mono ${selectedProject === "VERSO" ? "is-active" : ""}`}
+              aria-pressed={selectedProject === "VERSO"}
+              data-magnetic
+              onClick={() => setSelectedProject("VERSO")}
+            >
+              VERSO ({techIndexData.filter((t) => t.projects.includes("VERSO")).length})
+            </button>
+            <button
+              type="button"
+              className={`tech-filter-pill mono ${selectedProject === "DECODE" ? "is-active" : ""}`}
+              aria-pressed={selectedProject === "DECODE"}
+              data-magnetic
+              onClick={() => setSelectedProject("DECODE")}
+            >
+              DECODE ({techIndexData.filter((t) => t.projects.includes("DECODE")).length})
+            </button>
+          </div>
+          <span className="tech-audit-tag mono">
+            SÍMBOLOS VERIFICADOS NOS REPOSITÓRIOS VERSO &amp; DECODE
+          </span>
+        </div>
 
-                  <div className="tech-matrix-main">
-                    <div className="tech-matrix-name-group">
-                      <span className="tech-matrix-icon" aria-hidden="true">
-                        {getTechIcon(item.name, 16)}
-                      </span>
-                      <span className="tech-matrix-name">{item.name}</span>
-                    </div>
-                    <span className="tech-matrix-role">{item.role}</span>
-                  </div>
+        {/* Colorful Official Symbols Grid with Float, Brand Halo & 3D Hover */}
+        <ul
+          key={selectedProject}
+          className="tech-symbols-grid"
+          aria-label="Grade de tecnologias utilizadas"
+        >
+          {visibleTechs.map((item, idx) => (
+            <li
+              key={item.name}
+              className="tech-symbol-card"
+              data-tilt-card
+              data-cursor-label={item.projects.join(" · ")}
+              style={
+                {
+                  "--stagger-index": idx,
+                  "--float-delay": `${(idx % 6) * 0.42}s`,
+                  "--brand-color": item.brandColor,
+                } as React.CSSProperties
+              }
+            >
+              <div className="tech-symbol-halo" aria-hidden="true" />
+              <div className="project-plate-spotlight" aria-hidden="true" />
 
-                  <div className="tech-matrix-provenance">
-                    <div className="tech-matrix-badges">
-                      {item.projects.map((proj) => (
-                        <span key={proj} className="tech-matrix-badge mono">
-                          {proj}
-                        </span>
-                      ))}
-                    </div>
-                    <span className="tech-matrix-note mono">{item.provenanceNote}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
+              <div className="tech-symbol-emblem-wrap">
+                {getColorTechEmblem(item.name, 58)}
+              </div>
+
+              <span className="tech-symbol-name">{item.name}</span>
+              <span className="tech-symbol-role">{item.role}</span>
+
+              <div className="tech-symbol-badges" aria-label={`Aplicado em ${item.projects.join(" e ")}`}>
+                {item.projects.map((proj) => (
+                  <span key={proj} className="tech-symbol-badge mono">
+                    {proj}
+                  </span>
+                ))}
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        {/* Bottom Architectural Signature Bar matching reference image */}
+        <div className="tech-showcase-footer mono" aria-hidden="true">
+          <div className="tech-footer-left">
+            <span className="tech-footer-square" />
+            <span>ÁLEF FELIX TEIXEIRA</span>
+            <span className="tech-footer-rule" />
+          </div>
+          <div className="tech-footer-right">
+            <span className="tech-footer-slashes">//</span>
+            <span>ENGENHARIA DE SOFTWARE</span>
+            <span className="tech-footer-pipe">|</span>
           </div>
         </div>
       </div>
