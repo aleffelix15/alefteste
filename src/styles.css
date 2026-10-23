@@ -484,13 +484,15 @@ ol {
 
 /* Menu Mobile com abertura animada (transform + opacity) */
 .mobile-nav-drawer {
-  position: fixed;
-  top: var(--header-height);
+  position: absolute;
+  top: 100%;
   left: 0;
   right: 0;
-  bottom: 0;
+  min-height: calc(100vh - var(--header-height));
+  min-height: calc(100dvh - var(--header-height));
   background-color: var(--bg);
   border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
   opacity: 0;
   transform: translateY(-10px);
   pointer-events: none;
@@ -1396,7 +1398,7 @@ html.motion-ready [data-reveal].is-visible {
 /* ----------------------------------------------------------------------------
    15. RESPONSIVIDADE (1440px -> 1024px -> 768px -> 375px)
    ---------------------------------------------------------------------------- */
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
   .hero-grid {
     grid-template-columns: 1fr;
   }
