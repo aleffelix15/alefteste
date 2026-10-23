@@ -1,21 +1,26 @@
 export const links = {
-  siteUrl: "", // configurável quando o domínio próprio estiver definido
+  siteUrl: "",
   github: "https://github.com/aleffelix15",
   linkedin: "https://www.linkedin.com/in/alef-felix-teixeira-a5030b236/",
   disponivel: true,
 };
 
+export type ProjectScreen = {
+  id: string;
+  label: string;
+  base: string;
+  alt: string;
+  caption: string;
+};
+
 export type ProjectStory = {
   id: string;
   number: string;
-  chapterTag: string;
   name: string;
-  subtitle: string;
+  tagline: string;
   status: "Demo auditada" | "Publicado";
-  year: string;
-  lead: string;
-  narrativeParagraph1: string;
-  narrativeParagraph2: string;
+  summary: string;
+  architectureNote: string;
   stack: string[];
   liveUrl: string;
   liveDomainLabel: string;
@@ -27,65 +32,49 @@ export type ProjectStory = {
   };
   repoUrl: string;
   repoLabel: string;
-  imageBase: string;
-  imageAlt: string;
-  imageCaption: string;
-  imageType: "Captura real da aplicação";
+  screens: ProjectScreen[];
   verifiedFeatures: string[];
   honestLimitations: string[];
 };
 
 export const heroData = {
-  issueTag: "EDIÇÃO DOCUMENTAL N.º 01 // DOSSIÊ DE ENGENHARIA & INTERFACES",
-  chapterLabel: "Abertura — A pessoa por trás do código",
+  spineNumber: "01",
+  spineLabel: "PORTFÓLIO 2026",
   firstName: "Álef Felix",
   lastName: "Teixeira",
   statement:
     "Estudante de Engenharia de Software. Desenvolvo aplicações web e soluções digitais com foco em experiência, performance e código organizado.",
-  editorialNote:
-    "Mais do que empilhar telas, construir para a web exige silêncio visual, decisões claras de arquitetura e respeito por quem está do outro lado da interface. Este portfólio foi concebido como um caderno editorial sobre como penso, estudo e desenvolvo software.",
+  epigraph: "Tecnologia é sobre pessoas. É sobre resolver problemas reais.",
   ctaPrimary: "Explorar projetos",
   ctaSecondary: "Entrar em contato",
   studioImage: {
     base: "/images/studio-session",
-    alt: "Fotografia conceitual em preto e branco de um estúdio de concreto com duas poltronas de couro escuro, microfones de estúdio articulados e um notebook aberto com código sobre mesa baixa.",
+    alt: "Fotografia conceitual em preto e branco de um estúdio de concreto com poltronas escuras, microfones articulados e notebook aberto com código.",
     caption:
-      "FIG. 00 — Ensaio conceitual ilustrativo: o estúdio como metáfora de escuta, rigor técnico e diálogo entre engenharia e direção de arte.",
+      "ENSAIO CONCEITUAL ILUSTRATIVO · ESTÚDIO EM PRETO E BRANCO (NÃO REPRESENTA RETRATO PESSOAL)",
   },
-  pillars: [
-    {
-      index: "01",
-      title: "Experiência & Silêncio Visual",
-      detail: "Interfaces sem ruído, guiadas por tipografia, contraste e hierarquia clara de leitura.",
-    },
-    {
-      index: "02",
-      title: "Performance & Semântica",
-      detail: "Carregamento enxuto, acessibilidade por teclado e respeito às preferências do sistema.",
-    },
-    {
-      index: "03",
-      title: "Código Organizado & Honesto",
-      detail: "Componentização modular, tipagem explícita e documentação transparente sobre o que cada projeto faz.",
-    },
-  ],
+};
+
+export const projectsIntro = {
+  spineNumber: "02",
+  spineLabel: "PROJETOS",
+  headline: "Ideias que viram experiências.",
+  description:
+    "Dois projetos que representam meu processo de aprendizado e minha forma de ver a tecnologia: como uma ferramenta para criar, conectar e gerar impacto.",
+  allProjectsLabel: "Ver todos os projetos",
 };
 
 export const projects: ProjectStory[] = [
   {
     id: "verso",
-    number: "01",
-    chapterTag: "CRÔNICA DE CONSTRUÇÃO // 01 DE 02",
-    name: "Verso",
-    subtitle: "E-commerce demonstrativo de streetwear & arquitetura full-stack em React 19",
+    number: "01.",
+    name: "VERSO",
+    tagline: "E-commerce de streetwear (projeto demonstrativo).",
     status: "Demo auditada",
-    year: "2026",
-    lead:
-      "Como projetar uma loja digital de moda autoral em que a atmosfera gráfica caminha lado a lado com regras reais de negócio, validação de dados e cálculo de frete no servidor.",
-    narrativeParagraph1:
-      "Verso nasceu como um estudo aprofundado de arquitetura para e-commerce de streetwear. Em vez de tratar o catálogo apenas como uma vitrine estática, o projeto estrutura rotas completas de loja, coleções (drops), página de produto, sacola persistente e favoritos armazenados localmente no navegador sem exigir cadastro prévio.",
-    narrativeParagraph2:
-      "No código, a aplicação combina React 19, TypeScript e TanStack Start com Tailwind CSS 4, validação em Zod, elementos interativos em Three.js e animações coordenadas com Framer Motion, além de testes automatizados com Vitest e estrutura de integração com o SDK do Mercado Pago.",
+    summary:
+      "Loja digital autoral de streetwear com catálogo interativo, coleções (drops), favoritos salvos localmente no navegador, sacola persistente e cálculo de frete no servidor.",
+    architectureNote:
+      "Construído com React 19, TypeScript e TanStack Start (SSR/Server Functions), estilizado com Tailwind CSS 4, animações em Framer Motion, visualização 3D com Three.js, validação de esquemas com Zod e testes unitários em Vitest.",
     stack: [
       "React 19",
       "TypeScript",
@@ -101,43 +90,44 @@ export const projects: ProjectStory[] = [
     liveDomainLabel: "verso-five-psi.vercel.app",
     requestedUrlNote: {
       url: "https://verso-sable.vercel.app/",
-      checkedAt: "22 de outubro de 2026",
+      checkedAt: "22/10/2026",
       httpStatus: "HTTP 404 (DEPLOYMENT_NOT_FOUND)",
       explanation:
-        "A URL histórica verso-sable.vercel.app foi reavaliada e permanece desativada na Vercel (HTTP 404). O link principal acima aponta diretamente para o deploy ativo e verificado (HTTP 200 OK) do mesmo repositório em verso-five-psi.vercel.app.",
+        "A URL histórica verso-sable.vercel.app retorna HTTP 404 na Vercel. O botão 'Visitar projeto' abre diretamente o deploy ativo e verificado do mesmo repositório em verso-five-psi.vercel.app (HTTP 200 OK).",
     },
     repoUrl: "https://github.com/aleffelix15/verso",
     repoLabel: "github.com/aleffelix15/verso",
-    imageBase: "/screens/verso",
-    imageAlt: "Captura real da página inicial do projeto Verso exibindo a manchete Fé que veste e fotografia sobre parede de concreto.",
-    imageCaption: "FIG. 01 — Captura real da aplicação Verso em execução (1200×750 px).",
-    imageType: "Captura real da aplicação",
+    screens: [
+      {
+        id: "verso-home",
+        label: "Capa & Drop 01",
+        base: "/screens/verso",
+        alt: "Captura real da interface principal do e-commerce Verso.",
+        caption: "CAPTURA REAL DA APLICAÇÃO · VERSO-FIVE-PSI.VERCEL.APP",
+      },
+    ],
     verifiedFeatures: [
-      "Páginas completas de loja, produto, drops, sobre, contato, privacidade, termos e trocas.",
+      "Rotas completas de loja, ficha de produto, drops, sobre, contato, privacidade, termos e trocas.",
       "Sacola com cálculo de frete executado no servidor em centavos inteiros via server function.",
-      "Sistema de favoritos persistido em localStorage no navegador, sem fricção de login.",
-      "Estrutura de checkout e rota de webhook com SDK do Mercado Pago e validação de esquemas com Zod.",
-      "Componentes 3D interativos com Three.js (@react-three/fiber) e suíte de testes unitários com Vitest.",
+      "Favoritos persistidos em localStorage no navegador, sem exigir criação de conta.",
+      "Estrutura de checkout e rota de webhook com SDK do Mercado Pago e validação Zod.",
+      "Elementos 3D com Three.js (@react-three/fiber) e testes automatizados com Vitest.",
     ],
     honestLimitations: [
-      "Projeto demonstrativo: os itens do catálogo utilizam dados de exemplo.",
-      "O fluxo de checkout não processa compras comerciais reais nem liquidação financeira em produção.",
+      "Projeto demonstrativo: os produtos do catálogo utilizam dados de exemplo.",
+      "O fluxo de checkout não realiza cobranças comerciais reais nem liquidação em produção.",
     ],
   },
   {
     id: "decode",
-    number: "02",
-    chapterTag: "CRÔNICA DE CONSTRUÇÃO // 02 DE 02",
+    number: "02.",
     name: "DECODE",
-    subtitle: "Experiência interativa de conscientização sobre violência contra a mulher (Agosto Lilás)",
+    tagline: "Experiência interativa (Agosto Lilás).",
     status: "Publicado",
-    year: "2026",
-    lead:
-      "A tecnologia usada como veículo de escuta e percepção: uma narrativa interativa em capítulos que ajuda a identificar sinais sutis de violência doméstica e psicológica.",
-    narrativeParagraph1:
-      "Associado à campanha Agosto Lilás, o DECODE afasta-se do formato tradicional de folheto informativo para propor uma jornada ativa no navegador. O visitante percorre cenários cotidianos, analisa diálogos e toma decisões que revelam como comportamentos abusivos frequentemente se disfarçam de zelo ou cuidado.",
-    narrativeParagraph2:
-      "Construída com React 18, JavaScript, Vite 5, Tailwind CSS 3 e ícones Lucide React, a aplicação funciona integralmente no cliente (SPA), articulando capítulos ramificados, dinâmica de triagem de sinais de risco, cartas de insights e informações diretas sobre canais de ajuda.",
+    summary:
+      "Aplicação interativa de conscientização sobre violência contra a mulher, estruturada com narrativa ramificada em capítulos, módulos de triagem rápida, linha do tempo e canais de ajuda.",
+    architectureNote:
+      "Desenvolvida em React 18, JavaScript (ES Modules), Vite 5, Tailwind CSS 3 e Lucide React. Executa 100% no navegador (SPA) com gerenciamento de estado dos capítulos e cartas de insights em tempo real.",
     stack: [
       "React 18",
       "JavaScript",
@@ -150,211 +140,203 @@ export const projects: ProjectStory[] = [
     liveDomainLabel: "decode-ochre.vercel.app",
     repoUrl: "https://github.com/aleffelix15/decode",
     repoLabel: "github.com/aleffelix15/decode",
-    imageBase: "/screens/decode",
-    imageAlt: "Captura real da tela de abertura do projeto DECODE associado à campanha Agosto Lilás.",
-    imageCaption: "FIG. 02 — Captura real da aplicação DECODE publicada em decode-ochre.vercel.app.",
-    imageType: "Captura real da aplicação",
+    screens: [
+      {
+        id: "decode-cover",
+        label: "Abertura",
+        base: "/screens/decode",
+        alt: "Captura real da tela inicial do projeto DECODE (Agosto Lilás).",
+        caption: "CAPTURA REAL 01/02 · TELA DE ABERTURA (DECODE-OCHRE.VERCEL.APP)",
+      },
+      {
+        id: "decode-dashboard",
+        label: "Painel & Casos",
+        base: "/screens/decode-dashboard",
+        alt: "Captura real do painel interno do projeto DECODE com casos Sofia e Marcos e módulos de triagem.",
+        caption: "CAPTURA REAL 02/02 · PAINEL DE CAPÍTULOS E TRIAGEM RÁPIDA",
+      },
+    ],
     verifiedFeatures: [
-      "Narrativa interativa estruturada em capítulos com tomada de decisão pelo usuário.",
-      "Jogos de triagem para identificação prática de padrões e comportamentos de risco.",
-      "Cartas de insights educativos e telas dedicadas a orientação e canais de suporte.",
-      "Execução 100% client-side rápida e autônoma no navegador, sem dependência de servidor externo.",
+      "Narrativa interativa dividida em capítulos e casos práticos (Caso 01 Sofia e Caso 02 Marcos).",
+      "Módulos interativos: Triagem Rápida, Linha do Tempo, O Algoritmo, Arquivos Ocultos e Firewall.",
+      "Cartas de insights desbloqueáveis, visualização de dados (DataLab) e botão de Saída Rápida / Ajuda.",
+      "Execução integral client-side rápida e sem dependência de servidor externo.",
     ],
     honestLimitations: [
-      "Aplicação estritamente client-side (SPA): não possui banco de dados, autenticação ou persistência em servidor.",
+      "Aplicação 100% client-side (SPA): o progresso é mantido na sessão local do navegador, sem banco de dados externo.",
     ],
   },
 ];
 
 export const aboutData = {
-  chapterNumber: "Capítulo 02",
-  chapterTitle: "Sobre mim",
-  headline: "Arquitetura limpa, interfaces que respiram e compromisso com o que é real.",
+  spineNumber: "03",
+  spineLabel: "SOBRE MIM",
+  headline: "Engenharia, clareza e atenção aos detalhes.",
   paragraph1:
     "Sou estudante de Engenharia de Software e desenvolvedor web. Meu trabalho é centrado na criação de interfaces eficientes, acessíveis e focadas na experiência do usuário.",
   paragraph2:
-    "Desenvolvo aplicações utilizando tecnologias web modernas, valorizando arquitetura organizada, código legível e documentação honesta.",
-  interviewBlocks: [
-    {
-      question: "01 // Por que a estética de estúdio e publicação editorial?",
-      answer:
-        "Porque um bom software nasce do mesmo princípio de uma boa conversa em estúdio: escuta atenta, ausência de distrações e clareza na mensagem. Quando removemos efeitos gratuitos, sobra o que importa — tipografia legível, engenharia sólida e respeito pelo tempo do usuário.",
-    },
-    {
-      question: "02 // Como você equilibra forma visual e engenharia de software?",
-      answer:
-        "Não separo a camada visual da estrutura do código. Componentes bem delimitados, tipagem previsível e estados claros tornam a interface mais rápida de manter, testar e evoluir sem regressões.",
-    },
-    {
-      question: "03 // Qual é o papel da transparência técnica nos seus projetos?",
-      answer:
-        "Documentar exatamente o que está implementado e quais são os limites atuais de cada projeto demonstra maturidade de engenharia. Prefiro apresentar código auditável e funcional a prometer recursos fictícios.",
-    },
-  ],
+    "Tenho interesse em construir aplicações digitais que combinem funcionalidade, organização e atenção aos detalhes.",
+  paragraph3:
+    "Desenvolvo aplicações utilizando tecnologias web modernas, valorizando arquitetura limpa, código legível e documentação honesta.",
+  studioDeskImage: {
+    base: "/images/studio-desk",
+    alt: "Fotografia em preto e branco de uma mesa de trabalho com teclado mecânico, fones de estúdio e microfone diante de parede de concreto.",
+    caption: "ENSAIO CONCEITUAL · AMBIENTE DE ESTÚDIO E PRECISÃO TÉCNICA",
+  },
+  realPortraitImage: {
+    base: "/images/alef-portrait-bw",
+    alt: "Retrato real em preto e branco de Álef Felix Teixeira.",
+    caption: "RETRATO REAL · ÁLEF FELIX TEIXEIRA (ACERVO ALEF.DEV)",
+  },
   processSteps: [
     {
       number: "01",
       title: "Entender",
-      description: "Leitura do problema, do contexto de uso e do objetivo real de quem vai utilizar a interface.",
+      description: "Compreensão do problema real, do contexto de uso e das necessidades das pessoas.",
     },
     {
       number: "02",
       title: "Planejar",
-      description: "Definição da hierarquia de informação, arquitetura de componentes e ferramentas adequadas.",
+      description: "Definição da arquitetura de componentes, rotas, contratos de dados e hierarquia visual.",
     },
     {
       number: "03",
       title: "Desenvolver",
-      description: "Implementação com código organizado, semântica HTML, responsividade e controle de estado.",
+      description: "Construção com código limpo, semântica HTML, responsividade e foco em performance.",
     },
     {
       number: "04",
       title: "Testar",
-      description: "Validação de funcionamento, contraste, navegação por teclado e desempenho em diferentes telas.",
+      description: "Verificação prática de fluxos, estados de interface, contraste e acessibilidade por teclado.",
     },
     {
       number: "05",
-      title: "Evoluir",
-      description: "Refinamento contínuo e documentação honesta do escopo e das próximas etapas.",
+      title: "Documentar & Evoluir",
+      description: "Registro honesto do que foi implementado, das limitações atuais e dos próximos passos.",
     },
   ],
-  studioDeskImage: {
-    base: "/images/studio-desk",
-    alt: "Fotografia conceitual em preto e branco de uma bancada de desenvolvimento sobre madeira escura e parede de concreto, com teclado mecânico, fones de estúdio e microfone articulado.",
-    caption: "FIG. 03 — Ensaio conceitual ilustrativo: instrumentos de precisão, silêncio e foco.",
-  },
-  realSetupImage: {
-    base: "/images/about-setup",
-    alt: "Fotografia do ambiente de estudo e desenvolvimento com notebook sobre mesa de madeira.",
-    caption: "FIG. 04 — Registro de ambiente de estudo e desenvolvimento.",
-  },
 };
 
-export type TechIndexEntry = {
+export type TechItem = {
   index: string;
   name: string;
-  category: string;
-  projects: ("Verso" | "DECODE")[];
-  evidence: string;
+  role: string;
+  projects: ("VERSO" | "DECODE")[];
+  provenanceNote: string;
 };
 
-export const techIndexData: TechIndexEntry[] = [
+export const techChapterData = {
+  spineNumber: "04",
+  spineLabel: "TECNOLOGIAS",
+  headline: "Ferramentas que me acompanham.",
+  subtitle:
+    "Tecnologias verificadas nos repositórios públicos dos projetos em destaque — sem listas infladas e atribuídas exatamente onde são aplicadas.",
+};
+
+export const techIndexData: TechItem[] = [
   {
     index: "01",
     name: "React",
-    category: "Arquitetura de Interface",
-    projects: ["Verso", "DECODE"],
-    evidence: "React 19 no Verso · React 18 no DECODE",
+    role: "Interfaces & Componentização",
+    projects: ["VERSO", "DECODE"],
+    provenanceNote: "React 19 (Verso) · React 18 (DECODE)",
   },
   {
     index: "02",
     name: "TypeScript",
-    category: "Tipagem Estática & Contratos",
-    projects: ["Verso"],
-    evidence: "TypeScript 5.8 no Verso (e neste portfólio)",
+    role: "Tipagem Estática & Segurança",
+    projects: ["VERSO"],
+    provenanceNote: "TypeScript 5.8 (Verso & Portfólio)",
   },
   {
     index: "03",
     name: "JavaScript",
-    category: "Linguagem Base & ES Modules",
-    projects: ["Verso", "DECODE"],
-    evidence: "Lógica de capítulos e estado no DECODE · Base web no Verso",
+    role: "ES Modules & Lógica Interativa",
+    projects: ["VERSO", "DECODE"],
+    provenanceNote: "Motor de capítulos no DECODE · Base web no Verso",
   },
   {
     index: "04",
     name: "Vite",
-    category: "Build Tool & Bundler",
-    projects: ["Verso", "DECODE"],
-    evidence: "Vite 8 no Verso · Vite 5 no DECODE",
+    role: "Bundler & Ambiente de Build",
+    projects: ["VERSO", "DECODE"],
+    provenanceNote: "Vite 8 (Verso) · Vite 5 (DECODE)",
   },
   {
     index: "05",
     name: "Tailwind CSS",
-    category: "Estilização Utilitária & Tokens",
-    projects: ["Verso", "DECODE"],
-    evidence: "Tailwind CSS 4 no Verso · Tailwind CSS 3 no DECODE",
+    role: "Design Tokens & Estilização",
+    projects: ["VERSO", "DECODE"],
+    provenanceNote: "Tailwind CSS 4 (Verso) · Tailwind CSS 3 (DECODE)",
   },
   {
     index: "06",
     name: "TanStack",
-    category: "Roteamento, SSR & Server Functions",
-    projects: ["Verso"],
-    evidence: "TanStack Start, Router e React Query no Verso",
+    role: "SSR, Rotas & Server Functions",
+    projects: ["VERSO"],
+    provenanceNote: "TanStack Start, Router & Query no Verso",
   },
   {
     index: "07",
     name: "Three.js",
-    category: "Gráficos 3D & WebGL",
-    projects: ["Verso"],
-    evidence: "Three.js + @react-three/fiber e @react-three/drei no Verso",
+    role: "Renderização 3D & WebGL",
+    projects: ["VERSO"],
+    provenanceNote: "Three.js + React Three Fiber / Drei no Verso",
   },
   {
     index: "08",
     name: "Framer Motion",
-    category: "Transições & Coreografia de UI",
-    projects: ["Verso"],
-    evidence: "Framer Motion 14 nos fluxos e transições do Verso",
+    role: "Transições & Animações de UI",
+    projects: ["VERSO"],
+    provenanceNote: "Framer Motion 14 no Verso",
   },
   {
     index: "09",
     name: "Zod",
-    category: "Validação de Esquemas & Dados",
-    projects: ["Verso"],
-    evidence: "Zod 3.25 na validação de entradas e payloads do Verso",
+    role: "Validação de Esquemas",
+    projects: ["VERSO"],
+    provenanceNote: "Zod 3.25 no checkout e rotas do Verso",
   },
   {
     index: "10",
     name: "Vitest",
-    category: "Testes Automatizados",
-    projects: ["Verso"],
-    evidence: "Vitest 4 + Testing Library na suíte do Verso",
+    role: "Testes Unitários Automatizados",
+    projects: ["VERSO"],
+    provenanceNote: "Vitest 4 + Testing Library no Verso",
   },
   {
     index: "11",
     name: "Git",
-    category: "Controle de Versão",
-    projects: ["Verso", "DECODE"],
-    evidence: "Histórico de commits e versionamento em ambos os projetos",
+    role: "Versionamento de Código",
+    projects: ["VERSO", "DECODE"],
+    provenanceNote: "Controle de versão em todos os projetos",
   },
   {
     index: "12",
     name: "GitHub",
-    category: "Hospedagem de Código & Repositórios",
-    projects: ["Verso", "DECODE"],
-    evidence: "Repositórios públicos aleffelix15/verso e aleffelix15/decode",
+    role: "Repositórios & Código Aberto",
+    projects: ["VERSO", "DECODE"],
+    provenanceNote: "github.com/aleffelix15",
   },
   {
     index: "13",
     name: "Vercel",
-    category: "Infraestrutura & Deploy Web",
-    projects: ["Verso", "DECODE"],
-    evidence: "Ambientes publicados na Vercel para Verso e DECODE",
-  },
-];
-
-export const foundationalTechs = [
-  {
-    name: "HTML5 Semântico & CSS Moderno",
-    note: "Base estrutural, acessibilidade, grades assimétricas e animações nativas presente em todos os projetos.",
-  },
-  {
-    name: "Python",
-    note: "Linguagem em estudo complementar na graduação em Engenharia de Software.",
+    role: "Deploy & Hospedagem Web",
+    projects: ["VERSO", "DECODE"],
+    provenanceNote: "Publicações ativas na Vercel",
   },
 ];
 
 export const contactData = {
-  chapterNumber: "Capítulo 04",
-  chapterTitle: "Contato",
-  headline: "Toda boa arquitetura começa com uma conversa clara.",
-  subheadline:
-    "Conhecer meu trabalho em detalhe, trocar ideias sobre engenharia front-end ou conversar sobre oportunidades profissionais — os canais oficiais abaixo estão abertos.",
+  spineNumber: "05",
+  spineLabel: "CONTATO",
+  headline: "Vamos conversar?",
+  text:
+    "Se você tem um projeto em mente, uma oportunidade profissional ou quer trocar ideias sobre desenvolvimento e engenharia de software, entre em contato pelos canais oficiais abaixo.",
 };
 
 export const footerData = {
   author: "Álef Felix Teixeira",
-  role: "Estudante de Engenharia de Software · Desenvolvedor Web",
-  colophon:
-    "Edição autoral desenvolvida com React 18, TypeScript, Vite 5 e CSS arquitetônico puro. Tipografia em Bricolage Grotesque, Instrument Serif e DM Mono.",
-  copyright: `© ${new Date().getFullYear()} Álef Felix Teixeira.`,
+  role: "Desenvolvedor Web · 2026",
+  copyright: `© ${new Date().getFullYear()} Álef Felix Teixeira. Todos os direitos reservados.`,
 };
