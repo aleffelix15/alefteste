@@ -88,7 +88,12 @@ export function Header() {
   return (
     <header className="site-header" id="topo">
       <div className="container header-inner">
-        <a href="#abertura" className="brand-link" aria-label="Álef Felix Teixeira — Início">
+        <a
+          href="#abertura"
+          className="brand-link"
+          aria-label="Álef Felix Teixeira — Início"
+          data-magnetic
+        >
           <MonogramLogo />
           <span className="brand-divider" aria-hidden="true" />
           <span className="brand-serif-name">Álef Felix</span>
@@ -121,6 +126,7 @@ export function Header() {
               target="_blank"
               rel="noopener noreferrer"
               className="header-social-link"
+              data-magnetic
             >
               <GithubIcon size={15} />
               <span>GitHub</span>
@@ -131,6 +137,7 @@ export function Header() {
               target="_blank"
               rel="noopener noreferrer"
               className="header-social-link"
+              data-magnetic
             >
               <LinkedinIcon size={15} />
               <span>LinkedIn</span>
@@ -213,8 +220,13 @@ export function Header() {
 
 export function OpeningSection() {
   return (
-    <section className="hero-editorial-stage" id="abertura" aria-labelledby="hero-main-title">
-      {/* Full-bleed chiaroscuro monochrome studio background on right side */}
+    <section
+      className="hero-editorial-stage"
+      id="abertura"
+      aria-labelledby="hero-main-title"
+      data-hero-stage
+    >
+      {/* Full-bleed chiaroscuro monochrome studio background with Ken Burns & Parallax */}
       <div className="hero-backdrop-wrap" aria-hidden="true">
         <picture>
           <source
@@ -235,6 +247,7 @@ export function OpeningSection() {
             fetchPriority="high"
             decoding="async"
             className="hero-backdrop-img"
+            data-hero-parallax
           />
         </picture>
         <div className="hero-backdrop-vignette" />
@@ -252,22 +265,32 @@ export function OpeningSection() {
           </span>
         </aside>
 
-        {/* Main Editorial Cover Column */}
+        {/* Main Editorial Cover Column with Mask Text Reveal */}
         <div className="hero-main-column" data-reveal>
           <h1 id="hero-main-title" className="hero-serif-title">
-            <span>{heroData.firstName}</span>
-            <span>{heroData.lastName}</span>
+            <span className="line-mask">
+              <span className="line-inner" style={{ "--line-delay": "60ms" } as React.CSSProperties}>
+                {heroData.firstName}
+              </span>
+            </span>
+            <span className="line-mask">
+              <span className="line-inner" style={{ "--line-delay": "180ms" } as React.CSSProperties}>
+                {heroData.lastName}
+              </span>
+            </span>
           </h1>
 
-          <p className="hero-lead-statement">{heroData.statement}</p>
+          <p className="hero-lead-statement hero-stagger-fade" style={{ "--fade-delay": "300ms" } as React.CSSProperties}>
+            {heroData.statement}
+          </p>
 
-          <div className="hero-actions-row">
-            <a href="#projetos" className="btn-white-editorial">
+          <div className="hero-actions-row hero-stagger-fade" style={{ "--fade-delay": "420ms" } as React.CSSProperties}>
+            <a href="#projetos" className="btn-white-editorial" data-magnetic>
               <span>{heroData.ctaPrimary}</span>
               <span aria-hidden="true" className="arrow-inline">→</span>
             </a>
 
-            <a href="#contato" className="link-underlined-editorial">
+            <a href="#contato" className="link-underlined-editorial" data-magnetic>
               <span>{heroData.ctaSecondary}</span>
             </a>
           </div>
@@ -275,12 +298,18 @@ export function OpeningSection() {
 
         {/* Right Floating Studio Epigraph & Caption */}
         <div className="hero-epigraph-column" data-reveal>
-          <blockquote className="hero-floating-epigraph">
+          <blockquote
+            className="hero-floating-epigraph hero-stagger-fade"
+            style={{ "--fade-delay": "360ms" } as React.CSSProperties}
+          >
             <p>{heroData.epigraph}</p>
             <span className="epigraph-rule" aria-hidden="true" />
           </blockquote>
 
-          <p className="hero-studio-caption mono">
+          <p
+            className="hero-studio-caption mono hero-stagger-fade"
+            style={{ "--fade-delay": "480ms" } as React.CSSProperties}
+          >
             {heroData.studioImage.caption}
           </p>
         </div>
@@ -307,9 +336,16 @@ export function ProjectsChapter() {
           </div>
 
           <h2 id="projects-heading" className="section-serif-heading">
-            Ideias que
-            <br />
-            viram experiências.
+            <span className="line-mask">
+              <span className="line-inner" style={{ "--line-delay": "40ms" } as React.CSSProperties}>
+                Ideias que
+              </span>
+            </span>
+            <span className="line-mask">
+              <span className="line-inner" style={{ "--line-delay": "140ms" } as React.CSSProperties}>
+                viram experiências.
+              </span>
+            </span>
           </h2>
 
           <p className="section-intro-copy">{projectsIntro.description}</p>
@@ -319,6 +355,7 @@ export function ProjectsChapter() {
             target="_blank"
             rel="noopener noreferrer"
             className="link-underlined-editorial"
+            data-magnetic
           >
             <span>{projectsIntro.allProjectsLabel}</span>
             <span aria-hidden="true" className="arrow-inline">→</span>
@@ -328,7 +365,7 @@ export function ProjectsChapter() {
 
         {/* Right Area: 2 Editorial Project Showcases (01. VERSO & 02. DECODE) */}
         <div className="projects-showcase-grid">
-          {projects.map((project) => {
+          {projects.map((project, projIdx) => {
             const selectedScreenId =
               activeScreenByProject[project.id] || project.screens[0].id;
             const currentScreen =
@@ -341,8 +378,9 @@ export function ProjectsChapter() {
                 className="project-editorial-feature"
                 aria-labelledby={`proj-title-${project.id}`}
                 data-reveal
+                style={{ "--reveal-delay": `${projIdx * 120}ms` } as React.CSSProperties}
               >
-                {/* Browser / Archival Frame with Real Capture */}
+                {/* Browser / Archival Frame with Real Capture + Subtle 3D Tilt & Spotlight */}
                 <figure className="project-capture-frame" data-tilt-card>
                   <div className="capture-window-bar mono">
                     <div className="window-bar-left">
@@ -390,7 +428,7 @@ export function ProjectsChapter() {
                     className="project-capture-link"
                     aria-label={`Visitar projeto ${project.name} publicado (abre em nova aba)`}
                   >
-                    <picture>
+                    <picture key={currentScreen.id} className="screen-fade-picture">
                       <source
                         type="image/avif"
                         srcSet={`${currentScreen.base}.avif`}
@@ -430,20 +468,24 @@ export function ProjectsChapter() {
                   <p className="project-tagline">{project.tagline}</p>
                   <p className="project-summary">{project.summary}</p>
 
-                  {/* Confirmed Stack Pills */}
+                  {/* Confirmed Stack Pills with Stagger */}
                   <ul
                     className="project-stack-pills"
                     aria-label={`Tecnologias confirmadas em ${project.name}`}
                   >
-                    {project.stack.map((tech) => (
-                      <li key={tech} className="project-stack-pill">
+                    {project.stack.map((tech, idx) => (
+                      <li
+                        key={tech}
+                        className="project-stack-pill"
+                        style={{ "--stagger-index": idx } as React.CSSProperties}
+                      >
                         {tech}
                       </li>
                     ))}
                   </ul>
 
-                  {/* Technical Dossier Accordion */}
-                  <details className="project-audit-details">
+                  {/* Technical Dossier Accordion with WAAPI animation */}
+                  <details className="project-audit-details" data-animated-details>
                     <summary className="audit-summary mono">
                       <span>ARQUITETURA, FUNCIONALIDADES &amp; LIMITAÇÕES REAIS</span>
                       <span className="audit-plus" aria-hidden="true">+</span>
@@ -485,6 +527,7 @@ export function ProjectsChapter() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="project-action-primary"
+                      data-magnetic
                     >
                       <span>Visitar projeto</span>
                       <span aria-hidden="true" className="arrow-inline">→</span>
@@ -498,6 +541,7 @@ export function ProjectsChapter() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="project-action-secondary"
+                      data-magnetic
                     >
                       <GithubIcon size={15} />
                       <span>Ver código</span>
@@ -528,51 +572,57 @@ export function AboutChapter() {
             </div>
 
             <div className="about-photos-montage">
-              <figure className="about-photo-card about-photo-studio">
-                <picture>
-                  <source
-                    type="image/avif"
-                    srcSet={`${aboutData.studioDeskImage.base}-640.avif 640w, ${aboutData.studioDeskImage.base}.avif 1120w`}
-                    sizes="(max-width: 900px) 100vw, 38vw"
-                  />
-                  <source
-                    type="image/webp"
-                    srcSet={`${aboutData.studioDeskImage.base}-640.webp 640w, ${aboutData.studioDeskImage.base}.webp 1120w`}
-                    sizes="(max-width: 900px) 100vw, 38vw"
-                  />
-                  <img
-                    src={`${aboutData.studioDeskImage.base}.webp`}
-                    alt={aboutData.studioDeskImage.alt}
-                    width={1120}
-                    height={700}
-                    decoding="async"
-                    className="about-studio-img"
-                  />
-                </picture>
+              <figure className="about-photo-card about-photo-studio" data-tilt-card>
+                <div className="photo-curtain-wrap">
+                  <picture>
+                    <source
+                      type="image/avif"
+                      srcSet={`${aboutData.studioDeskImage.base}-640.avif 640w, ${aboutData.studioDeskImage.base}.avif 1120w`}
+                      sizes="(max-width: 900px) 100vw, 38vw"
+                    />
+                    <source
+                      type="image/webp"
+                      srcSet={`${aboutData.studioDeskImage.base}-640.webp 640w, ${aboutData.studioDeskImage.base}.webp 1120w`}
+                      sizes="(max-width: 900px) 100vw, 38vw"
+                    />
+                    <img
+                      src={`${aboutData.studioDeskImage.base}.webp`}
+                      alt={aboutData.studioDeskImage.alt}
+                      width={1120}
+                      height={700}
+                      decoding="async"
+                      className="about-studio-img"
+                    />
+                  </picture>
+                  <div className="project-plate-spotlight" aria-hidden="true" />
+                </div>
                 <figcaption className="photo-micro-caption mono">
                   {aboutData.studioDeskImage.caption}
                 </figcaption>
               </figure>
 
-              <figure className="about-photo-card about-photo-portrait">
-                <picture>
-                  <source
-                    type="image/avif"
-                    srcSet={`${aboutData.realPortraitImage.base}.avif`}
-                  />
-                  <source
-                    type="image/webp"
-                    srcSet={`${aboutData.realPortraitImage.base}.webp`}
-                  />
-                  <img
-                    src={`${aboutData.realPortraitImage.base}.webp`}
-                    alt={aboutData.realPortraitImage.alt}
-                    width={720}
-                    height={900}
-                    decoding="async"
-                    className="about-portrait-img"
-                  />
-                </picture>
+              <figure className="about-photo-card about-photo-portrait" data-tilt-card>
+                <div className="photo-curtain-wrap">
+                  <picture>
+                    <source
+                      type="image/avif"
+                      srcSet={`${aboutData.realPortraitImage.base}.avif`}
+                    />
+                    <source
+                      type="image/webp"
+                      srcSet={`${aboutData.realPortraitImage.base}.webp`}
+                    />
+                    <img
+                      src={`${aboutData.realPortraitImage.base}.webp`}
+                      alt={aboutData.realPortraitImage.alt}
+                      width={720}
+                      height={900}
+                      decoding="async"
+                      className="about-portrait-img"
+                    />
+                  </picture>
+                  <div className="project-plate-spotlight" aria-hidden="true" />
+                </div>
                 <figcaption className="photo-micro-caption mono">
                   {aboutData.realPortraitImage.caption}
                 </figcaption>
@@ -583,7 +633,11 @@ export function AboutChapter() {
           {/* Right Narrative & 5-Step Process */}
           <div className="about-narrative-zone">
             <h2 id="about-heading" className="section-serif-heading">
-              {aboutData.headline}
+              <span className="line-mask">
+                <span className="line-inner" style={{ "--line-delay": "60ms" } as React.CSSProperties}>
+                  {aboutData.headline}
+                </span>
+              </span>
             </h2>
 
             <div className="about-prose-stack">
@@ -595,8 +649,12 @@ export function AboutChapter() {
             <div className="about-process-ledger" aria-label="Método de trabalho em 5 etapas">
               <p className="process-ledger-kicker mono">MÉTODO &amp; PROCESSO DE ENGENHARIA</p>
               <ol className="process-compact-grid">
-                {aboutData.processSteps.map((step) => (
-                  <li key={step.number} className="process-compact-item">
+                {aboutData.processSteps.map((step, idx) => (
+                  <li
+                    key={step.number}
+                    className="process-compact-item"
+                    style={{ "--stagger-index": idx } as React.CSSProperties}
+                  >
                     <span className="process-step-num mono">{step.number}</span>
                     <div>
                       <h3 className="process-step-title">{step.title}</h3>
@@ -608,7 +666,7 @@ export function AboutChapter() {
             </div>
 
             <div className="about-cta-row">
-              <a href="#tecnologias" className="link-underlined-editorial">
+              <a href="#tecnologias" className="link-underlined-editorial" data-magnetic>
                 <span>Saiba mais sobre minha stack</span>
                 <span aria-hidden="true" className="arrow-inline">→</span>
               </a>
@@ -641,9 +699,16 @@ export function TechChapter() {
             </div>
 
             <h2 id="tech-heading" className="section-serif-heading">
-              Ferramentas que
-              <br />
-              me acompanham.
+              <span className="line-mask">
+                <span className="line-inner" style={{ "--line-delay": "40ms" } as React.CSSProperties}>
+                  Ferramentas que
+                </span>
+              </span>
+              <span className="line-mask">
+                <span className="line-inner" style={{ "--line-delay": "140ms" } as React.CSSProperties}>
+                  me acompanham.
+                </span>
+              </span>
             </h2>
 
             <p className="section-intro-copy">{techChapterData.subtitle}</p>
@@ -677,19 +742,22 @@ export function TechChapter() {
             </div>
 
             {/* Atmospheric B&W Detail Plate */}
-            <figure className="tech-detail-plate">
-              <picture>
-                <source type="image/avif" srcSet="/images/about-setup-440.avif" />
-                <source type="image/webp" srcSet="/images/about-setup-440.webp" />
-                <img
-                  src="/images/about-setup.webp"
-                  alt="Detalhe em preto e branco de notebook e bancada de desenvolvimento."
-                  width={520}
-                  height={549}
-                  decoding="async"
-                  className="tech-detail-img"
-                />
-              </picture>
+            <figure className="tech-detail-plate" data-tilt-card>
+              <div className="photo-curtain-wrap">
+                <picture>
+                  <source type="image/avif" srcSet="/images/about-setup-440.avif" />
+                  <source type="image/webp" srcSet="/images/about-setup-440.webp" />
+                  <img
+                    src="/images/about-setup.webp"
+                    alt="Detalhe em preto e branco de notebook e bancada de desenvolvimento."
+                    width={520}
+                    height={549}
+                    decoding="async"
+                    className="tech-detail-img"
+                  />
+                </picture>
+                <div className="project-plate-spotlight" aria-hidden="true" />
+              </div>
               <figcaption className="photo-micro-caption mono">
                 ÍNDICE AUDITADO NOS ARQUIVOS PACKAGE.JSON
               </figcaption>
@@ -698,9 +766,17 @@ export function TechChapter() {
 
           {/* Right Typographic Index Grid */}
           <div className="tech-index-column">
-            <ul className="tech-editorial-matrix" aria-label="Índice de tecnologias verificadas">
-              {visibleTechs.map((item) => (
-                <li key={item.index} className="tech-matrix-row">
+            <ul
+              key={selectedProject}
+              className="tech-editorial-matrix"
+              aria-label="Índice de tecnologias verificadas"
+            >
+              {visibleTechs.map((item, idx) => (
+                <li
+                  key={item.index}
+                  className="tech-matrix-row"
+                  style={{ "--stagger-index": idx } as React.CSSProperties}
+                >
                   <span className="tech-matrix-num mono">{item.index}</span>
 
                   <div className="tech-matrix-main">
@@ -746,7 +822,11 @@ export function ContactChapter() {
             </div>
 
             <h2 id="contact-heading" className="contact-serif-heading">
-              {contactData.headline}
+              <span className="line-mask">
+                <span className="line-inner" style={{ "--line-delay": "50ms" } as React.CSSProperties}>
+                  {contactData.headline}
+                </span>
+              </span>
             </h2>
 
             <p className="contact-lead-text">{contactData.text}</p>
@@ -757,6 +837,7 @@ export function ContactChapter() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="contact-editorial-link"
+                data-magnetic
               >
                 <GithubIcon size={18} />
                 <span>GitHub</span>
@@ -771,6 +852,7 @@ export function ContactChapter() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="contact-editorial-link"
+                data-magnetic
               >
                 <LinkedinIcon size={18} />
                 <span>LinkedIn</span>
@@ -786,6 +868,7 @@ export function ContactChapter() {
               target="_blank"
               rel="noopener noreferrer"
               className="contact-architectural-card"
+              data-tilt-card
             >
               <div className="card-top-meta mono">
                 <span>REPOSITÓRIOS &amp; CÓDIGO ABERTO</span>
@@ -798,6 +881,7 @@ export function ContactChapter() {
                   <span className="card-channel-sub mono">github.com/aleffelix15</span>
                 </div>
               </div>
+              <div className="project-plate-spotlight" aria-hidden="true" />
               <span className="sr-only"> (abre em nova aba)</span>
             </a>
 
@@ -806,6 +890,7 @@ export function ContactChapter() {
               target="_blank"
               rel="noopener noreferrer"
               className="contact-architectural-card"
+              data-tilt-card
             >
               <div className="card-top-meta mono">
                 <span>PERFIL PROFISSIONAL &amp; CONEXÃO</span>
@@ -818,6 +903,7 @@ export function ContactChapter() {
                   <span className="card-channel-sub mono">Álef Felix Teixeira</span>
                 </div>
               </div>
+              <div className="project-plate-spotlight" aria-hidden="true" />
               <span className="sr-only"> (abre em nova aba)</span>
             </a>
           </div>
@@ -839,7 +925,12 @@ export function Footer() {
 
         <div className="footer-right">
           <span className="footer-role-tag mono">{footerData.role}</span>
-          <a href="#abertura" className="footer-top-link mono" aria-label="Voltar ao topo da página">
+          <a
+            href="#abertura"
+            className="footer-top-link mono"
+            aria-label="Voltar ao topo da página"
+            data-magnetic
+          >
             <span>Topo</span>
             <ArrowUpIcon size={14} />
           </a>
