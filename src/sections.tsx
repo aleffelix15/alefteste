@@ -98,7 +98,6 @@ export function Header() {
     return () => window.removeEventListener("resize", onResize);
   }, [activeSection, updatePillPosition]);
 
-  // Trava de scroll do body e tecla Escape quando o menu mobile está aberto
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.overflow = "hidden";
@@ -122,12 +121,17 @@ export function Header() {
   return (
     <header className="site-header" data-header>
       <div className="container header-inner">
-        <a href="#inicio" className="brand" aria-label="Álef Felix — Ir para o início">
-          <span className="brand-name">Álef Felix</span>
-          <span className="brand-dot" aria-hidden="true">
-            .
+        <div className="brand-group">
+          <a href="#inicio" className="brand" aria-label="Álef Felix — Ir para o início">
+            <span className="brand-name">Álef Felix</span>
+            <span className="brand-dot" aria-hidden="true">
+              .
+            </span>
+          </a>
+          <span className="brand-meta" aria-hidden="true">
+            ENG. SOFTWARE
           </span>
-        </a>
+        </div>
 
         <nav
           ref={navRef}
@@ -157,10 +161,14 @@ export function Header() {
 
         <div className="header-right">
           {links.disponivel && (
-            <div className="status-indicator" role="status">
+            <a
+              href="#contato"
+              className="status-indicator"
+              aria-label="Status: Disponível — Ir para contato"
+            >
               <span className="status-dot" aria-hidden="true" />
               <span className="status-label">Disponível</span>
-            </div>
+            </a>
           )}
 
           <button
@@ -218,7 +226,10 @@ export function Hero() {
     <section id="inicio" className="hero-section" aria-labelledby="hero-heading">
       <div className="container hero-grid">
         <div className="hero-main" data-reveal>
-          <p className="hero-eyebrow">{heroData.role}</p>
+          <div className="hero-eyebrow-row">
+            <span className="eyebrow-square" aria-hidden="true" />
+            <p className="hero-eyebrow">{heroData.role}</p>
+          </div>
 
           <h1 id="hero-heading" className="hero-title">
             <span className="hero-name-strong">{heroData.firstName}</span>{" "}
@@ -230,7 +241,9 @@ export function Hero() {
           <div className="hero-actions">
             <a href="#projetos" className="btn-pill btn-primary">
               <span>{heroData.ctaProjects}</span>
-              <span aria-hidden="true">↗</span>
+              <span className="btn-arrow" aria-hidden="true">
+                ↗
+              </span>
             </a>
             <a href="#contato" className="btn-pill btn-outline">
               <span>{heroData.ctaContact}</span>
@@ -246,6 +259,9 @@ export function Hero() {
         >
           <div className="focus-col-header">
             <span className="mono-label">Foco</span>
+            <span className="focus-col-range" aria-hidden="true">
+              01 — 03
+            </span>
           </div>
 
           <ol className="focus-list">
@@ -261,6 +277,12 @@ export function Hero() {
               </li>
             ))}
           </ol>
+
+          <div className="focus-col-footer">
+            <span className="focus-footer-tag">REACT · TYPESCRIPT · WEB</span>
+            <span className="focus-footer-dot" aria-hidden="true" />
+            <span className="focus-footer-tag">CÓDIGO AUDITADO</span>
+          </div>
         </aside>
       </div>
     </section>
@@ -279,6 +301,11 @@ export function StackMarquee() {
       aria-label="Tecnologias comprovadas em projetos"
     >
       <div className="container stack-strip-inner">
+        <div className="marquee-label-box" aria-hidden="true">
+          <span className="marquee-label-dot" />
+          <span>STACK COMPROVADA</span>
+        </div>
+
         <div className="marquee-viewport">
           <div className="marquee-track">
             <ul className="marquee-list">
@@ -361,8 +388,11 @@ export function Projects() {
             rel="noopener noreferrer"
             className="btn-pill btn-outline"
           >
+            <GitHubIcon size={15} />
             <span>Ver todos no GitHub</span>
-            <span aria-hidden="true">↗</span>
+            <span className="btn-arrow" aria-hidden="true">
+              ↗
+            </span>
             <span className="sr-only"> (abre em nova aba)</span>
           </a>
         </div>
@@ -373,6 +403,7 @@ export function Projects() {
             const isPublished = project.status === "Publicado";
             const imgHeight = project.name === "VERSO" ? 750 : 641;
             const basePath = project.image.replace(/\.webp$/, "");
+            const cleanHost = project.live.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
             return (
               <article
@@ -382,36 +413,53 @@ export function Projects() {
               >
                 <div className="project-media-col">
                   <div className="project-media-tilt" data-tilt-media>
-                    <div className="project-media-frame">
-                      <picture>
-                        <source
-                          type="image/avif"
-                          srcSet={`${basePath}-640.avif 768w, ${basePath}.avif 1200w`}
-                          sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 1080px) calc(100vw - 64px), 660px"
-                        />
-                        <source
-                          type="image/webp"
-                          srcSet={`${basePath}-640.webp 768w, ${project.image} 1200w`}
-                          sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 1080px) calc(100vw - 64px), 660px"
-                        />
-                        <img
-                          src={project.image}
-                          alt={`Captura de tela real da aplicação ${project.name}`}
-                          width={1200}
-                          height={imgHeight}
-                          loading="lazy"
-                          decoding="async"
-                          className="project-img"
-                        />
-                      </picture>
-                      <div className="project-spotlight" aria-hidden="true" />
-                    </div>
+                    <a
+                      href={project.live}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="project-media-frame"
+                      aria-label={`Abrir aplicação ${project.name} em nova aba`}
+                    >
+                      <div className="project-frame-bar" aria-hidden="true">
+                        <span className="frame-bar-left">
+                          <span className="frame-bar-num">FIG. {project.number}</span>
+                          <span className="frame-bar-sep">//</span>
+                          <span>{project.name}</span>
+                        </span>
+                        <span className="frame-bar-url">{cleanHost} ↗</span>
+                      </div>
+
+                      <div className="project-img-wrap">
+                        <picture>
+                          <source
+                            type="image/avif"
+                            srcSet={`${basePath}-640.avif 768w, ${basePath}.avif 1200w`}
+                            sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 960px) calc(100vw - 64px), 660px"
+                          />
+                          <source
+                            type="image/webp"
+                            srcSet={`${basePath}-640.webp 768w, ${project.image} 1200w`}
+                            sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 960px) calc(100vw - 64px), 660px"
+                          />
+                          <img
+                            src={project.image}
+                            alt={`Captura de tela real da aplicação ${project.name}`}
+                            width={1200}
+                            height={imgHeight}
+                            loading="lazy"
+                            decoding="async"
+                            className="project-img"
+                          />
+                        </picture>
+                        <div className="project-spotlight" aria-hidden="true" />
+                      </div>
+                    </a>
                   </div>
                 </div>
 
                 <div className="project-info-col">
                   <div className="project-meta-top">
-                    <span className="project-index">{project.number}</span>
+                    <span className="project-index">PROJETO {project.number}</span>
                     <span
                       className={`status-chip ${
                         isPublished ? "is-published" : "is-demo"
@@ -445,7 +493,9 @@ export function Projects() {
                       className="btn-pill btn-primary"
                     >
                       <span>Visitar</span>
-                      <span aria-hidden="true">↗</span>
+                      <span className="btn-arrow" aria-hidden="true">
+                        ↗
+                      </span>
                       <span className="sr-only">
                         {" "}
                         {project.name} (abre em nova aba)
@@ -469,7 +519,10 @@ export function Projects() {
 
                   <details className="project-details" data-animated-details>
                     <summary className="project-details-summary">
-                      <span>Auditoria técnica &amp; limitações</span>
+                      <span className="summary-left">
+                        <span className="summary-dot" aria-hidden="true" />
+                        <span>Auditoria técnica &amp; limitações</span>
+                      </span>
                       <span className="details-indicator" aria-hidden="true">
                         +
                       </span>
@@ -483,7 +536,7 @@ export function Projects() {
 
                       <div className="details-group">
                         <h4 className="details-heading">Comprovado no código</h4>
-                        <ul className="details-list">
+                        <ul className="details-list is-verified">
                           {project.does.map((item) => (
                             <li key={item}>{item}</li>
                           ))}
@@ -494,7 +547,7 @@ export function Projects() {
                         <h4 className="details-heading">
                           Limitações reais registradas
                         </h4>
-                        <ul className="details-list">
+                        <ul className="details-list is-limits">
                           {project.limits.map((limit) => (
                             <li key={limit}>{limit}</li>
                           ))}
@@ -539,6 +592,25 @@ export function About() {
             <p className="about-paragraph">{aboutData.paragraph1}</p>
             <p className="about-paragraph">{aboutData.paragraph2}</p>
 
+            <dl className="about-specs-grid" aria-label="Síntese acadêmica e técnica">
+              <div className="about-spec-cell">
+                <dt className="spec-label">Formação</dt>
+                <dd className="spec-value">Engenharia de Software</dd>
+              </div>
+              <div className="about-spec-cell">
+                <dt className="spec-label">Atuação</dt>
+                <dd className="spec-value">Desenvolvimento Web &amp; UI</dd>
+              </div>
+              <div className="about-spec-cell">
+                <dt className="spec-label">Base Principal</dt>
+                <dd className="spec-value">React · TypeScript · Vite</dd>
+              </div>
+              <div className="about-spec-cell">
+                <dt className="spec-label">Transparência</dt>
+                <dd className="spec-value">Código aberto e auditado</dd>
+              </div>
+            </dl>
+
             <div className="about-cta-wrap">
               <a href="#processo" className="btn-pill btn-outline">
                 <span>{aboutData.cta}</span>
@@ -553,16 +625,24 @@ export function About() {
             style={{ ["--stagger-index" as string]: 1 }}
           >
             <div className="about-img-frame">
+              <div className="project-frame-bar" aria-hidden="true">
+                <span className="frame-bar-left">
+                  <span className="frame-bar-num">ARQUIVO</span>
+                  <span className="frame-bar-sep">//</span>
+                  <span>SETUP &amp; ESTUDO</span>
+                </span>
+                <span className="frame-bar-url">02.A</span>
+              </div>
               <picture>
                 <source
                   type="image/avif"
                   srcSet="/images/about-setup-440.avif 440w, /images/about-setup.avif 800w"
-                  sizes="(max-width: 1080px) 100vw, 42vw"
+                  sizes="(max-width: 960px) 100vw, 42vw"
                 />
                 <source
                   type="image/webp"
                   srcSet="/images/about-setup-440.webp 440w, /images/about-setup.webp 800w"
-                  sizes="(max-width: 1080px) 100vw, 42vw"
+                  sizes="(max-width: 960px) 100vw, 42vw"
                 />
                 <img
                   src={aboutData.image}
@@ -574,13 +654,13 @@ export function About() {
                   className="about-img"
                 />
               </picture>
+              <figcaption className="about-caption">
+                <span className="caption-index" aria-hidden="true">
+                  FIG. 01
+                </span>
+                <span>{aboutData.imageCaption}</span>
+              </figcaption>
             </div>
-            <figcaption className="about-caption">
-              <span className="caption-index" aria-hidden="true">
-                FIG. 01
-              </span>
-              <span>{aboutData.imageCaption}</span>
-            </figcaption>
           </figure>
         </div>
       </div>
@@ -589,7 +669,7 @@ export function About() {
 }
 
 // ============================================================================
-// 6. TECNOLOGIAS / STACK (03 STACK)
+// 6. TECNOLOGIAS / STACK (03 STACK — MALHA SIMÉTRICA DE 1px)
 // ============================================================================
 export function Technologies() {
   return (
@@ -630,7 +710,7 @@ export function Technologies() {
               </span>
             </div>
 
-            <ul className="stack-matrix" aria-label="Tecnologias comprovadas nos projetos">
+            <ul className="stack-matrix stack-matrix-proven" aria-label="Tecnologias comprovadas nos projetos">
               {techGroups.proven.map((tech, idx) => (
                 <li key={tech} className="stack-cell">
                   <span className="stack-cell-num" aria-hidden="true">
@@ -642,6 +722,10 @@ export function Technologies() {
                   <span className="stack-cell-name">{tech}</span>
                 </li>
               ))}
+              <li className="stack-cell stack-cell-seal" aria-hidden="true">
+                <span className="seal-dot" />
+                <span>VERIFICADO EM PACKAGE.JSON (VERSO &amp; DECODE)</span>
+              </li>
             </ul>
           </div>
 
@@ -716,9 +800,16 @@ export function Process() {
                 <div className="timeline-node" aria-hidden="true">
                   <span className="timeline-dot" />
                 </div>
-                <span className="timeline-num">{step.number}</span>
-                <h3 className="timeline-title">{step.title}</h3>
-                <p className="timeline-desc">{step.description}</p>
+                <div className="timeline-card-body">
+                  <div className="timeline-step-head">
+                    <span className="timeline-num">PASSO {step.number}</span>
+                    <span className="timeline-Watermark" aria-hidden="true">
+                      {step.number}
+                    </span>
+                  </div>
+                  <h3 className="timeline-title">{step.title}</h3>
+                  <p className="timeline-desc">{step.description}</p>
+                </div>
               </li>
             ))}
           </ol>
@@ -738,55 +829,75 @@ export function Contact() {
       className="section-block section-contact"
       aria-labelledby="contact-heading"
     >
-      <div className="container contact-centered" data-reveal>
-        <div className="section-kicker contact-kicker">
-          <span className="kicker-num">05</span>
-          <span className="kicker-sep" aria-hidden="true">
-            /
-          </span>
-          <span>Contato</span>
-        </div>
+      <div className="container">
+        <div className="contact-editorial-panel" data-reveal>
+          <span className="corner-mark is-tl" aria-hidden="true">+</span>
+          <span className="corner-mark is-tr" aria-hidden="true">+</span>
+          <span className="corner-mark is-bl" aria-hidden="true">+</span>
+          <span className="corner-mark is-br" aria-hidden="true">+</span>
 
-        <h2 id="contact-heading" className="contact-giant-title">
-          {contactData.title}
-        </h2>
+          <div className="section-kicker contact-kicker">
+            <span className="kicker-num">05</span>
+            <span className="kicker-sep" aria-hidden="true">
+              /
+            </span>
+            <span>Contato</span>
+          </div>
 
-        <p className="contact-lead">{contactData.text}</p>
+          {links.disponivel && (
+            <div className="contact-availability">
+              <span className="status-dot" aria-hidden="true" />
+              <span>{heroData.statusText}</span>
+            </div>
+          )}
 
-        <div className="contact-actions">
-          <a
-            href={links.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-pill btn-primary btn-lg"
-          >
-            <GitHubIcon size={17} />
-            <span>GitHub</span>
-            <span aria-hidden="true">↗</span>
-            <span className="sr-only"> (abre em nova aba)</span>
-          </a>
+          <h2 id="contact-heading" className="contact-giant-title">
+            {contactData.title}
+          </h2>
 
-          <a
-            href={links.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-pill btn-outline btn-lg"
-          >
-            <LinkedInIcon size={17} />
-            <span>LinkedIn</span>
-            <span aria-hidden="true">↗</span>
-            <span className="sr-only"> (abre em nova aba)</span>
-          </a>
+          <p className="contact-lead">{contactData.text}</p>
 
-          {links.email && (
+          <div className="contact-actions">
             <a
-              href={`mailto:${links.email}`}
+              href={links.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-pill btn-primary btn-lg"
+            >
+              <GitHubIcon size={17} />
+              <span>GitHub</span>
+              <span className="btn-arrow" aria-hidden="true">
+                ↗
+              </span>
+              <span className="sr-only"> (abre em nova aba)</span>
+            </a>
+
+            <a
+              href={links.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn-pill btn-outline btn-lg"
             >
-              <span>E-mail</span>
-              <span aria-hidden="true">↗</span>
+              <LinkedInIcon size={17} />
+              <span>LinkedIn</span>
+              <span className="btn-arrow" aria-hidden="true">
+                ↗
+              </span>
+              <span className="sr-only"> (abre em nova aba)</span>
             </a>
-          )}
+
+            {links.email && (
+              <a
+                href={`mailto:${links.email}`}
+                className="btn-pill btn-outline btn-lg"
+              >
+                <span>E-mail</span>
+                <span className="btn-arrow" aria-hidden="true">
+                  ↗
+                </span>
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </section>
@@ -805,7 +916,15 @@ export function Footer() {
   return (
     <footer className="site-footer">
       <div className="container footer-inner">
-        <p className="footer-copy">{footerData.copyright}</p>
+        <div className="footer-left">
+          <span className="footer-brand-mini">
+            Álef Felix<span className="brand-dot">.</span>
+          </span>
+          <span className="footer-sep" aria-hidden="true">
+            /
+          </span>
+          <p className="footer-copy">{footerData.copyright}</p>
+        </div>
 
         <button
           type="button"
