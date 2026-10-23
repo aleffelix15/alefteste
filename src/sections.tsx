@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Menu, X } from "lucide-react";
 import {
   links,
   projects,
@@ -14,6 +13,8 @@ import {
   getTechIcon,
   GitHubIcon,
   LinkedInIcon,
+  MenuIcon,
+  CloseIcon,
 } from "./icons";
 
 const NAV_ITEMS = [
@@ -34,42 +35,57 @@ export function Header() {
   const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
 
   const updatePillPosition = useCallback((sectionId: string) => {
+    if (window.innerWidth <= 860) return;
     const navEl = navRef.current;
     const activeEl = linkRefs.current[sectionId];
     if (!navEl || !activeEl) return;
 
-    const x = activeEl.offsetLeft;
-    const w = activeEl.offsetWidth;
-    navEl.style.setProperty("--pill-x", `${x}px`);
-    navEl.style.setProperty("--pill-w", `${w}px`);
-    navEl.style.setProperty("--pill-opacity", "1");
+    window.requestAnimationFrame(() => {
+      const x = activeEl.offsetLeft;
+      const w = activeEl.offsetWidth;
+      navEl.style.setProperty("--pill-x", `${x}px`);
+      navEl.style.setProperty("--pill-w", `${w}px`);
+      navEl.style.setProperty("--pill-opacity", "1");
+    });
   }, []);
 
   useEffect(() => {
+    let scrollRaf = 0;
     const handleScroll = () => {
-      const scrollPos = window.scrollY + 220;
-      const docBottom =
-        window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight - 40;
-
-      if (docBottom) {
-        setActiveSection("contato");
-        return;
-      }
-
-      let current = "projetos";
-      for (const item of NAV_ITEMS) {
-        const el = document.getElementById(item.id);
-        if (el && scrollPos >= el.offsetTop) {
-          current = item.id;
+      if (scrollRaf) return;
+      scrollRaf = window.requestAnimationFrame(() => {
+        scrollRaf = 0;
+        const scrollY = window.scrollY;
+        if (scrollY < 100) {
+          setActiveSection("projetos");
+          return;
         }
-      }
-      setActiveSection(current);
+        const scrollPos = scrollY + 220;
+        const docBottom =
+          window.innerHeight + scrollY >=
+          document.documentElement.scrollHeight - 40;
+
+        if (docBottom) {
+          setActiveSection("contato");
+          return;
+        }
+
+        let current = "projetos";
+        for (const item of NAV_ITEMS) {
+          const el = document.getElementById(item.id);
+          if (el && scrollPos >= el.offsetTop) {
+            current = item.id;
+          }
+        }
+        setActiveSection(current);
+      });
     };
 
-    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (scrollRaf) window.cancelAnimationFrame(scrollRaf);
+    };
   }, []);
 
   useEffect(() => {
@@ -155,7 +171,7 @@ export function Header() {
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav-drawer"
           >
-            {mobileOpen ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
+            {mobileOpen ? <CloseIcon size={20} /> : <MenuIcon size={20} />}
           </button>
         </div>
       </div>
@@ -356,6 +372,7 @@ export function Projects() {
             const isReversed = idx % 2 === 1;
             const isPublished = project.status === "Publicado";
             const imgHeight = project.name === "VERSO" ? 750 : 641;
+            const basePath = project.image.replace(/\.webp$/, "");
 
             return (
               <article
@@ -366,15 +383,27 @@ export function Projects() {
                 <div className="project-media-col">
                   <div className="project-media-tilt" data-tilt-media>
                     <div className="project-media-frame">
-                      <img
-                        src={project.image}
-                        alt={`Captura de tela real da aplicação ${project.name}`}
-                        width={1200}
-                        height={imgHeight}
-                        loading={idx === 0 ? "eager" : "lazy"}
-                        decoding="async"
-                        className="project-img"
-                      />
+                      <picture>
+                        <source
+                          type="image/avif"
+                          srcSet={`${basePath}-640.avif 768w, ${basePath}.avif 1200w`}
+                          sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 1080px) calc(100vw - 64px), 660px"
+                        />
+                        <source
+                          type="image/webp"
+                          srcSet={`${basePath}-640.webp 768w, ${project.image} 1200w`}
+                          sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 1080px) calc(100vw - 64px), 660px"
+                        />
+                        <img
+                          src={project.image}
+                          alt={`Captura de tela real da aplicação ${project.name}`}
+                          width={1200}
+                          height={imgHeight}
+                          loading="lazy"
+                          decoding="async"
+                          className="project-img"
+                        />
+                      </picture>
                       <div className="project-spotlight" aria-hidden="true" />
                     </div>
                   </div>
@@ -524,15 +553,27 @@ export function About() {
             style={{ ["--stagger-index" as string]: 1 }}
           >
             <div className="about-img-frame">
-              <img
-                src={aboutData.image}
-                alt="Ambiente de desenvolvimento e estudo de Álef Felix Teixeira"
-                width={800}
-                height={600}
-                loading="lazy"
-                decoding="async"
-                className="about-img"
-              />
+              <picture>
+                <source
+                  type="image/avif"
+                  srcSet="/images/about-setup-440.avif 440w, /images/about-setup.avif 800w"
+                  sizes="(max-width: 1080px) 100vw, 42vw"
+                />
+                <source
+                  type="image/webp"
+                  srcSet="/images/about-setup-440.webp 440w, /images/about-setup.webp 800w"
+                  sizes="(max-width: 1080px) 100vw, 42vw"
+                />
+                <img
+                  src={aboutData.image}
+                  alt="Ambiente de desenvolvimento e estudo de Álef Felix Teixeira"
+                  width={800}
+                  height={600}
+                  loading="lazy"
+                  decoding="async"
+                  className="about-img"
+                />
+              </picture>
             </div>
             <figcaption className="about-caption">
               <span className="caption-index" aria-hidden="true">

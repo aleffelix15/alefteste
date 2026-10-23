@@ -14,8 +14,14 @@ import { initPortfolioMotion } from "./motion";
 
 export default function App() {
   useEffect(() => {
-    const cleanup = initPortfolioMotion();
-    return cleanup;
+    let cleanup: (() => void) | undefined;
+    const timer = window.setTimeout(() => {
+      cleanup = initPortfolioMotion();
+    }, 20);
+    return () => {
+      window.clearTimeout(timer);
+      cleanup?.();
+    };
   }, []);
 
   return (

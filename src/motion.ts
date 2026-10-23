@@ -63,7 +63,7 @@ export function initPortfolioMotion(): () => void {
 
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
-  updateScrollMetrics();
+  onScroll();
 
   cleanups.push(() => {
     window.removeEventListener("scroll", onScroll);
@@ -93,6 +93,16 @@ export function initPortfolioMotion(): () => void {
       return;
     }
 
+    const vh = window.innerHeight;
+    // Lê todos os retângulos ANTES de mutar a classe no DOM para evitar forced synchronous reflow
+    const initiallyVisible = new Set<HTMLElement>();
+    for (const el of revealElements) {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < vh * 0.92 && rect.bottom > 0) {
+        initiallyVisible.add(el);
+      }
+    }
+
     root.classList.add("motion-ready");
 
     observer = new IntersectionObserver(
@@ -111,11 +121,8 @@ export function initPortfolioMotion(): () => void {
       }
     );
 
-    const vh = window.innerHeight;
     for (const el of revealElements) {
-      const rect = el.getBoundingClientRect();
-      // Elementos já visíveis na dobra inicial aparecem imediatamente sem atraso de scroll
-      if (rect.top < vh * 0.92 && rect.bottom > 0) {
+      if (initiallyVisible.has(el)) {
         el.classList.add("is-visible");
       } else {
         observer.observe(el);
