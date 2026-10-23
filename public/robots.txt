@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# Quando o domínio final de produção estiver definido em src/data.ts (links.siteUrl),
+# adicione a diretiva Sitemap abaixo:
+# Sitemap: https://seu-dominio-final/sitemap.xml

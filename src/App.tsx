@@ -29,7 +29,7 @@ export default function App() {
         aria-hidden="true"
       />
       <Header />
-      <main id="conteudo">
+      <main id="conteudo" tabIndex={-1}>
         <Hero />
         <StackMarquee />
         <Projects />
