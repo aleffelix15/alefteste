@@ -1,12 +1,17 @@
 /**
- * Coreografia de Movimento Editorial — Álef Felix Teixeira
+ * Coreografia de Movimento Editorial v2 — Álef Felix Teixeira
  * - Revelação em máscara tipográfica (.line-mask > .line-inner) e capítulos via IntersectionObserver + fallback no scroll
+ * - Cortina de revelação fotográfica de câmara escura (.photo-curtain-wrap)
+ * - Decodificação monoespaçada (cipher scramble) nos índices de capítulo ([data-scramble])
+ * - Cursor editorial contextual ([data-editorial-cursor] + [data-cursor-label]) com interpolação suave
  * - Paralaxe suave de profundidade no cenário fotográfico do estúdio (Hero)
- * - Botões e links magnéticos ([data-magnetic]) com física amortecida
- * - Tilt 3D sutil (±3°) + luz direcional de estúdio ([data-tilt-card]) em dispositivos com mouse
+ * - Botões e links magnéticos ([data-magnetic]) + texto em rolagem dupla (.hover-roll-text)
+ * - Tilt 3D sutil (±2.8°) + luz direcional de estúdio ([data-tilt-card]) em dispositivos com mouse
  * - Acordeão técnico suave via Web Animations API (details[data-animated-details])
  * - Respeito estrito a prefers-reduced-motion: reduce
  */
+
+const CIPHER_GLYPHS = "0123456789/—·#";
 
 export function initPortfolioMotion(): () => void {
   if (typeof window === "undefined" || typeof document === "undefined") {
@@ -24,6 +29,65 @@ export function initPortfolioMotion(): () => void {
   const header = document.querySelector<HTMLElement>(".site-header");
   const heroParallaxEl = document.querySelector<HTMLElement>("[data-hero-parallax]");
   const revealElements = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+  const chapterSections = Array.from(document.querySelectorAll<HTMLElement>("[data-chapter-section]"));
+
+  // Controle de scramble para índices monoespaçados ([data-scramble])
+  const scrambledDone = new WeakSet<HTMLElement>();
+  const activeScrambleTimers = new Set<number>();
+
+  const triggerScrambleInside = (container: HTMLElement) => {
+    if (reducedMotionQuery.matches) return;
+    const targets = Array.from(container.querySelectorAll<HTMLElement>("[data-scramble]"));
+    for (const el of targets) {
+      if (scrambledDone.has(el)) continue;
+      scrambledDone.add(el);
+
+      const finalStr = el.getAttribute("data-scramble") || el.textContent || "";
+      if (!finalStr) continue;
+
+      el.setAttribute("aria-label", finalStr);
+      const totalSteps = 10;
+      let step = 0;
+
+      const intervalId = window.setInterval(() => {
+        step += 1;
+        if (step >= totalSteps || reducedMotionQuery.matches) {
+          el.textContent = finalStr;
+          window.clearInterval(intervalId);
+          activeScrambleTimers.delete(intervalId);
+          return;
+        }
+
+        const lockCount = Math.floor((step / totalSteps) * finalStr.length);
+        let nextText = "";
+        for (let i = 0; i < finalStr.length; i++) {
+          const ch = finalStr[i];
+          if (ch === " " || i < lockCount) {
+            nextText += ch;
+          } else {
+            nextText += CIPHER_GLYPHS[(i + step * 3) % CIPHER_GLYPHS.length];
+          }
+        }
+        el.textContent = nextText;
+      }, 32);
+
+      activeScrambleTimers.add(intervalId);
+    }
+  };
+
+  cleanups.push(() => {
+    for (const timerId of activeScrambleTimers) {
+      window.clearInterval(timerId);
+    }
+    activeScrambleTimers.clear();
+  });
+
+  const markElementVisible = (el: HTMLElement) => {
+    if (!el.classList.contains("is-visible")) {
+      el.classList.add("is-visible");
+      triggerScrambleInside(el);
+    }
+  };
 
   const revealVisibleInViewport = () => {
     const vh = window.innerHeight;
@@ -31,7 +95,14 @@ export function initPortfolioMotion(): () => void {
       if (el.classList.contains("is-visible")) continue;
       const rect = el.getBoundingClientRect();
       if (rect.top <= vh * 0.96) {
-        el.classList.add("is-visible");
+        markElementVisible(el);
+      }
+    }
+    for (const sec of chapterSections) {
+      if (sec.classList.contains("is-chapter-drawn")) continue;
+      const rect = sec.getBoundingClientRect();
+      if (rect.top <= vh * 0.92) {
+        sec.classList.add("is-chapter-drawn");
       }
     }
   };
@@ -94,6 +165,9 @@ export function initPortfolioMotion(): () => void {
       for (const el of revealElements) {
         el.classList.add("is-visible");
       }
+      for (const sec of chapterSections) {
+        sec.classList.add("is-chapter-drawn");
+      }
       return;
     }
 
@@ -113,7 +187,7 @@ export function initPortfolioMotion(): () => void {
         for (const entry of entries) {
           if (entry.isIntersecting || entry.boundingClientRect.top <= window.innerHeight) {
             const target = entry.target as HTMLElement;
-            target.classList.add("is-visible");
+            markElementVisible(target);
             observer?.unobserve(target);
           }
         }
@@ -126,7 +200,7 @@ export function initPortfolioMotion(): () => void {
 
     for (const el of revealElements) {
       if (initiallyVisible.has(el)) {
-        el.classList.add("is-visible");
+        markElementVisible(el);
       } else {
         observer.observe(el);
       }
@@ -169,7 +243,6 @@ export function initPortfolioMotion(): () => void {
         const relX = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
         const relY = Math.min(1, Math.max(0, (clientY - rect.top) / rect.height));
 
-        // Tilt 3D discreto (±2.8 graus máximo para elegância editorial)
         const tiltX = (0.5 - relY) * 5.6;
         const tiltY = (relX - 0.5) * 5.6;
 
@@ -263,7 +336,7 @@ export function initPortfolioMotion(): () => void {
 
     const onSummaryClick = (e: MouseEvent) => {
       if (reducedMotionQuery.matches || typeof detailsEl.animate !== "function") {
-        return; // deixa o comportamento nativo imediato
+        return;
       }
 
       e.preventDefault();
@@ -275,7 +348,6 @@ export function initPortfolioMotion(): () => void {
       const startHeight = `${detailsEl.offsetHeight}px`;
 
       if (detailsEl.open) {
-        // Fechando
         const endHeight = `${summaryEl.offsetHeight + 20}px`;
         detailsEl.style.overflow = "hidden";
 
@@ -295,7 +367,6 @@ export function initPortfolioMotion(): () => void {
           detailsEl.style.overflow = "";
         };
       } else {
-        // Abrindo
         detailsEl.open = true;
         const endHeight = `${detailsEl.offsetHeight}px`;
         detailsEl.style.overflow = "hidden";
@@ -321,6 +392,79 @@ export function initPortfolioMotion(): () => void {
     cleanups.push(() => {
       summaryEl.removeEventListener("click", onSummaryClick);
       currentAnimation?.cancel();
+    });
+  }
+
+  // 6. Cursor Editorial Contextual ([data-editorial-cursor])
+  const cursorEl = document.querySelector<HTMLElement>("[data-editorial-cursor]");
+  const cursorTextEl = document.querySelector<HTMLElement>("[data-editorial-cursor-text]");
+
+  if (cursorEl && cursorTextEl) {
+    let targetX = -100;
+    let targetY = -100;
+    let currentX = -100;
+    let currentY = -100;
+    let cursorRaf = 0;
+    let cursorVisible = false;
+
+    const updateCursorPosition = () => {
+      cursorRaf = 0;
+      currentX += (targetX - currentX) * 0.24;
+      currentY += (targetY - currentY) * 0.24;
+
+      cursorEl.style.transform = `translate3d(${currentX.toFixed(1)}px, ${currentY.toFixed(1)}px, 0)`;
+
+      if (Math.abs(targetX - currentX) > 0.2 || Math.abs(targetY - currentY) > 0.2) {
+        cursorRaf = window.requestAnimationFrame(updateCursorPosition);
+      }
+    };
+
+    const onWindowPointerMove = (e: PointerEvent) => {
+      if (reducedMotionQuery.matches || !finePointerQuery.matches) {
+        cursorEl.classList.remove("is-active", "has-label");
+        return;
+      }
+
+      targetX = e.clientX;
+      targetY = e.clientY;
+
+      if (!cursorVisible) {
+        currentX = targetX;
+        currentY = targetY;
+        cursorVisible = true;
+        cursorEl.classList.add("is-active");
+      }
+
+      const targetNode = e.target as HTMLElement | null;
+      const labeledAncestor = targetNode?.closest<HTMLElement>("[data-cursor-label]");
+
+      if (labeledAncestor) {
+        const label = labeledAncestor.getAttribute("data-cursor-label") || "";
+        if (cursorTextEl.textContent !== label) {
+          cursorTextEl.textContent = label;
+        }
+        cursorEl.classList.add("has-label");
+      } else {
+        cursorEl.classList.remove("has-label");
+      }
+
+      if (!cursorRaf) {
+        cursorRaf = window.requestAnimationFrame(updateCursorPosition);
+      }
+    };
+
+    const onWindowPointerLeave = () => {
+      cursorVisible = false;
+      cursorEl.classList.remove("is-active", "has-label");
+    };
+
+    window.addEventListener("pointermove", onWindowPointerMove, { passive: true });
+    document.addEventListener("mouseleave", onWindowPointerLeave, { passive: true });
+
+    cleanups.push(() => {
+      if (cursorRaf) window.cancelAnimationFrame(cursorRaf);
+      window.removeEventListener("pointermove", onWindowPointerMove);
+      document.removeEventListener("mouseleave", onWindowPointerLeave);
     });
   }
 

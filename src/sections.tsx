@@ -20,6 +20,26 @@ const navItems = [
   { id: "contato", label: "Contato" },
 ];
 
+const tickerPhrases = [
+  "ENGENHARIA DE SOFTWARE",
+  "ARQUITETURA REACT 19 & TYPESCRIPT",
+  "DIREÇÃO EDITORIAL MONOCROMÁTICA",
+  "01. VERSO — LEITURA PROFUNDA",
+  "02. DECODE — DESIGN GRÁFICO INTERATIVO",
+  "INTERFACES AUTORAIS & CÓDIGO LIMPO",
+];
+
+function RollText({ text }: { text: string }) {
+  return (
+    <span className="hover-roll-text">
+      <span className="hover-roll-primary">{text}</span>
+      <span className="hover-roll-clone" aria-hidden="true">
+        {text}
+      </span>
+    </span>
+  );
+}
+
 function MonogramLogo() {
   return (
     <svg
@@ -111,7 +131,7 @@ export function Header() {
                     aria-current={isActive ? "location" : undefined}
                     onClick={() => setActiveSection(item.id)}
                   >
-                    <span>{item.label}</span>
+                    <RollText text={item.label} />
                   </a>
                 </li>
               );
@@ -129,7 +149,7 @@ export function Header() {
               data-magnetic
             >
               <GithubIcon size={15} />
-              <span>GitHub</span>
+              <RollText text="GitHub" />
               <span className="sr-only"> (abre em nova aba)</span>
             </a>
             <a
@@ -140,7 +160,7 @@ export function Header() {
               data-magnetic
             >
               <LinkedinIcon size={15} />
-              <span>LinkedIn</span>
+              <RollText text="LinkedIn" />
               <span className="sr-only"> (abre em nova aba)</span>
             </a>
           </div>
@@ -256,7 +276,9 @@ export function OpeningSection() {
       <div className="container hero-stage-grid">
         {/* Left Vertical Spine: 01 | PORTFÓLIO 2026 */}
         <aside className="editorial-spine hero-spine" aria-label="Capítulo 01 — Portfólio 2026" data-reveal>
-          <span className="spine-num mono">{heroData.spineNumber}</span>
+          <span className="spine-num mono" data-scramble={heroData.spineNumber}>
+            {heroData.spineNumber}
+          </span>
           <span className="spine-rule" aria-hidden="true" />
           <span className="spine-text mono">
             PORTFÓLIO
@@ -285,13 +307,23 @@ export function OpeningSection() {
           </p>
 
           <div className="hero-actions-row hero-stagger-fade" style={{ "--fade-delay": "420ms" } as React.CSSProperties}>
-            <a href="#projetos" className="btn-white-editorial" data-magnetic>
-              <span>{heroData.ctaPrimary}</span>
+            <a
+              href="#projetos"
+              className="btn-white-editorial btn-sheen"
+              data-magnetic
+              data-cursor-label="EXPLORAR"
+            >
+              <RollText text={heroData.ctaPrimary} />
               <span aria-hidden="true" className="arrow-inline">→</span>
             </a>
 
-            <a href="#contato" className="link-underlined-editorial" data-magnetic>
-              <span>{heroData.ctaSecondary}</span>
+            <a
+              href="#contato"
+              className="link-underlined-editorial"
+              data-magnetic
+              data-cursor-label="CONTATO"
+            >
+              <RollText text={heroData.ctaSecondary} />
             </a>
           </div>
         </div>
@@ -306,15 +338,67 @@ export function OpeningSection() {
             <span className="epigraph-rule" aria-hidden="true" />
           </blockquote>
 
-          <p
-            className="hero-studio-caption mono hero-stagger-fade"
+          <div
+            className="hero-bottom-meta hero-stagger-fade"
             style={{ "--fade-delay": "480ms" } as React.CSSProperties}
           >
-            {heroData.studioImage.caption}
-          </p>
+            <p className="hero-studio-caption mono">
+              {heroData.studioImage.caption}
+            </p>
+            <a href="#projetos" className="hero-scroll-cue mono" aria-label="Rolar para a seção de projetos">
+              <span className="scroll-cue-line" aria-hidden="true" />
+              <span>ROLAR EDIÇÃO</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>
+  );
+}
+
+export function EditorialTickerBand() {
+  const [paused, setPaused] = useState(false);
+
+  return (
+    <div
+      className={`editorial-ticker-band ${paused ? "is-paused" : ""}`}
+      role="region"
+      aria-label="Faixa editorial de temas e projetos"
+    >
+      <div className="ticker-track-viewport">
+        <div className="ticker-track">
+          <div className="ticker-group">
+            {tickerPhrases.map((phrase, idx) => (
+              <span key={idx} className="ticker-item mono">
+                <span className="ticker-dot" aria-hidden="true">◆</span>
+                <span>{phrase}</span>
+              </span>
+            ))}
+          </div>
+          <div className="ticker-group" aria-hidden="true">
+            {tickerPhrases.map((phrase, idx) => (
+              <span key={`dup-${idx}`} className="ticker-item mono">
+                <span className="ticker-dot" aria-hidden="true">◆</span>
+                <span>{phrase}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        className="ticker-pause-btn mono"
+        aria-pressed={paused}
+        aria-label={paused ? "Retomar movimento da faixa editorial" : "Pausar movimento da faixa editorial"}
+        onClick={() => setPaused((prev) => !prev)}
+      >
+        <span className="ticker-pause-glyph" aria-hidden="true">
+          {paused ? "▶" : "❚❚"}
+        </span>
+        <span>{paused ? "RETOMAR" : "PAUSAR"}</span>
+      </button>
+    </div>
   );
 }
 
@@ -325,13 +409,22 @@ export function ProjectsChapter() {
   });
 
   return (
-    <section className="editorial-chapter projects-section" id="projetos" aria-labelledby="projects-heading">
+    <section
+      className="editorial-chapter projects-section"
+      id="projetos"
+      aria-labelledby="projects-heading"
+      data-chapter-section
+    >
       <div className="container projects-editorial-layout">
         {/* Left Column: 02 | PROJETOS + "Ideias que viram experiências." */}
         <div className="projects-intro-column" data-reveal>
           <div className="section-marker">
-            <span className="marker-num mono">{projectsIntro.spineNumber}</span>
-            <span className="marker-label mono">{projectsIntro.spineLabel}</span>
+            <span className="marker-num mono" data-scramble={projectsIntro.spineNumber}>
+              {projectsIntro.spineNumber}
+            </span>
+            <span className="marker-label mono" data-scramble={projectsIntro.spineLabel}>
+              {projectsIntro.spineLabel}
+            </span>
             <span className="marker-line" aria-hidden="true" />
           </div>
 
@@ -356,8 +449,9 @@ export function ProjectsChapter() {
             rel="noopener noreferrer"
             className="link-underlined-editorial"
             data-magnetic
+            data-cursor-label="GITHUB ↗"
           >
-            <span>{projectsIntro.allProjectsLabel}</span>
+            <RollText text={projectsIntro.allProjectsLabel} />
             <span aria-hidden="true" className="arrow-inline">→</span>
             <span className="sr-only"> (abre em nova aba)</span>
           </a>
@@ -404,6 +498,7 @@ export function ProjectsChapter() {
                                 isCurrent ? "is-active" : ""
                               }`}
                               aria-pressed={isCurrent}
+                              data-cursor-label="TELA"
                               onClick={() =>
                                 setActiveScreenByProject((prev) => ({
                                   ...prev,
@@ -425,8 +520,9 @@ export function ProjectsChapter() {
                     href={project.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="project-capture-link"
+                    className="project-capture-link photo-curtain-wrap"
                     aria-label={`Visitar projeto ${project.name} publicado (abre em nova aba)`}
+                    data-cursor-label="VISITAR ↗"
                   >
                     <picture key={currentScreen.id} className="screen-fade-picture">
                       <source
@@ -459,7 +555,9 @@ export function ProjectsChapter() {
                 <div className="project-editorial-body">
                   <div className="project-title-row">
                     <h3 id={`proj-title-${project.id}`} className="project-serif-title">
-                      <span className="project-num-prefix mono">{project.number}</span>{" "}
+                      <span className="project-num-prefix mono" data-scramble={project.number}>
+                        {project.number}
+                      </span>{" "}
                       {project.name}
                     </h3>
                     <span className="project-status-pill mono">{project.status}</span>
@@ -486,7 +584,7 @@ export function ProjectsChapter() {
 
                   {/* Technical Dossier Accordion with WAAPI animation */}
                   <details className="project-audit-details" data-animated-details>
-                    <summary className="audit-summary mono">
+                    <summary className="audit-summary mono" data-cursor-label="DOSSIÊ">
                       <span>ARQUITETURA, FUNCIONALIDADES &amp; LIMITAÇÕES REAIS</span>
                       <span className="audit-plus" aria-hidden="true">+</span>
                     </summary>
@@ -528,8 +626,9 @@ export function ProjectsChapter() {
                       rel="noopener noreferrer"
                       className="project-action-primary"
                       data-magnetic
+                      data-cursor-label="ABRIR ↗"
                     >
-                      <span>Visitar projeto</span>
+                      <RollText text="Visitar projeto" />
                       <span aria-hidden="true" className="arrow-inline">→</span>
                       <span className="sr-only"> (abre em nova aba)</span>
                     </a>
@@ -542,9 +641,10 @@ export function ProjectsChapter() {
                       rel="noopener noreferrer"
                       className="project-action-secondary"
                       data-magnetic
+                      data-cursor-label="CÓDIGO ↗"
                     >
                       <GithubIcon size={15} />
-                      <span>Ver código</span>
+                      <RollText text="Ver código" />
                       <span className="sr-only"> (abre em nova aba)</span>
                     </a>
                   </div>
@@ -560,19 +660,32 @@ export function ProjectsChapter() {
 
 export function AboutChapter() {
   return (
-    <section className="editorial-chapter about-section" id="sobre" aria-labelledby="about-heading">
+    <section
+      className="editorial-chapter about-section"
+      id="sobre"
+      aria-labelledby="about-heading"
+      data-chapter-section
+    >
       <div className="container">
         <div className="about-editorial-grid" data-reveal>
           {/* Left Spine & Studio Still-Life + Real Portrait */}
           <div className="about-visual-zone">
             <div className="section-marker">
-              <span className="marker-num mono">{aboutData.spineNumber}</span>
-              <span className="marker-label mono">{aboutData.spineLabel}</span>
+              <span className="marker-num mono" data-scramble={aboutData.spineNumber}>
+                {aboutData.spineNumber}
+              </span>
+              <span className="marker-label mono" data-scramble={aboutData.spineLabel}>
+                {aboutData.spineLabel}
+              </span>
               <span className="marker-line" aria-hidden="true" />
             </div>
 
             <div className="about-photos-montage">
-              <figure className="about-photo-card about-photo-studio" data-tilt-card>
+              <figure
+                className="about-photo-card about-photo-studio"
+                data-tilt-card
+                data-cursor-label="ESTÚDIO"
+              >
                 <div className="photo-curtain-wrap">
                   <picture>
                     <source
@@ -601,7 +714,11 @@ export function AboutChapter() {
                 </figcaption>
               </figure>
 
-              <figure className="about-photo-card about-photo-portrait" data-tilt-card>
+              <figure
+                className="about-photo-card about-photo-portrait"
+                data-tilt-card
+                data-cursor-label="RETRATO"
+              >
                 <div className="photo-curtain-wrap">
                   <picture>
                     <source
@@ -630,7 +747,7 @@ export function AboutChapter() {
             </div>
           </div>
 
-          {/* Right Narrative & 5-Step Process */}
+          {/* Right Narrative & Process */}
           <div className="about-narrative-zone">
             <h2 id="about-heading" className="section-serif-heading">
               <span className="line-mask">
@@ -646,7 +763,7 @@ export function AboutChapter() {
               <p>{aboutData.paragraph3}</p>
             </div>
 
-            <div className="about-process-ledger" aria-label="Método de trabalho em 5 etapas">
+            <div className="about-process-ledger" aria-label="Método de trabalho em etapas">
               <p className="process-ledger-kicker mono">MÉTODO &amp; PROCESSO DE ENGENHARIA</p>
               <ol className="process-compact-grid">
                 {aboutData.processSteps.map((step, idx) => (
@@ -655,7 +772,9 @@ export function AboutChapter() {
                     className="process-compact-item"
                     style={{ "--stagger-index": idx } as React.CSSProperties}
                   >
-                    <span className="process-step-num mono">{step.number}</span>
+                    <span className="process-step-num mono" data-scramble={step.number}>
+                      {step.number}
+                    </span>
                     <div>
                       <h3 className="process-step-title">{step.title}</h3>
                       <p className="process-step-desc">{step.description}</p>
@@ -666,8 +785,13 @@ export function AboutChapter() {
             </div>
 
             <div className="about-cta-row">
-              <a href="#tecnologias" className="link-underlined-editorial" data-magnetic>
-                <span>Saiba mais sobre minha stack</span>
+              <a
+                href="#tecnologias"
+                className="link-underlined-editorial"
+                data-magnetic
+                data-cursor-label="STACK ↓"
+              >
+                <RollText text="Saiba mais sobre minha stack" />
                 <span aria-hidden="true" className="arrow-inline">→</span>
               </a>
             </div>
@@ -687,14 +811,23 @@ export function TechChapter() {
       : techIndexData.filter((t) => t.projects.includes(selectedProject));
 
   return (
-    <section className="editorial-chapter tech-and-contact-Band" id="tecnologias" aria-labelledby="tech-heading">
+    <section
+      className="editorial-chapter tech-and-contact-Band"
+      id="tecnologias"
+      aria-labelledby="tech-heading"
+      data-chapter-section
+    >
       <div className="container">
         <div className="tech-editorial-layout" data-reveal>
           {/* Left Header & Monochrome Keyboard Visual */}
           <div className="tech-header-column">
             <div className="section-marker">
-              <span className="marker-num mono">{techChapterData.spineNumber}</span>
-              <span className="marker-label mono">{techChapterData.spineLabel}</span>
+              <span className="marker-num mono" data-scramble={techChapterData.spineNumber}>
+                {techChapterData.spineNumber}
+              </span>
+              <span className="marker-label mono" data-scramble={techChapterData.spineLabel}>
+                {techChapterData.spineLabel}
+              </span>
               <span className="marker-line" aria-hidden="true" />
             </div>
 
@@ -719,6 +852,7 @@ export function TechChapter() {
                 type="button"
                 className={`tech-filter-pill mono ${selectedProject === "ALL" ? "is-active" : ""}`}
                 aria-pressed={selectedProject === "ALL"}
+                data-magnetic
                 onClick={() => setSelectedProject("ALL")}
               >
                 TODAS ({techIndexData.length})
@@ -727,6 +861,7 @@ export function TechChapter() {
                 type="button"
                 className={`tech-filter-pill mono ${selectedProject === "VERSO" ? "is-active" : ""}`}
                 aria-pressed={selectedProject === "VERSO"}
+                data-magnetic
                 onClick={() => setSelectedProject("VERSO")}
               >
                 VERSO ({techIndexData.filter((t) => t.projects.includes("VERSO")).length})
@@ -735,6 +870,7 @@ export function TechChapter() {
                 type="button"
                 className={`tech-filter-pill mono ${selectedProject === "DECODE" ? "is-active" : ""}`}
                 aria-pressed={selectedProject === "DECODE"}
+                data-magnetic
                 onClick={() => setSelectedProject("DECODE")}
               >
                 DECODE ({techIndexData.filter((t) => t.projects.includes("DECODE")).length})
@@ -742,7 +878,7 @@ export function TechChapter() {
             </div>
 
             {/* Atmospheric B&W Detail Plate */}
-            <figure className="tech-detail-plate" data-tilt-card>
+            <figure className="tech-detail-plate" data-tilt-card data-cursor-label="AUDITORIA">
               <div className="photo-curtain-wrap">
                 <picture>
                   <source type="image/avif" srcSet="/images/about-setup-440.avif" />
@@ -811,13 +947,22 @@ export function TechChapter() {
 
 export function ContactChapter() {
   return (
-    <section className="editorial-chapter contact-section" id="contato" aria-labelledby="contact-heading">
+    <section
+      className="editorial-chapter contact-section"
+      id="contato"
+      aria-labelledby="contact-heading"
+      data-chapter-section
+    >
       <div className="container">
         <div className="contact-editorial-grid" data-reveal>
           <div className="contact-left-col">
             <div className="section-marker">
-              <span className="marker-num mono">{contactData.spineNumber}</span>
-              <span className="marker-label mono">{contactData.spineLabel}</span>
+              <span className="marker-num mono" data-scramble={contactData.spineNumber}>
+                {contactData.spineNumber}
+              </span>
+              <span className="marker-label mono" data-scramble={contactData.spineLabel}>
+                {contactData.spineLabel}
+              </span>
               <span className="marker-line" aria-hidden="true" />
             </div>
 
@@ -838,9 +983,10 @@ export function ContactChapter() {
                 rel="noopener noreferrer"
                 className="contact-editorial-link"
                 data-magnetic
+                data-cursor-label="GITHUB ↗"
               >
                 <GithubIcon size={18} />
-                <span>GitHub</span>
+                <RollText text="GitHub" />
                 <span aria-hidden="true" className="arrow-inline">→</span>
                 <span className="sr-only"> (abre em nova aba)</span>
               </a>
@@ -853,9 +999,10 @@ export function ContactChapter() {
                 rel="noopener noreferrer"
                 className="contact-editorial-link"
                 data-magnetic
+                data-cursor-label="LINKEDIN ↗"
               >
                 <LinkedinIcon size={18} />
-                <span>LinkedIn</span>
+                <RollText text="LinkedIn" />
                 <span aria-hidden="true" className="arrow-inline">→</span>
                 <span className="sr-only"> (abre em nova aba)</span>
               </a>
@@ -869,6 +1016,7 @@ export function ContactChapter() {
               rel="noopener noreferrer"
               className="contact-architectural-card"
               data-tilt-card
+              data-cursor-label="ABRIR ↗"
             >
               <div className="card-top-meta mono">
                 <span>REPOSITÓRIOS &amp; CÓDIGO ABERTO</span>
@@ -891,6 +1039,7 @@ export function ContactChapter() {
               rel="noopener noreferrer"
               className="contact-architectural-card"
               data-tilt-card
+              data-cursor-label="ABRIR ↗"
             >
               <div className="card-top-meta mono">
                 <span>PERFIL PROFISSIONAL &amp; CONEXÃO</span>
@@ -930,8 +1079,9 @@ export function Footer() {
             className="footer-top-link mono"
             aria-label="Voltar ao topo da página"
             data-magnetic
+            data-cursor-label="TOPO ↑"
           >
-            <span>Topo</span>
+            <RollText text="Topo" />
             <ArrowUpIcon size={14} />
           </a>
         </div>

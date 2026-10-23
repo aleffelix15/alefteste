@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import {
   Header,
   OpeningSection,
+  EditorialTickerBand,
   ProjectsChapter,
   AboutChapter,
   TechChapter,
@@ -32,9 +33,19 @@ export default function App() {
         data-scroll-progress
         aria-hidden="true"
       />
+      {/* Cursor editorial contextual para dispositivos com ponteiro fino */}
+      <div
+        className="editorial-cursor"
+        data-editorial-cursor
+        aria-hidden="true"
+      >
+        <span className="editorial-cursor-dot" />
+        <span className="editorial-cursor-label mono" data-editorial-cursor-text />
+      </div>
       <Header />
       <main id="conteudo" tabIndex={-1}>
         <OpeningSection />
+        <EditorialTickerBand />
         <ProjectsChapter />
         <AboutChapter />
         <TechChapter />
