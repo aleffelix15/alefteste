@@ -1,40 +1,32 @@
-# Verificação de Sites e Links Externos — Frente 0
+# Verificação Técnica de URLs, Repositórios e Ativos — Portfólio Álef Felix Teixeira
 
-**Data da verificação:** 22 de outubro de 2026 (`2026-10-22T20:40-03:00`)  
-**Método:** Navegador real headless (Google Chrome 126 via Playwright, viewport `1440×900`) + inspeção de resposta HTTP.
-
----
-
-## 1. Resumo das URLs Verificadas
-
-| Alvo | URL | Status HTTP | Título da Página | Resultado | Observação |
-| :--- | :--- | :---: | :--- | :---: | :--- |
-| **VERSO (Deploy)** | https://verso-five-psi.vercel.app/ | `200 OK` | `Fé que veste. — VERSO` | **Verificado (Online)** | Aplicação carregou integralmente com banner, navegação e catálogo streetwear. |
-| **DECODE (Deploy)** | https://decode-ochre.vercel.app/ | `200 OK` | `DECODE — Descriptografando a Violência` | **Verificado (Online)** | Aplicação interativa carregou sem erros, exibindo tela inicial da campanha Agosto Lilás. |
-| **GitHub (Perfil)** | https://github.com/aleffelix15 | `200 OK` | `aleffelix15 (Alef Felix Teixeira) · GitHub` | **Verificado (Online)** | Perfil público acessível e ativo. |
-| **GitHub (VERSO)** | https://github.com/aleffelix15/verso | `200 OK` | `GitHub - aleffelix15/verso · GitHub` | **Verificado (Online)** | Repositório público acessível com código-fonte e documentação. |
-| **GitHub (DECODE)** | https://github.com/aleffelix15/decode | `200 OK` | `GitHub - aleffelix15/decode · GitHub` | **Verificado (Online)** | Repositório público acessível (`decode-project` na branch `master`). |
-| **LinkedIn** | https://www.linkedin.com/in/alef-felix-teixeira-a5030b236/ | `999` (Authwall) | `Cadastre-se \| LinkedIn` | **Não verificado** | O LinkedIn redireciona acessos automatizados/anônimos para `/authwall` (`HTTP 999`). A URL declarada em `src/data.ts` foi mantida sem inferência de conteúdo interno. |
+Data da verificação: **22 de outubro de 2026**
 
 ---
 
-## 2. Capturas de Tela e Ativos Locais (`public/screens/`)
+## 1. Status das Publicações e Repositórios Oficiais
 
-As capturas de tela em `public/screens/` foram inspecionadas e comparadas com a renderização ao vivo dos projetos:
-
-1. **`public/screens/verso.webp`**
-   - **Dimensões:** `1200×750 px` (proporção 16:10)
-   - **Tamanho:** `102.568 bytes` (~100,2 KB — abaixo do teto de 120 KB)
-   - **Decisão:** Mantida. Representa fielmente a página inicial em produção (`https://verso-five-psi.vercel.app/`).
-
-2. **`public/screens/decode.webp`**
-   - **Dimensões:** `1200×641 px`
-   - **Tamanho:** `16.510 bytes` (~16,1 KB — abaixo do teto de 120 KB)
-   - **Decisão:** Mantida. Representa fielmente a tela inicial em produção (`https://decode-ochre.vercel.app/`).
+| Recurso | URL Verificada | Status HTTP / Resultado | Observação Factual |
+| :--- | :--- | :--- | :--- |
+| **Verso (URL histórica citada)** | `https://verso-sable.vercel.app/` | `HTTP 404 Not Found` (`DEPLOYMENT_NOT_FOUND`) | Reavaliada em 22/10/2026: o subdomínio `verso-sable` permanece desativado na Vercel. |
+| **Verso (URL listada no GitHub)** | `https://verso-puce.vercel.app/` | `HTTP 404 Not Found` (`DEPLOYMENT_NOT_FOUND`) | Subdomínio antigo configurado no campo `homepage` do repositório também retorna `DEPLOYMENT_NOT_FOUND`. |
+| **Verso (Deploy ativo do repositório)** | `https://verso-five-psi.vercel.app/` | **`HTTP 200 OK`** | **Operacional**. Título: `"Fé que veste. — VERSO"`. Utilizado no botão principal com nota de auditoria explícita sobre `verso-sable.vercel.app`. |
+| **Verso (Repositório GitHub)** | `https://github.com/aleffelix15/verso` | **`HTTP 200 OK`** | `package.json` auditado: React 19, TypeScript 5.8, TanStack Start/Router/Query, Tailwind CSS 4, Framer Motion 14, Three.js, Zod, Vitest 4, SDK Mercado Pago. |
+| **DECODE (Site publicado)** | `https://decode-ochre.vercel.app/` | **`HTTP 200 OK`** | **Operacional**. Experiência interativa Agosto Lilás funcionando no navegador (SPA). |
+| **DECODE (Repositório GitHub)** | `https://github.com/aleffelix15/decode` | **`HTTP 200 OK`** | `decode-project/package.json` auditado: React 18, JavaScript (ES Modules), Vite 5, Tailwind CSS 3, Lucide React. |
+| **Perfil GitHub** | `https://github.com/aleffelix15` | **`HTTP 200 OK`** | Perfil público acessível e validado. |
+| **Perfil LinkedIn** | `https://www.linkedin.com/in/alef-felix-teixeira-a5030b236/` | `HTTP 999` (Authwall do LinkedIn) | URL oficial mantida; o LinkedIn restringe leitura automatizada sem sessão autenticada. |
 
 ---
 
-## 3. Conformidade com `src/data.ts`
+## 2. Classificação Transparente de Imagens (Reais vs. Conceituais)
 
-- Nenhuma URL de projeto ou repositório retornou erro `404` ou `5xx`.
-- Os status `"Demo"` (VERSO) e `"Publicado"` (DECODE), bem como os textos de `"Limitações reais registradas"`, permanecem inalterados conforme exigido em `AUDITORIA.md`.
+Conforme diretriz editorial do projeto, todas as imagens são identificadas de forma explícita nas legendas (`<figcaption>`):
+
+1. **Capturas e Fotografias Reais**:
+   - `public/screens/verso.webp` e `.avif` (`1200×750`): **Captura real** obtida diretamente da publicação ativa do projeto **Verso** (`https://verso-five-psi.vercel.app/`).
+   - `public/screens/decode.webp` e `.avif` (`1200×750`): **Captura real** obtida diretamente da publicação ativa do projeto **DECODE** (`https://decode-ochre.vercel.app/`).
+   - `public/images/about-setup.webp` e `.avif`: **Fotografia de arquivo** do ambiente de estudo e desenvolvimento.
+2. **Ensaios Fotográficos Conceituais / Ilustrativos (Estúdio em Preto & Branco)**:
+   - `public/images/studio-session.webp` e `.avif` (`1280×800`): **Imagem conceitual ilustrativa** em preto e branco (estúdio de concreto, poltronas de couro escuro, microfones articulados e notebook com código, **sem rostos ou pessoas fictícias**), identificada na legenda como `FIG. 00 — Ensaio conceitual ilustrativo`.
+   - `public/images/studio-desk.webp` e `.avif` (`1120×700`): **Imagem conceitual ilustrativa** em preto e branco (bancada de desenvolvimento sobre madeira escura e concreto com teclado mecânico, fones de estúdio e microfone, **sem pessoas**), identificada na legenda como `FIG. 03 — Ensaio conceitual ilustrativo`.

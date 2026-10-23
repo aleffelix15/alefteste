@@ -1,8 +1,9 @@
 /**
- * Sistema de movimento nativo — Editorial Escuro (v2)
- * Utiliza exclusivamente IntersectionObserver, Web Animations API,
- * requestAnimationFrame e CSS Custom Properties (transform / opacity).
- * Respeita integralmente prefers-reduced-motion: reduce e (hover: hover) and (pointer: fine).
+ * Sistema de movimento editorial discreto e cinematográfico
+ * - Revelação gradual de capítulos e pranchas fotográficas via IntersectionObserver + fallback no scroll
+ * - Barra de leitura de edição e cabeçalho adaptativo
+ * - Luz direcional de estúdio discreta nas pranchas fotográficas
+ * - Respeito estrito a prefers-reduced-motion: reduce
  */
 
 export function initPortfolioMotion(): () => void {
@@ -17,13 +18,22 @@ export function initPortfolioMotion(): () => void {
   const cleanups: Array<() => void> = [];
   let rafScrollId = 0;
 
-  // -------------------------------------------------------------------------
-  // 1. Barra de progresso de leitura + Header compacto + Linha da Timeline
-  // -------------------------------------------------------------------------
   const progressBar = document.querySelector<HTMLElement>("[data-scroll-progress]");
-  const header = document.querySelector<HTMLElement>("[data-header]");
-  const timelineSection = document.querySelector<HTMLElement>("[data-timeline-section]");
+  const header = document.querySelector<HTMLElement>(".site-header");
+  const revealElements = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
 
+  const revealVisibleInViewport = () => {
+    const vh = window.innerHeight;
+    for (const el of revealElements) {
+      if (el.classList.contains("is-visible")) continue;
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= vh * 0.96) {
+        el.classList.add("is-visible");
+      }
+    }
+  };
+
+  // 1. Barra de leitura de capítulo & estado compacto do cabeçalho
   const updateScrollMetrics = () => {
     rafScrollId = 0;
     const scrollY = window.scrollY || window.pageYOffset;
@@ -35,24 +45,10 @@ export function initPortfolioMotion(): () => void {
     }
 
     if (header) {
-      header.classList.toggle("is-compact", scrollY > 24);
+      header.classList.toggle("is-compact", scrollY > 32);
     }
 
-    if (timelineSection) {
-      if (reducedMotionQuery.matches) {
-        timelineSection.style.setProperty("--timeline-progress", "1");
-      } else {
-        const rect = timelineSection.getBoundingClientRect();
-        const vh = window.innerHeight;
-        // Começa a desenhar quando o topo da seção entra em 80% da viewport
-        // e completa quando atinge 25% da viewport
-        const start = vh * 0.82;
-        const end = vh * 0.22;
-        const raw = (start - rect.top) / Math.max(1, start - end);
-        const clamped = Math.min(1, Math.max(0.08, raw));
-        timelineSection.style.setProperty("--timeline-progress", clamped.toFixed(4));
-      }
-    }
+    revealVisibleInViewport();
   };
 
   const onScroll = () => {
@@ -63,7 +59,6 @@ export function initPortfolioMotion(): () => void {
 
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
-  onScroll();
 
   cleanups.push(() => {
     window.removeEventListener("scroll", onScroll);
@@ -73,10 +68,7 @@ export function initPortfolioMotion(): () => void {
     }
   });
 
-  // -------------------------------------------------------------------------
-  // 2. Reveal ao rolar com IntersectionObserver e Stagger
-  // -------------------------------------------------------------------------
-  const revealElements = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+  // 2. Revelação gradual durante a rolagem (IntersectionObserver + fallback imediato)
   let observer: IntersectionObserver | null = null;
 
   const setupReveal = () => {
@@ -94,11 +86,10 @@ export function initPortfolioMotion(): () => void {
     }
 
     const vh = window.innerHeight;
-    // Lê todos os retângulos ANTES de mutar a classe no DOM para evitar forced synchronous reflow
     const initiallyVisible = new Set<HTMLElement>();
     for (const el of revealElements) {
       const rect = el.getBoundingClientRect();
-      if (rect.top < vh * 0.92 && rect.bottom > 0) {
+      if (rect.top <= vh * 0.96) {
         initiallyVisible.add(el);
       }
     }
@@ -108,7 +99,7 @@ export function initPortfolioMotion(): () => void {
     observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting || entry.boundingClientRect.top <= window.innerHeight) {
             const target = entry.target as HTMLElement;
             target.classList.add("is-visible");
             observer?.unobserve(target);
@@ -116,8 +107,8 @@ export function initPortfolioMotion(): () => void {
         }
       },
       {
-        rootMargin: "0px 0px -8% 0px",
-        threshold: 0.08,
+        rootMargin: "0px 0px 48px 0px",
+        threshold: 0.01,
       }
     );
 
@@ -131,6 +122,7 @@ export function initPortfolioMotion(): () => void {
   };
 
   setupReveal();
+  onScroll();
 
   const onReducedMotionChange = () => {
     setupReveal();
@@ -144,96 +136,49 @@ export function initPortfolioMotion(): () => void {
     root.classList.remove("motion-ready");
   });
 
-  // -------------------------------------------------------------------------
-  // 3. Tilt 3D leve (máx. 4°) + Spotlight no cursor em imagens de projetos
-  //    Restrito a (hover: hover) and (pointer: fine) e sem movimento reduzido
-  // -------------------------------------------------------------------------
-  const tiltElements = Array.from(document.querySelectorAll<HTMLElement>("[data-tilt-media]"));
-  const MAX_TILT_DEG = 4;
+  // 3. Luz direcional discreta nas pranchas de projetos
+  const plateElements = Array.from(document.querySelectorAll<HTMLElement>("[data-tilt-card]"));
 
-  for (const mediaEl of tiltElements) {
-    let tiltRaf = 0;
+  for (const plateEl of plateElements) {
+    let spotRaf = 0;
 
     const handlePointerMove = (e: PointerEvent) => {
-      if (reducedMotionQuery.matches || !finePointerQuery.matches) {
-        return;
-      }
+      if (reducedMotionQuery.matches || !finePointerQuery.matches) return;
       const clientX = e.clientX;
       const clientY = e.clientY;
 
-      if (tiltRaf) {
-        window.cancelAnimationFrame(tiltRaf);
-      }
+      if (spotRaf) window.cancelAnimationFrame(spotRaf);
 
-      tiltRaf = window.requestAnimationFrame(() => {
-        tiltRaf = 0;
-        const rect = mediaEl.getBoundingClientRect();
+      spotRaf = window.requestAnimationFrame(() => {
+        spotRaf = 0;
+        const rect = plateEl.getBoundingClientRect();
         if (rect.width === 0 || rect.height === 0) return;
 
         const relX = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
         const relY = Math.min(1, Math.max(0, (clientY - rect.top) / rect.height));
 
-        // Tilt suave limitado a +-4 graus
-        const tiltY = (relX - 0.5) * 2 * MAX_TILT_DEG;
-        const tiltX = (0.5 - relY) * 2 * MAX_TILT_DEG;
-
-        mediaEl.style.setProperty("--spot-x", `${(relX * 100).toFixed(1)}%`);
-        mediaEl.style.setProperty("--spot-y", `${(relY * 100).toFixed(1)}%`);
-        mediaEl.style.setProperty("--spot-opacity", "1");
-        mediaEl.style.setProperty("--tilt-x", `${tiltX.toFixed(2)}deg`);
-        mediaEl.style.setProperty("--tilt-y", `${tiltY.toFixed(2)}deg`);
+        plateEl.style.setProperty("--spot-x", `${(relX * 100).toFixed(1)}%`);
+        plateEl.style.setProperty("--spot-y", `${(relY * 100).toFixed(1)}%`);
+        plateEl.style.setProperty("--spot-opacity", "1");
       });
     };
 
     const handlePointerLeave = () => {
-      if (tiltRaf) {
-        window.cancelAnimationFrame(tiltRaf);
-        tiltRaf = 0;
+      if (spotRaf) {
+        window.cancelAnimationFrame(spotRaf);
+        spotRaf = 0;
       }
-      mediaEl.style.setProperty("--spot-opacity", "0");
-      mediaEl.style.setProperty("--tilt-x", "0deg");
-      mediaEl.style.setProperty("--tilt-y", "0deg");
+      plateEl.style.setProperty("--spot-opacity", "0");
     };
 
-    mediaEl.addEventListener("pointermove", handlePointerMove, { passive: true });
-    mediaEl.addEventListener("pointerleave", handlePointerLeave, { passive: true });
+    plateEl.addEventListener("pointermove", handlePointerMove, { passive: true });
+    plateEl.addEventListener("pointerleave", handlePointerLeave, { passive: true });
 
     cleanups.push(() => {
-      if (tiltRaf) window.cancelAnimationFrame(tiltRaf);
-      mediaEl.removeEventListener("pointermove", handlePointerMove);
-      mediaEl.removeEventListener("pointerleave", handlePointerLeave);
+      if (spotRaf) window.cancelAnimationFrame(spotRaf);
+      plateEl.removeEventListener("pointermove", handlePointerMove);
+      plateEl.removeEventListener("pointerleave", handlePointerLeave);
     });
-  }
-
-  // -------------------------------------------------------------------------
-  // 4. Acordeão nativo <details> com Web Animations API (transform + opacity)
-  // -------------------------------------------------------------------------
-  const detailsElements = Array.from(
-    document.querySelectorAll<HTMLDetailsElement>("[data-animated-details]")
-  );
-
-  for (const details of detailsElements) {
-    const drawer = details.querySelector<HTMLElement>(".details-drawer");
-    if (!drawer) continue;
-
-    const handleToggle = () => {
-      if (reducedMotionQuery.matches || !details.open || typeof drawer.animate !== "function") {
-        return;
-      }
-      drawer.animate(
-        [
-          { opacity: 0, transform: "translateY(-6px)" },
-          { opacity: 1, transform: "translateY(0)" },
-        ],
-        {
-          duration: 220,
-          easing: "cubic-bezier(0.16, 1, 0.3, 1)",
-        }
-      );
-    };
-
-    details.addEventListener("toggle", handleToggle);
-    cleanups.push(() => details.removeEventListener("toggle", handleToggle));
   }
 
   return () => {

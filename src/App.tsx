@@ -1,13 +1,11 @@
 import React, { useEffect } from "react";
 import {
   Header,
-  Hero,
-  StackMarquee,
-  Projects,
-  About,
-  Technologies,
-  Process,
-  Contact,
+  OpeningSection,
+  ProjectsChapter,
+  AboutChapter,
+  TechChapter,
+  ContactChapter,
   Footer,
 } from "./sections";
 import { initPortfolioMotion } from "./motion";
@@ -36,13 +34,11 @@ export default function App() {
       />
       <Header />
       <main id="conteudo" tabIndex={-1}>
-        <Hero />
-        <StackMarquee />
-        <Projects />
-        <About />
-        <Technologies />
-        <Process />
-        <Contact />
+        <OpeningSection />
+        <ProjectsChapter />
+        <AboutChapter />
+        <TechChapter />
+        <ContactChapter />
       </main>
       <Footer />
     </>
