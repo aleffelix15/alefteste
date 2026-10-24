@@ -92,11 +92,21 @@
     transform 0.2s var(--ease-editorial);
 }
 
-.btn-email-copy:hover {
-  border-color: var(--accent-electric);
-  background: var(--bg-elevated);
-  box-shadow: 0 4px 18px -6px var(--accent-electric-glow);
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .btn-email-copy:hover {
+    border-color: var(--accent-electric);
+    background: var(--bg-elevated);
+    box-shadow: 0 4px 18px -6px var(--accent-electric-glow);
+    transform: translateY(-1px);
+  }
+}
+
+.btn-email-copy:active {
+  transform: scale(0.98);
+}
+.btn-email-copy:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
 }
 
 .btn-email-copy.is-copied {
@@ -141,11 +151,21 @@
     transform 0.2s var(--ease-editorial);
 }
 
-.btn-mailto-direct:hover {
-  color: var(--accent-cyan);
-  border-color: var(--accent-electric);
-  background: var(--bg-elevated);
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .btn-mailto-direct:hover {
+    color: var(--accent-cyan);
+    border-color: var(--accent-electric);
+    background: var(--bg-elevated);
+    transform: translateY(-1px);
+  }
+}
+
+.btn-mailto-direct:active {
+  transform: scale(0.98);
+}
+.btn-mailto-direct:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
 }
 
 /* ==========================================================================
@@ -185,12 +205,24 @@
     transform 0.22s var(--ease-editorial);
 }
 
-.contact-action-btn:hover {
-  border-color: var(--accent-electric);
-  background: var(--bg-elevated);
-  color: var(--accent-cyan);
-  box-shadow: var(--shadow-md), 0 4px 14px -6px var(--accent-electric-glow);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .contact-action-btn:hover {
+    border-color: var(--accent-electric);
+    background: var(--bg-elevated);
+    color: var(--accent-cyan);
+    box-shadow: var(--shadow-md), 0 4px 14px -6px var(--accent-electric-glow);
+    transform: translateY(-2px);
+  }
+
+  .contact-action-btn:hover .btn-arrow {
+    transform: translateX(3px);
+    color: var(--accent-cyan);
+  }
+
+  .btn-cv-contact:hover .btn-arrow {
+    transform: translateY(2.5px);
+    color: var(--accent-cyan);
+  }
 }
 
 .contact-action-btn .btn-arrow {
@@ -199,14 +231,12 @@
   transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.contact-action-btn:hover .btn-arrow {
-  transform: translateX(3px);
-  color: var(--accent-cyan);
+.contact-action-btn:active {
+  transform: scale(0.98);
 }
-
-.btn-cv-contact:hover .btn-arrow {
-  transform: translateY(2.5px);
-  color: var(--accent-cyan);
+.contact-action-btn:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
 }
 
 /* Bloco do Currículo com Metadados Alinhados */
@@ -240,8 +270,14 @@
   font-size: 0.6875rem;
 }
 
-.contact-cv-view-link:hover {
-  color: var(--text-white);
+@media (hover: hover) and (pointer: fine) {
+  .contact-cv-view-link:hover {
+    color: var(--text-white);
+  }
+}
+.contact-cv-view-link:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }
 
 /* ==========================================================================

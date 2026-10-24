@@ -87,8 +87,17 @@
   transition: color 0.2s ease;
 }
 
-.footer-nav-link:hover {
-  color: var(--text-white);
+@media (hover: hover) and (pointer: fine) {
+  .footer-nav-link:hover {
+    color: var(--text-white);
+  }
+}
+.footer-nav-link:active {
+  color: var(--accent-cyan);
+}
+.footer-nav-link:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }
 
 /* Coluna 3: Redes & Canais */
@@ -107,8 +116,17 @@
   transition: color 0.2s ease;
 }
 
-.footer-social-link:hover {
-  color: var(--accent-cyan);
+@media (hover: hover) and (pointer: fine) {
+  .footer-social-link:hover {
+    color: var(--accent-cyan);
+  }
+}
+.footer-social-link:active {
+  transform: scale(0.97);
+}
+.footer-social-link:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }
 
 /* Coluna 4: Voltar ao Topo */
@@ -136,11 +154,20 @@
     transform 0.2s var(--ease-editorial);
 }
 
-.footer-top-link:hover {
-  border-color: var(--accent-electric);
-  background: var(--bg-elevated);
-  box-shadow: var(--shadow-md), 0 4px 14px -6px var(--accent-electric-glow);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .footer-top-link:hover {
+    border-color: var(--accent-electric);
+    background: var(--bg-elevated);
+    box-shadow: var(--shadow-md), 0 4px 14px -6px var(--accent-electric-glow);
+    transform: translateY(-2px);
+  }
+}
+.footer-top-link:active {
+  transform: scale(0.96);
+}
+.footer-top-link:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
 }
 
 @media (max-width: 1024px) {

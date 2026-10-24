@@ -36,7 +36,12 @@
   will-change: transform;
 }
 
-.editorial-ticker-band:hover .ticker-track,
+@media (hover: hover) and (pointer: fine) {
+  .editorial-ticker-band:hover .ticker-track {
+    animation-play-state: paused;
+  }
+}
+
 .editorial-ticker-band:focus-within .ticker-track,
 .editorial-ticker-band.is-paused .ticker-track {
   animation-play-state: paused;
@@ -78,9 +83,18 @@
   transition: color 0.2s ease, background-color 0.2s ease;
 }
 
-.ticker-pause-btn:hover {
-  color: var(--text-white);
-  background: var(--bg-concrete);
+@media (hover: hover) and (pointer: fine) {
+  .ticker-pause-btn:hover {
+    color: var(--text-white);
+    background: var(--bg-concrete);
+  }
+}
+.ticker-pause-btn:active {
+  transform: scale(0.94);
+}
+.ticker-pause-btn:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }
 
 .ticker-pause-glyph {

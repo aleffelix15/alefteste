@@ -42,12 +42,21 @@
   box-shadow: var(--shadow-sm);
 }
 
-.btn-cv-secondary:hover {
-  border-color: var(--accent-electric);
-  background: var(--bg-elevated);
-  color: var(--accent-cyan);
-  box-shadow: var(--shadow-md), 0 4px 14px -6px var(--accent-electric-glow);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .btn-cv-secondary:hover {
+    border-color: var(--accent-electric);
+    background: var(--bg-elevated);
+    color: var(--accent-cyan);
+    box-shadow: var(--shadow-md), 0 4px 14px -6px var(--accent-electric-glow);
+    transform: translateY(-2px);
+  }
+}
+.btn-cv-secondary:active {
+  transform: scale(0.98);
+}
+.btn-cv-secondary:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
 }
 
 /* Variante Header (Discreta e Compacta) */
@@ -61,12 +70,21 @@
   color: var(--text-body);
 }
 
-.btn-cv-header:hover {
-  border-color: var(--accent-electric);
-  background: var(--bg-concrete);
-  color: var(--text-white);
-  box-shadow: 0 4px 14px -6px var(--accent-electric-glow);
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .btn-cv-header:hover {
+    border-color: var(--accent-electric);
+    background: var(--bg-concrete);
+    color: var(--text-white);
+    box-shadow: 0 4px 14px -6px var(--accent-electric-glow);
+    transform: translateY(-1px);
+  }
+}
+.btn-cv-header:active {
+  transform: scale(0.96);
+}
+.btn-cv-header:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }
 
 /* Animação do Ícone de Download */
@@ -80,8 +98,10 @@
   transition: transform 0.24s var(--ease-editorial);
 }
 
-.btn-cv-action:hover .btn-cv-download-icon .cv-icon-arrow {
-  transform: translateY(2.5px);
+@media (hover: hover) and (pointer: fine) {
+  .btn-cv-action:hover .btn-cv-download-icon .cv-icon-arrow {
+    transform: translateY(2.5px);
+  }
 }
 
 /* Feedback de Estados */
@@ -134,10 +154,19 @@
     background-color 0.2s ease;
 }
 
-.btn-cv-view-inline:hover {
-  border-color: var(--line-strong);
-  color: var(--accent-cyan);
-  background: var(--bg-elevated);
+@media (hover: hover) and (pointer: fine) {
+  .btn-cv-view-inline:hover {
+    border-color: var(--line-strong);
+    color: var(--accent-cyan);
+    background: var(--bg-elevated);
+  }
+}
+.btn-cv-view-inline:active {
+  transform: scale(0.96);
+}
+.btn-cv-view-inline:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }
 
 /* Metadados Técnicos do CV */

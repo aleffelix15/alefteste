@@ -241,15 +241,25 @@
     transform 0.22s var(--ease-editorial);
 }
 
-.btn-white-editorial:hover {
-  background: var(--accent-electric-hover);
-  border-color: var(--accent-cyan);
-  box-shadow: 0 10px 26px -6px rgba(22, 119, 255, 0.65);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .btn-white-editorial:hover {
+    background: var(--accent-electric-hover);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 10px 26px -6px rgba(22, 119, 255, 0.65);
+    transform: translateY(-2px);
+  }
+
+  .btn-white-editorial:hover .arrow-inline {
+    transform: translateX(4px);
+  }
 }
 
-.btn-white-editorial:hover .arrow-inline {
-  transform: translateX(4px);
+.btn-white-editorial:active {
+  transform: scale(0.98);
+}
+.btn-white-editorial:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
 }
 
 .btn-cv-secondary {

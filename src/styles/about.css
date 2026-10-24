@@ -28,10 +28,16 @@
     transform 0.25s var(--ease-editorial);
 }
 
-.about-photo-card:hover {
-  border-color: var(--line-accent);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .about-photo-card:hover {
+    border-color: var(--line-accent);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+}
+
+.about-photo-card:active {
+  transform: scale(0.99);
 }
 
 .about-studio-img {
@@ -51,9 +57,11 @@
   transition: transform 0.55s var(--ease-editorial);
 }
 
-.about-photo-card:hover .about-studio-img,
-.about-photo-card:hover .about-portrait-img {
-  transform: scale(1.02);
+@media (hover: hover) and (pointer: fine) {
+  .about-photo-card:hover .about-studio-img,
+  .about-photo-card:hover .about-portrait-img {
+    transform: scale(1.02);
+  }
 }
 
 .photo-micro-caption {
@@ -199,11 +207,13 @@
   border-color: rgba(73, 180, 255, 0.28);
 }
 
-.timeline-vertical-step:hover .timeline-step-card {
-  border-color: var(--line-accent);
-  background: var(--bg-elevated);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .timeline-vertical-step:hover .timeline-step-card {
+    border-color: var(--line-accent);
+    background: var(--bg-elevated);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
 }
 
 .timeline-step-title {

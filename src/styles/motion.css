@@ -215,8 +215,10 @@ html.motion-ready [data-reveal].is-visible .project-stack-pill {
   pointer-events: none;
 }
 
-.btn-sheen:hover::after {
-  transform: rotate(24deg) translate3d(380%, 0, 0);
+@media (hover: hover) and (pointer: fine) {
+  .btn-sheen:hover::after {
+    transform: rotate(24deg) translate3d(380%, 0, 0);
+  }
 }
 
 /* 11. Indicador Animado de Leitura no Hero (.hero-scroll-cue) */
@@ -243,8 +245,14 @@ html.motion-ready [data-reveal].is-visible .project-stack-pill {
   transition: color 0.2s ease;
 }
 
-.hero-scroll-cue:hover {
-  color: var(--accent-cyan);
+@media (hover: hover) and (pointer: fine) {
+  .hero-scroll-cue:hover {
+    color: var(--accent-cyan);
+  }
+}
+.hero-scroll-cue:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }
 
 @keyframes scrollBeamDrop {

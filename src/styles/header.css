@@ -46,12 +46,20 @@
   transition: color 0.25s ease;
 }
 
-.brand-link:hover .monogram-svg {
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .brand-link:hover .monogram-svg {
+    transform: translateY(-1px);
+  }
+  .brand-link:hover .monogram-dot {
+    color: var(--accent-cyan);
+  }
 }
-
-.brand-link:hover .monogram-dot {
-  color: var(--accent-cyan);
+.brand-link:active {
+  transform: scale(0.98);
+}
+.brand-link:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
 }
 
 .brand-divider {
@@ -108,8 +116,17 @@
   transition: color 0.2s ease;
 }
 
-.nav-link:hover {
-  color: var(--text-white);
+@media (hover: hover) and (pointer: fine) {
+  .nav-link:hover {
+    color: var(--text-white);
+  }
+}
+.nav-link:active {
+  color: var(--accent-cyan);
+}
+.nav-link:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }
 
 .nav-link.is-active {
@@ -148,11 +165,20 @@
     box-shadow 0.2s ease;
 }
 
-.header-social-link:hover {
-  color: var(--text-white);
-  border-color: var(--accent-electric);
-  background: var(--bg-concrete);
-  box-shadow: 0 4px 14px -6px var(--accent-electric-glow);
+@media (hover: hover) and (pointer: fine) {
+  .header-social-link:hover {
+    color: var(--text-white);
+    border-color: var(--accent-electric);
+    background: var(--bg-concrete);
+    box-shadow: 0 4px 14px -6px var(--accent-electric-glow);
+  }
+}
+.header-social-link:active {
+  transform: scale(0.96);
+}
+.header-social-link:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }
 
 /* Menu Mobile */
@@ -172,6 +198,20 @@
 .mobile-menu-toggle[aria-expanded="true"] {
   border-color: var(--accent-electric);
   background: var(--bg-elevated);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .mobile-menu-toggle:hover {
+    border-color: var(--accent-electric);
+    background: var(--bg-elevated);
+  }
+}
+.mobile-menu-toggle:active {
+  transform: scale(0.96);
+}
+.mobile-menu-toggle:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
 }
 
 .hamburger-lines {
