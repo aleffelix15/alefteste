@@ -245,12 +245,14 @@
 @media (max-width: 768px) {
   :root {
     --container-pad: 20px;
+    --header-height: 60px;
   }
 }
 
 @media (max-width: 480px) {
   :root {
     --container-pad: 16px;
+    --header-height: 56px;
   }
 }
 

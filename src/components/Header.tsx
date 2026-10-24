@@ -19,23 +19,32 @@ export function Header() {
 
   const navListRef = useRef<HTMLUListElement>(null);
   const [sliderStyle, setSliderStyle] = useState<React.CSSProperties>({});
+  const scrollYRef = useRef(0);
+  const toggleBtnRef = useRef<HTMLButtonElement>(null);
+  const firstNavLinkRef = useRef<HTMLAnchorElement>(null);
 
-  // Atualiza posição do indicador deslizante ativo
+  // Atualiza posição do indicador deslizante ativo com suporte a resize/rotação
   useEffect(() => {
-    const list = navListRef.current;
-    if (!list) return;
+    const updateSlider = () => {
+      const list = navListRef.current;
+      if (!list) return;
 
-    const activeEl = list.querySelector<HTMLElement>(`[data-nav-id="${activeSection}"]`);
-    if (activeEl) {
-      const listRect = list.getBoundingClientRect();
-      const activeRect = activeEl.getBoundingClientRect();
+      const activeEl = list.querySelector<HTMLElement>(`[data-nav-id="${activeSection}"]`);
+      if (activeEl) {
+        const listRect = list.getBoundingClientRect();
+        const activeRect = activeEl.getBoundingClientRect();
 
-      setSliderStyle({
-        left: `${activeRect.left - listRect.left}px`,
-        width: `${activeRect.width}px`,
-        opacity: 1,
-      });
-    }
+        setSliderStyle({
+          left: `${activeRect.left - listRect.left}px`,
+          width: `${activeRect.width}px`,
+          opacity: 1,
+        });
+      }
+    };
+
+    updateSlider();
+    window.addEventListener("resize", updateSlider);
+    return () => window.removeEventListener("resize", updateSlider);
   }, [activeSection]);
 
   useEffect(() => {
@@ -64,17 +73,39 @@ export function Header() {
     return () => observer.disconnect();
   }, []);
 
+  // Scroll lock robusto no iOS e gerenciamento de foco acessível
   useEffect(() => {
-    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
-    return () => {
+    if (mobileMenuOpen) {
+      scrollYRef.current = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollYRef.current}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+
+      requestAnimationFrame(() => {
+        firstNavLinkRef.current?.focus();
+      });
+    } else {
+      const top = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
       document.body.style.overflow = "";
-    };
+      if (top) {
+        window.scrollTo(0, scrollYRef.current);
+      }
+    }
   }, [mobileMenuOpen]);
+
+  const closeMenu = () => {
+    setMobileMenuOpen(false);
+    toggleBtnRef.current?.focus();
+  };
 
   useEffect(() => {
     if (!mobileMenuOpen) return;
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMobileMenuOpen(false);
+      if (e.key === "Escape") closeMenu();
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
@@ -153,6 +184,7 @@ export function Header() {
           <CvButton variant="header" label="CV" />
 
           <button
+            ref={toggleBtnRef}
             type="button"
             className="mobile-menu-toggle mono"
             aria-expanded={mobileMenuOpen}
@@ -181,13 +213,14 @@ export function Header() {
               return (
                 <li key={item.id}>
                   <a
+                    ref={idx === 0 ? firstNavLinkRef : undefined}
                     href={`#${item.id}`}
                     className={`mobile-nav-link ${isActive ? "is-active" : ""}`}
                     aria-current={isActive ? "location" : undefined}
                     tabIndex={mobileMenuOpen ? 0 : -1}
                     onClick={() => {
                       setActiveSection(item.id);
-                      setMobileMenuOpen(false);
+                      closeMenu();
                     }}
                   >
                     <span className="mono mobile-nav-index">0{idx + 1}</span>
@@ -204,6 +237,7 @@ export function Header() {
               rel="noopener noreferrer"
               tabIndex={mobileMenuOpen ? 0 : -1}
               className="header-social-link"
+              onClick={closeMenu}
             >
               <GithubIcon size={16} />
               <span>GitHub ↗</span>
@@ -214,6 +248,7 @@ export function Header() {
               rel="noopener noreferrer"
               tabIndex={mobileMenuOpen ? 0 : -1}
               className="header-social-link"
+              onClick={closeMenu}
             >
               <LinkedinIcon size={16} />
               <span>LinkedIn ↗</span>
