@@ -1,0 +1,201 @@
+/* ==========================================================================
+   RESET & BASE
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: var(--bg-obsidian);
+  color: var(--text-white);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--header-height);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color-scheme: dark;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--bg-obsidian);
+  color: var(--text-body);
+  overflow-x: hidden;
+  width: 100%;
+  min-height: 100vh;
+  background-image: radial-gradient(rgba(73, 180, 255, 0.032) 1px, transparent 0);
+  background-size: 28px 28px;
+}
+
+::selection {
+  background: rgba(22, 119, 255, 0.32);
+  color: var(--text-white);
+}
+
+.hero-stage-grid > *,
+.projects-editorial-layout > *,
+.projects-showcase-grid > *,
+.about-editorial-grid > *,
+.about-photos-montage > *,
+.tech-editorial-layout > *,
+.contact-editorial-grid > *,
+.contact-right-cards > * {
+  min-width: 0;
+}
+
+img,
+picture,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.arrow-inline {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+/* ==========================================================================
+   ACESSIBILIDADE: SKIP LINK & FOCUS VISIBLE
+   ========================================================================== */
+
+.skip-link {
+  position: fixed;
+  top: -120px;
+  left: 20px;
+  z-index: 9999;
+  background: var(--text-white);
+  color: var(--text-ink);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 12px 20px;
+  border: 2px solid var(--accent-electric);
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 14px;
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 3px;
+}
+
+main:focus {
+  outline: none;
+}
+
+/* ==========================================================================
+   ESTRUTURA COMUM DE MARCADORES DE CAPÍTULO (02, 03, 04, 05)
+   ========================================================================== */
+
+.editorial-chapter {
+  padding-block: 88px;
+  border-bottom: 1px solid var(--line-hairline);
+}
+
+@media (max-width: 768px) {
+  .editorial-chapter {
+    padding-block: 60px;
+  }
+}
+
+.section-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 22px;
+}
+
+.marker-num {
+  color: var(--accent-cyan);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.marker-label {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.marker-line {
+  width: 1px;
+  height: 28px;
+  background: linear-gradient(180deg, var(--accent-electric) 0%, var(--line-strong) 100%);
+  margin-top: 4px;
+}
+
+.section-serif-heading {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: var(--text-3xl);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--text-white);
+  margin-bottom: 20px;
+}
+
+.section-intro-copy {
+  font-size: 0.96rem;
+  line-height: 1.68;
+  color: var(--text-body);
+  margin-bottom: 28px;
+}

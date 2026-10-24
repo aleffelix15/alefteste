@@ -10,27 +10,13 @@
       content="Portfólio autoral de Álef Felix Teixeira, estudante de Engenharia de Software e desenvolvedor de aplicações web e soluções digitais com foco em experiência, performance e código organizado."
     />
 
-    <!-- Preload de fontes críticas locais (woff2) -->
+    <!-- Preload prioritário do recurso LCP (Retrato real do autor) -->
     <link
       rel="preload"
-      href="/fonts/playfair-display-700-normal-latin.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href="/fonts/bricolage-grotesque-latin.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href="/fonts/dm-mono-400-latin.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
+      as="image"
+      href="/images/alef-portrait-bw.avif"
+      type="image/avif"
+      fetchpriority="high"
     />
 
     <!-- Favicons -->
@@ -39,9 +25,13 @@
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://portfolio-alef-felix.vercel.app/" />
+
     <!-- Open Graph & Twitter Card -->
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
+    <meta property="og:url" content="https://portfolio-alef-felix.vercel.app/" />
     <meta property="og:title" content="Álef Felix Teixeira — Engenharia de Software &amp; Desenvolvimento Web" />
     <meta
       property="og:description"
@@ -60,18 +50,47 @@
     />
     <meta name="twitter:image" content="/og-image.png" />
 
-    <!-- JSON-LD Person -->
+    <!-- JSON-LD Estruturado: Person & WebSite -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Álef Felix Teixeira",
-        "jobTitle": "Estudante de Engenharia de Software e Desenvolvedor Web",
-        "sameAs": [
-          "https://github.com/aleffelix15",
-          "https://www.linkedin.com/in/alef-felix-teixeira-a5030b236/"
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://portfolio-alef-felix.vercel.app/#person",
+            "name": "Álef Felix Teixeira",
+            "url": "https://portfolio-alef-felix.vercel.app/",
+            "jobTitle": "Estudante de Engenharia de Software e Desenvolvedor Full-Stack",
+            "description": "Desenvolvedor de aplicações web e full-stack com React, TypeScript e Java.",
+            "sameAs": [
+              "https://github.com/aleffelix15",
+              "https://www.linkedin.com/in/alef-felix-teixeira-a5030b236/"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://portfolio-alef-felix.vercel.app/#website",
+            "url": "https://portfolio-alef-felix.vercel.app/",
+            "name": "Álef Felix Teixeira — Portfólio de Engenharia de Software",
+            "description": "Projetos de software auditados, arquitetura e engenharia com React, TypeScript, Spring Boot e Docker.",
+            "inLanguage": "pt-BR",
+            "publisher": {
+              "@id": "https://portfolio-alef-felix.vercel.app/#person"
+            }
+          }
         ]
       }
+    </script>
+    <!-- Inicialização de Tema com persistência e sem flash (FOUC) -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('theme');
+          var pref = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          var theme = saved || 'dark';
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {}
+      })();
     </script>
   </head>
   <body>

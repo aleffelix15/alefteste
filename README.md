@@ -2,7 +2,7 @@
 
 Portfólio autoral de **Álef Felix Teixeira**, estudante de Engenharia de Software e desenvolvedor de aplicações web e soluções digitais.
 
-Concebido sob direção de arte **Editorial Monocromática & Cinematográfica**, inspirada na atmosfera de um estúdio de concreto em preto e branco, tipografia editorial de alto contraste (*Playfair Display*, *Bricolage Grotesque* e *DM Mono*) e iconografia técnica fiel aos repositórios públicos do GitHub (`@aleffelix15`).
+Concebido sob direção de arte **Editorial Técnica & Cinematográfica**, combinando uma paleta sólida em preto e azul elétrico (`#070A10`, `#0D1420`, `#1677FF`, `#49B4FF`), tipografia editorial de alto contraste (*Playfair Display*, *Bricolage Grotesque* e *DM Mono*), fotografia documental e iconografia técnica fiel aos repositórios públicos do GitHub (`@aleffelix15`).
 
 ---
 

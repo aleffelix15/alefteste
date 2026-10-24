@@ -1,0 +1,234 @@
+/* ==========================================================================
+   CAPÍTULO 02 (SEÇÃO 03) — SOBRE MIM
+   ========================================================================== */
+
+.about-editorial-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 56px;
+  align-items: start;
+}
+
+.about-photos-montage {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 18px;
+  align-items: end;
+}
+
+.about-photo-card {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line-hairline);
+  background: var(--bg-concrete);
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.about-photo-card:hover {
+  border-color: var(--line-strong);
+  box-shadow: 0 14px 32px -16px rgba(0, 0, 0, 0.7);
+}
+
+.about-studio-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  filter: grayscale(100%) contrast(1.08);
+  transition: transform 0.55s var(--ease-editorial);
+}
+
+.about-portrait-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  transition: transform 0.55s var(--ease-editorial);
+}
+
+.about-photo-card:hover .about-studio-img,
+.about-photo-card:hover .about-portrait-img {
+  transform: scale(1.02);
+}
+
+.photo-micro-caption {
+  padding: 9px 12px;
+  border-top: 1px solid var(--line-hairline);
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+  font-size: 0.625rem;
+}
+
+.about-narrative-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.about-prose-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--text-body);
+}
+
+.about-lead-p {
+  font-size: 1.12rem;
+  font-weight: 500;
+  color: var(--text-white);
+}
+
+/* ==========================================================================
+   LINHA DO TEMPO VERTICAL DO MÉTODO DE TRABALHO
+   ========================================================================== */
+
+.about-process-ledger {
+  margin-top: 8px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line-hairline);
+}
+
+.process-ledger-kicker {
+  color: var(--accent-cyan);
+  margin-bottom: 20px;
+  letter-spacing: 0.12em;
+}
+
+.timeline-vertical-ledger {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-left: 20px;
+  margin-left: 12px;
+}
+
+/* Espinha dorsal da timeline que se desenha com o scroll */
+.timeline-vertical-spine {
+  position: absolute;
+  top: 10px;
+  bottom: 24px;
+  left: 27px;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    var(--accent-electric) 0%,
+    rgba(73, 180, 255, 0.3) 70%,
+    var(--line-hairline) 100%
+  );
+  pointer-events: none;
+}
+
+.timeline-vertical-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 16px;
+  align-items: start;
+  opacity: 0.55;
+  transform: translateX(-4px);
+  transition:
+    opacity 0.4s var(--ease-editorial),
+    transform 0.4s var(--ease-editorial);
+}
+
+.timeline-vertical-step.is-active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.timeline-node-marker {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: var(--bg-obsidian);
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  font-weight: 600;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.timeline-node-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--line-strong);
+  opacity: 0;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.timeline-vertical-step.is-active .timeline-node-marker {
+  border-color: var(--accent-electric);
+  background: var(--bg-elevated);
+  color: var(--accent-cyan);
+  box-shadow: 0 0 14px -2px var(--accent-electric-glow);
+}
+
+.timeline-step-card {
+  padding: 16px 18px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line-hairline);
+  background: var(--bg-concrete);
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.timeline-vertical-step.is-active .timeline-step-card {
+  border-color: rgba(73, 180, 255, 0.28);
+}
+
+.timeline-vertical-step:hover .timeline-step-card {
+  border-color: var(--accent-electric);
+  background: var(--bg-elevated);
+  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.6);
+}
+
+.timeline-step-title {
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: var(--text-white);
+  margin-bottom: 4px;
+}
+
+.timeline-step-desc {
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--text-body);
+}
+
+@media (max-width: 960px) {
+  .about-editorial-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .about-photos-montage {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline-vertical-ledger {
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  .timeline-vertical-spine {
+    left: 15px;
+  }
+}

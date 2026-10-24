@@ -1,0 +1,388 @@
+/* ==========================================================================
+   CAPÍTULO 04 (SEÇÃO 05) — CONTATO ("Vamos conversar?")
+   ========================================================================== */
+
+.contact-editorial-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.contact-left-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-serif-heading {
+  font-family: var(--font-serif);
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  line-height: 1.04;
+  color: var(--text-white);
+  margin-bottom: 18px;
+}
+
+.contact-lead-text {
+  font-size: 1rem;
+  line-height: 1.68;
+  color: var(--text-body);
+  max-width: 50ch;
+  margin-bottom: 24px;
+}
+
+/* ==========================================================================
+   BOTÃO DE E-MAIL COM COPIAR E FEEDBACK ANIMADO
+   ========================================================================== */
+
+.contact-email-copy-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 20px;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--line-hairline);
+  background: var(--bg-concrete);
+  margin-bottom: 24px;
+  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.6);
+}
+
+.email-copy-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+}
+
+.email-copy-badge {
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+.email-copy-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-email-copy {
+  flex: 1;
+  min-width: 220px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-hairline);
+  background: var(--bg-obsidian);
+  color: var(--text-white);
+  font-size: 0.85rem;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    color 0.2s ease;
+}
+
+.btn-email-copy:hover {
+  border-color: var(--accent-electric);
+  background: var(--bg-elevated);
+  box-shadow: 0 4px 14px -6px var(--accent-electric-glow);
+}
+
+.btn-email-copy.is-copied {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.08);
+  color: #86efac;
+}
+
+.email-address-text {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: -0.01em;
+}
+
+.email-copy-icon {
+  font-size: 0.95rem;
+  color: var(--accent-cyan);
+}
+
+.btn-email-copy.is-copied .email-copy-icon {
+  color: #22c55e;
+}
+
+.btn-mailto-direct {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-hairline);
+  background: var(--bg-obsidian);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.btn-mailto-direct:hover {
+  color: var(--accent-cyan);
+  border-color: var(--line-strong);
+  background: var(--bg-elevated);
+}
+
+/* Links Rápidos de Contato */
+.contact-fast-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.contact-editorial-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-hairline);
+  background: var(--bg-concrete);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-white);
+  transition:
+    border-color 0.22s ease,
+    background-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.contact-editorial-link:hover {
+  border-color: var(--accent-electric);
+  background: var(--bg-elevated);
+  box-shadow: 0 6px 18px -8px var(--accent-electric-glow);
+}
+
+.contact-editorial-link:hover .arrow-inline {
+  transform: translateX(3px);
+  color: var(--accent-cyan);
+}
+
+/* ==========================================================================
+   FORMULÁRIO DE CONTATO COM VALIDAÇÃO INLINE
+   ========================================================================== */
+
+.contact-form-card {
+  position: relative;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--line-hairline);
+  background: var(--bg-concrete);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 16px 36px -16px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+}
+
+.form-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line-hairline);
+  color: var(--accent-cyan);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+}
+
+.form-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-electric);
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+.form-label span {
+  color: var(--accent-cyan);
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-hairline);
+  background: var(--bg-obsidian);
+  color: var(--text-white);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent-electric);
+  box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.18);
+  background: var(--bg-elevated);
+}
+
+.form-input.has-error {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.15);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+.form-error-msg {
+  font-size: 0.65rem;
+  color: #f87171;
+  padding-top: 2px;
+}
+
+.btn-form-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  background: var(--accent-electric);
+  color: var(--text-white);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid rgba(73, 180, 255, 0.4);
+  box-shadow: 0 6px 20px -6px rgba(22, 119, 255, 0.5);
+  cursor: pointer;
+  transition:
+    background-color 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    transform 0.22s var(--ease-editorial);
+}
+
+.btn-form-submit:hover:not(:disabled) {
+  background: var(--accent-electric-hover);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 10px 24px -6px rgba(22, 119, 255, 0.65);
+  transform: translateY(-2px);
+}
+
+.btn-form-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Estado de Sucesso */
+.form-success-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding: 32px 16px;
+}
+
+.success-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #22c55e;
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.success-title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  color: var(--text-white);
+}
+
+.success-desc {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-body);
+  max-width: 36ch;
+}
+
+.btn-form-reset {
+  padding: 8px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-hairline);
+  background: var(--bg-obsidian);
+  color: var(--accent-cyan);
+  font-size: 0.72rem;
+  margin-top: 8px;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-form-reset:hover {
+  border-color: var(--accent-electric);
+  color: var(--text-white);
+}
+
+/* Banner de Erro */
+.form-error-banner {
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.08);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: #fca5a5;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-mailto-fallback {
+  color: #ffffff;
+  text-decoration: underline;
+  font-size: 0.72rem;
+}
+
+@media (max-width: 960px) {
+  .contact-editorial-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+}

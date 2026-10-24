@@ -9,6 +9,7 @@ import {
   ContactChapter,
   Footer,
 } from "./sections";
+import { Preloader } from "./components/Preloader";
 import { initPortfolioMotion } from "./motion";
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
 
   return (
     <>
+      <Preloader />
       <a href="#conteudo" className="skip-link">
         Pular para o conteúdo principal
       </a>

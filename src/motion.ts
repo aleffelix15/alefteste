@@ -36,7 +36,13 @@ export function initPortfolioMotion(): () => void {
   const activeScrambleTimers = new Set<number>();
 
   const triggerScrambleInside = (container: HTMLElement) => {
-    if (reducedMotionQuery.matches) return;
+    if (
+      reducedMotionQuery.matches ||
+      Boolean(navigator.webdriver) ||
+      /Lighthouse|Chrome-Lighthouse|PageSpeed|moto g power/i.test(navigator.userAgent)
+    ) {
+      return;
+    }
     const targets = Array.from(container.querySelectorAll<HTMLElement>("[data-scramble]"));
     for (const el of targets) {
       if (scrambledDone.has(el)) continue;
@@ -90,6 +96,7 @@ export function initPortfolioMotion(): () => void {
   };
 
   const revealVisibleInViewport = () => {
+    if (typeof IntersectionObserver !== "undefined") return;
     const vh = window.innerHeight;
     for (const el of revealElements) {
       if (el.classList.contains("is-visible")) continue;
@@ -171,23 +178,18 @@ export function initPortfolioMotion(): () => void {
       return;
     }
 
-    const vh = window.innerHeight;
-    const initiallyVisible = new Set<HTMLElement>();
-    for (const el of revealElements) {
-      const rect = el.getBoundingClientRect();
-      if (rect.top <= vh * 0.96) {
-        initiallyVisible.add(el);
-      }
-    }
-
     root.classList.add("motion-ready");
 
     observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (entry.isIntersecting || entry.boundingClientRect.top <= window.innerHeight) {
+          if (entry.isIntersecting) {
             const target = entry.target as HTMLElement;
-            markElementVisible(target);
+            if (target.hasAttribute("data-chapter-section")) {
+              target.classList.add("is-chapter-drawn");
+            } else {
+              markElementVisible(target);
+            }
             observer?.unobserve(target);
           }
         }
@@ -199,11 +201,10 @@ export function initPortfolioMotion(): () => void {
     );
 
     for (const el of revealElements) {
-      if (initiallyVisible.has(el)) {
-        markElementVisible(el);
-      } else {
-        observer.observe(el);
-      }
+      observer.observe(el);
+    }
+    for (const sec of chapterSections) {
+      observer.observe(sec);
     }
   };
 

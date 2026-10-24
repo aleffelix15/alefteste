@@ -1,0 +1,160 @@
+/* ==========================================================================
+   RODAPÉ EDITORIAL COMPLETO
+   ========================================================================== */
+
+.site-footer {
+  padding-block: 56px 40px;
+  background: var(--bg-obsidian);
+  border-top: 1px solid var(--line-hairline);
+}
+
+.footer-content-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1.2fr 0.8fr;
+  gap: 36px;
+  align-items: start;
+}
+
+/* Coluna 1: Autor & Relógio */
+.footer-col-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-serif-author {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-white);
+  letter-spacing: -0.01em;
+}
+
+.footer-role-tag {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+/* Relógio em Tempo Real (Brasília) */
+.footer-live-clock {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line-hairline);
+  background: var(--bg-concrete);
+  color: var(--accent-cyan);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+}
+
+.clock-beacon {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-electric);
+  box-shadow: 0 0 6px var(--accent-electric-glow);
+}
+
+.footer-copy-note {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+/* Colunas de Título */
+.footer-col-title {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--accent-cyan);
+  letter-spacing: 0.12em;
+  margin-bottom: 14px;
+}
+
+/* Coluna 2: Navegação Secundária */
+.footer-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-nav-link {
+  font-size: 0.82rem;
+  color: var(--text-body);
+  transition: color 0.2s ease;
+}
+
+.footer-nav-link:hover {
+  color: var(--text-white);
+}
+
+/* Coluna 3: Redes & Canais */
+.footer-social-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-body);
+  transition: color 0.2s ease;
+}
+
+.footer-social-link:hover {
+  color: var(--accent-cyan);
+}
+
+/* Coluna 4: Voltar ao Topo */
+.footer-col-top {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.footer-top-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-hairline);
+  background: var(--bg-concrete);
+  color: var(--text-white);
+  font-size: 0.72rem;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s var(--ease-editorial);
+}
+
+.footer-top-link:hover {
+  border-color: var(--accent-electric);
+  background: var(--bg-elevated);
+  box-shadow: 0 4px 14px -6px var(--accent-electric-glow);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 960px) {
+  .footer-content-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .footer-col-top {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .footer-content-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}

@@ -13,6 +13,12 @@ export type ProjectScreen = {
   caption: string;
 };
 
+export type ProjectCaseStudy = {
+  problem: string;
+  solution: string;
+  technicalDecisions: string[];
+};
+
 export type ProjectStory = {
   id: string;
   number: string;
@@ -35,23 +41,36 @@ export type ProjectStory = {
   screens: ProjectScreen[];
   verifiedFeatures: string[];
   honestLimitations: string[];
+  caseStudy: ProjectCaseStudy;
+  isArchitectureDiagram?: boolean;
 };
 
 export const heroData = {
   spineNumber: "01",
   spineLabel: "PORTFÓLIO 2026",
+  statusBadge: "Disponível para oportunidades",
   firstName: "Álef Felix",
-  lastName: "Teixeira",
+  lastName: "Engenharia de Software",
   statement:
-    "Estudante de Engenharia de Software. Desenvolvo aplicações web e soluções digitais com foco em experiência, performance e código organizado.",
+    "Desenvolvo aplicações full-stack robustas, arquiteturas escaláveis e experiências digitais interativas. Foco em React, TypeScript, Java e alta performance técnica.",
   epigraph: "Tecnologia é sobre pessoas. É sobre resolver problemas reais.",
-  ctaPrimary: "Explorar projetos",
-  ctaSecondary: "Entrar em contato",
+  ctaPrimary: "Ver projetos",
+  ctaSecondary: "Baixar CV",
+  cvUrl: "/curriculo-alef-felix.pdf",
+  proofMetrics: [
+    { value: 12, suffix: "+", label: "Repositórios", detail: "Projetos no GitHub" },
+    { value: 3, suffix: "", label: "Deploys Ativos", detail: "Vercel & Produção" },
+    { value: 18, suffix: "", label: "Tecnologias", detail: "Stack Auditada" },
+  ],
+  portraitImage: {
+    base: "/images/alef-portrait-bw",
+    alt: "Retrato em preto e branco de Álef Felix Teixeira, estudante de Engenharia de Software.",
+    caption: "ÁLEF FELIX TEIXEIRA · ENGENHARIA DE SOFTWARE",
+  },
   studioImage: {
-    base: "/images/studio-session",
-    alt: "Fotografia conceitual em preto e branco de um estúdio de concreto com poltronas escuras, microfones articulados e notebook aberto com código.",
-    caption:
-      "ENSAIO CONCEITUAL ILUSTRATIVO · ESTÚDIO EM PRETO E BRANCO (NÃO REPRESENTA RETRATO PESSOAL)",
+    base: "/images/alef-portrait-bw",
+    alt: "Retrato em preto e branco de Álef Felix Teixeira com tratamento duotone azul sutil.",
+    caption: "ÁLEF FELIX TEIXEIRA · RETRATO AUTORAL",
   },
 };
 
@@ -60,8 +79,8 @@ export const projectsIntro = {
   spineLabel: "PROJETOS",
   headline: "Ideias que viram experiências.",
   description:
-    "Dois projetos que representam meu processo de aprendizado e minha forma de ver a tecnologia: como uma ferramenta para criar, conectar e gerar impacto.",
-  allProjectsLabel: "Ver todos os projetos",
+    "Três projetos autorais que representam meu processo de engenharia de software: e-commerce performático, narrativa interativa de conscientização e arquitetura bancária full-stack.",
+  allProjectsLabel: "Ver todos os projetos no GitHub",
 };
 
 export const projects: ProjectStory[] = [
@@ -117,6 +136,18 @@ export const projects: ProjectStory[] = [
       "Projeto demonstrativo: os produtos do catálogo utilizam dados de exemplo.",
       "O fluxo de checkout não realiza cobranças comerciais reais nem liquidação em produção.",
     ],
+    caseStudy: {
+      problem:
+        "E-commerces convencionais sofrem com tempos lentos de carregamento inicial (FCP/LCP) e experiências truncadas em catálogo denso causadas por bundlers monolíticos.",
+      solution:
+        "Implementação com React 19 e TanStack Start pré-renderizando páginas no servidor (SSR) com hidratação seletiva, sacola persistida no cliente e rotas tipadas de ponta a ponta.",
+      technicalDecisions: [
+        "TanStack Start e Server Functions para tipagem garantida entre cliente e servidor sem duplicar contratos.",
+        "Tailwind CSS 4 para compilação com zero overhead em tempo de execução.",
+        "Carregamento tardio (lazy loading) nos canvas Three.js para não impactar o First Contentful Paint.",
+        "Vitest para testes unitários automatizados com execução instantânea.",
+      ],
+    },
   },
   {
     id: "decode",
@@ -165,6 +196,77 @@ export const projects: ProjectStory[] = [
     honestLimitations: [
       "Aplicação 100% client-side (SPA): o progresso é mantido na sessão local do navegador, sem banco de dados externo.",
     ],
+    caseStudy: {
+      problem:
+        "Campanhas educativas de conscientização social tradicionalmente têm baixa retenção por utilizarem formatos de leitura passivos e cartilhas estáticas.",
+      solution:
+        "Criação de um sistema de capítulos narrativos ramificados onde o usuário investiga dados, identifica padrões de comportamento abusivo e desbloqueia orientações práticas de apoio.",
+      technicalDecisions: [
+        "Arquitetura 100% client-side sem dependência de servidores de terceiros para garantir disponibilidade permanente.",
+        "Botão de emergência 'Saída Rápida' que limpa a tela e redireciona imediatamente, protegendo a usuária.",
+        "Vite 5 com árvore de dependências enxuta para tempo de carregamento inferior a 800ms.",
+      ],
+    },
+  },
+  {
+    id: "banktef",
+    number: "03.",
+    name: "BANKTEF",
+    tagline: "Plataforma bancária & TEF full-stack (Java 21 + Spring Boot 3 + React 19).",
+    status: "Demo auditada",
+    summary:
+      "Sistema de gerenciamento bancário e autorização de transações eletrônicas com arquitetura em microsserviços, segurança stateless com JWT, persistência relacional e conteinerização completa.",
+    architectureNote:
+      "Backend construído em Java 21 LTS com Spring Boot 3.2.3, Spring Security com JWT (io.jsonwebtoken), Spring Data JPA, PostgreSQL e H2. Frontend em React 19, TypeScript, React Router 7, Axios e Tailwind CSS 4. Orquestrado com Docker Compose e builds multi-stage.",
+    stack: [
+      "Java 21 LTS",
+      "Spring Boot 3",
+      "Spring Security",
+      "JWT",
+      "PostgreSQL",
+      "React 19",
+      "TypeScript",
+      "Docker",
+      "Tailwind CSS 4",
+      "Maven",
+    ],
+    liveUrl: "https://github.com/aleffelix15/BANKTEF",
+    liveDomainLabel: "github.com/aleffelix15/BANKTEF",
+    repoUrl: "https://github.com/aleffelix15/BANKTEF",
+    repoLabel: "github.com/aleffelix15/BANKTEF",
+    isArchitectureDiagram: true,
+    screens: [
+      {
+        id: "banktef-arch",
+        label: "Arquitetura SVG",
+        base: "/screens/banktef-arch",
+        alt: "Diagrama vetorial da arquitetura full-stack do projeto BANKTEF.",
+        caption: "DIAGRAMA DE ARQUITETURA TÉCNICA · BANKTEF FULL-STACK",
+      },
+    ],
+    verifiedFeatures: [
+      "Autenticação e controle de acesso stateless via Spring Security com tokens JWT e roles de usuário.",
+      "Modelagem de dados com JPA/Hibernate cobrindo Contas, Clientes, Cartões e Transações TEF.",
+      "Documentação interativa de endpoints com SpringDoc OpenAPI e Swagger UI integrados.",
+      "Multi-stage Dockerfiles com imagens leves (eclipse-temurin:21 e node:alpine).",
+      "Frontend reativo em React 19 consumindo serviços REST via Axios com tratamento unificado de erros.",
+    ],
+    honestLimitations: [
+      "Ambiente acadêmico/demonstrativo: módulo TEF opera com simulador de transações sem conexão com adquirentes financeiras reais.",
+      "Execução em contêineres Docker locais via docker-compose.",
+    ],
+    caseStudy: {
+      problem:
+        "Sistemas bancários demandam rigor absoluto em integridade transacional, isolamento de segurança contra ataques comuns e escalabilidade de microsserviços.",
+      solution:
+        "Estruturação de um backend em Java 21 LTS aplicando o padrão Controller-Service-Repository com DTOs imutáveis, autenticação stateless via JWT e banco relacional ACID (PostgreSQL).",
+      technicalDecisions: [
+        "Java 21 LTS (Eclipse Temurin) aproveitando estabilidade corporativa e suporte a Virtual Threads.",
+        "Spring Security com filtro JWT stateless customizado, desacoplando o servidor de sessões HTTP em memória.",
+        "PostgreSQL 15 para garantia de integridade referencial com H2 Database para testes ágeis.",
+        "Docker Compose orquestrando backend Java, banco de dados PostgreSQL e frontend Nginx de forma reproduzível.",
+      ],
+    },
   },
 ];
 
@@ -228,15 +330,25 @@ export type AuditedRepoName =
   | "ConektaCell"
   | "alef.dev";
 
+export type TechTier = "daily" | "projects" | "learning";
+
 export type TechItem = {
   index: string;
   name: string;
   category: TechCategory;
+  tier: TechTier;
   role: string;
   brandColor: string;
   projects: AuditedRepoName[];
   provenanceNote: string;
 };
+
+export const techTiers: { id: "ALL" | TechTier; label: string; desc: string }[] = [
+  { id: "daily", label: "Uso no dia a dia", desc: "Stack principal utilizada diariamente em produção e estudos" },
+  { id: "projects", label: "Já usei em projetos", desc: "Tecnologias comprovadas em projetos e arquiteturas auditadas" },
+  { id: "learning", label: "Estudando", desc: "Tópicos de aprofundamento contínuo em engenharia de software" },
+  { id: "ALL", label: "Ver todas", desc: "Visão consolidada de todas as ferramentas e tecnologias auditadas" },
+];
 
 export const techCategories: {
   id: TechCategory;
@@ -296,6 +408,7 @@ export const techIndexData: TechItem[] = [
     index: "01",
     name: "React",
     category: "frontend",
+    tier: "daily",
     role: "Interfaces & Componentização",
     brandColor: "#00D8FF",
     projects: ["VERSO", "DECODE", "BANKTEF", "BioStudy", "Loja de Roupa", "ConektaCell"],
@@ -305,6 +418,7 @@ export const techIndexData: TechItem[] = [
     index: "02",
     name: "TypeScript",
     category: "frontend",
+    tier: "daily",
     role: "Tipagem Estática & Contratos",
     brandColor: "#3178C6",
     projects: ["VERSO", "BANKTEF", "Loja de Roupa", "ConektaCell", "alef.dev"],
@@ -314,6 +428,7 @@ export const techIndexData: TechItem[] = [
     index: "03",
     name: "JavaScript",
     category: "frontend",
+    tier: "daily",
     role: "ES Modules & Lógica Interativa",
     brandColor: "#F7DF1E",
     projects: ["VERSO", "DECODE", "BioStudy"],
@@ -323,6 +438,7 @@ export const techIndexData: TechItem[] = [
     index: "04",
     name: "Next.js",
     category: "frontend",
+    tier: "projects",
     role: "Framework React & Rotas Híbridas",
     brandColor: "#F8FAFC",
     projects: ["Loja de Roupa", "ConektaCell"],
@@ -332,6 +448,7 @@ export const techIndexData: TechItem[] = [
     index: "05",
     name: "Vite",
     category: "frontend",
+    tier: "daily",
     role: "Bundler & Dev Server Rápido",
     brandColor: "#BD34FE",
     projects: ["VERSO", "DECODE", "BANKTEF", "BioStudy", "alef.dev"],
@@ -341,6 +458,7 @@ export const techIndexData: TechItem[] = [
     index: "06",
     name: "Tailwind CSS",
     category: "frontend",
+    tier: "daily",
     role: "Design System & Utilitários CSS",
     brandColor: "#38BDF8",
     projects: ["VERSO", "DECODE", "BANKTEF", "Loja de Roupa", "ConektaCell"],
@@ -350,6 +468,7 @@ export const techIndexData: TechItem[] = [
     index: "07",
     name: "HTML",
     category: "frontend",
+    tier: "daily",
     role: "Semântica & Acessibilidade",
     brandColor: "#E34F26",
     projects: ["VERSO", "DECODE", "BANKTEF", "BioStudy"],
@@ -359,6 +478,7 @@ export const techIndexData: TechItem[] = [
     index: "08",
     name: "CSS",
     category: "frontend",
+    tier: "daily",
     role: "Layout Grid, Tokens & Motion",
     brandColor: "#264DE4",
     projects: ["VERSO", "DECODE", "BANKTEF", "alef.dev"],
@@ -368,6 +488,7 @@ export const techIndexData: TechItem[] = [
     index: "09",
     name: "Framer Motion",
     category: "frontend",
+    tier: "projects",
     role: "Transições & Coreografia de UI",
     brandColor: "#8B5CF6",
     projects: ["VERSO", "BANKTEF", "alef.dev"],
@@ -377,6 +498,7 @@ export const techIndexData: TechItem[] = [
     index: "10",
     name: "Three.js",
     category: "frontend",
+    tier: "projects",
     role: "Renderização 3D & WebGL",
     brandColor: "#E2E8F0",
     projects: ["VERSO", "BioStudy"],
@@ -386,6 +508,7 @@ export const techIndexData: TechItem[] = [
     index: "11",
     name: "React Router",
     category: "frontend",
+    tier: "projects",
     role: "Roteamento SPA Client-Side",
     brandColor: "#F43F5E",
     projects: ["BANKTEF"],
@@ -395,6 +518,7 @@ export const techIndexData: TechItem[] = [
     index: "12",
     name: "Lucide React",
     category: "frontend",
+    tier: "projects",
     role: "Iconografia Técnica Vetorial",
     brandColor: "#FB7185",
     projects: ["VERSO", "DECODE", "BANKTEF", "BioStudy", "Loja de Roupa"],
@@ -406,6 +530,7 @@ export const techIndexData: TechItem[] = [
     index: "13",
     name: "Java",
     category: "backend",
+    tier: "projects",
     role: "Linguagem Backend & OO",
     brandColor: "#F89820",
     projects: ["BANKTEF"],
@@ -415,6 +540,7 @@ export const techIndexData: TechItem[] = [
     index: "14",
     name: "Spring Boot",
     category: "backend",
+    tier: "projects",
     role: "API REST, Validação & Camadas",
     brandColor: "#6DB33F",
     projects: ["BANKTEF"],
@@ -424,6 +550,7 @@ export const techIndexData: TechItem[] = [
     index: "15",
     name: "Spring Security",
     category: "backend",
+    tier: "projects",
     role: "Autenticação & Filtros de Acesso",
     brandColor: "#6DB33F",
     projects: ["BANKTEF"],
@@ -433,6 +560,7 @@ export const techIndexData: TechItem[] = [
     index: "16",
     name: "JWT",
     category: "backend",
+    tier: "projects",
     role: "Tokens Stateless Assinados",
     brandColor: "#D946EF",
     projects: ["BANKTEF"],
@@ -442,6 +570,7 @@ export const techIndexData: TechItem[] = [
     index: "17",
     name: "Spring Data JPA",
     category: "backend",
+    tier: "projects",
     role: "ORM Hibernate & Repositórios",
     brandColor: "#59666C",
     projects: ["BANKTEF"],
@@ -451,6 +580,7 @@ export const techIndexData: TechItem[] = [
     index: "18",
     name: "PostgreSQL",
     category: "backend",
+    tier: "projects",
     role: "Banco de Dados Relacional SQL",
     brandColor: "#336791",
     projects: ["VERSO", "BANKTEF", "BioStudy"],
@@ -460,6 +590,7 @@ export const techIndexData: TechItem[] = [
     index: "19",
     name: "Supabase",
     category: "backend",
+    tier: "projects",
     role: "BaaS, Postgres & Row-Level Security",
     brandColor: "#3ECF8E",
     projects: ["VERSO", "BioStudy"],
@@ -469,6 +600,7 @@ export const techIndexData: TechItem[] = [
     index: "20",
     name: "H2 Database",
     category: "backend",
+    tier: "projects",
     role: "Banco em Memória para Dev/Test",
     brandColor: "#38BDF8",
     projects: ["BANKTEF"],
@@ -478,6 +610,7 @@ export const techIndexData: TechItem[] = [
     index: "21",
     name: "Maven",
     category: "backend",
+    tier: "projects",
     role: "Gestão de Dependências & Build Java",
     brandColor: "#C71A36",
     projects: ["BANKTEF"],
@@ -487,6 +620,7 @@ export const techIndexData: TechItem[] = [
     index: "22",
     name: "Python",
     category: "backend",
+    tier: "projects",
     role: "Scripts de Automação & Dados",
     brandColor: "#FFD43B",
     projects: ["BioStudy"],
@@ -495,94 +629,136 @@ export const techIndexData: TechItem[] = [
 
   // 03. ENGENHARIA, QUALIDADE & FERRAMENTAS
   {
-    index: "22",
+    index: "23",
     name: "TanStack Query",
     category: "engineering",
+    tier: "projects",
     role: "SSR, Server Functions & Cache",
     brandColor: "#FF4154",
     projects: ["VERSO"],
     provenanceNote: "TanStack Start, Router & React Query 5.101 no Verso",
   },
   {
-    index: "23",
+    index: "24",
     name: "Zod",
     category: "engineering",
+    tier: "projects",
     role: "Validação de Schemas & Payloads",
     brandColor: "#7C3AED",
     projects: ["VERSO", "Loja de Roupa", "ConektaCell"],
     provenanceNote: "Zod 3.25 no checkout/webhooks do Verso e formulários",
   },
   {
-    index: "24",
+    index: "25",
     name: "Vitest",
     category: "engineering",
+    tier: "projects",
     role: "Testes Unitários Automatizados",
     brandColor: "#86EFAC",
     projects: ["VERSO"],
     provenanceNote: "Vitest 4.1 + Testing Library no Verso",
   },
   {
-    index: "25",
+    index: "26",
     name: "Docker",
     category: "engineering",
+    tier: "projects",
     role: "Containers & Multi-Stage Build",
     brandColor: "#2496ED",
     projects: ["BANKTEF"],
     provenanceNote: "Dockerfiles multi-stage (backend Java 21 + frontend) no BANKTEF",
   },
   {
-    index: "26",
+    index: "27",
     name: "Axios",
     category: "engineering",
+    tier: "projects",
     role: "Cliente HTTP & Interceptors",
     brandColor: "#5A29E4",
     projects: ["BANKTEF"],
     provenanceNote: "axios 1.20.0 na integração frontend-backend do BANKTEF",
   },
   {
-    index: "27",
+    index: "28",
     name: "ESLint",
     category: "engineering",
+    tier: "projects",
     role: "Análise Estática & Qualidade",
     brandColor: "#6366F1",
     projects: ["VERSO", "Loja de Roupa", "ConektaCell", "alef.dev"],
     provenanceNote: "ESLint 9 + typescript-eslint no Verso",
   },
   {
-    index: "28",
+    index: "29",
     name: "Prettier",
     category: "engineering",
+    tier: "projects",
     role: "Formatação Padronizada de Código",
     brandColor: "#F7B93E",
     projects: ["VERSO"],
     provenanceNote: "Prettier 3.7.3 + eslint-plugin-prettier no Verso",
   },
   {
-    index: "29",
+    index: "30",
     name: "Git",
     category: "engineering",
+    tier: "daily",
     role: "Controle de Versão Distribuído",
     brandColor: "#F05032",
     projects: ["VERSO", "DECODE", "BANKTEF", "BioStudy"],
     provenanceNote: "Versionamento em todos os repositórios",
   },
   {
-    index: "30",
+    index: "31",
     name: "GitHub",
     category: "engineering",
+    tier: "daily",
     role: "Repositórios & Código Aberto",
     brandColor: "#F8FAFC",
     projects: ["VERSO", "DECODE", "BANKTEF", "BioStudy"],
     provenanceNote: "7 repositórios públicos em github.com/aleffelix15",
   },
   {
-    index: "31",
+    index: "32",
     name: "Vercel",
     category: "engineering",
+    tier: "projects",
     role: "Deploy & Edge Hosting",
     brandColor: "#E2E8F0",
     projects: ["VERSO", "DECODE", "Loja de Roupa", "ConektaCell"],
     provenanceNote: "Deploys ativos e @vercel/analytics",
+  },
+
+  // 04. ESTUDANDO (APROFUNDAMENTO CONTÍNUO)
+  {
+    index: "33",
+    name: "Microsserviços",
+    category: "engineering",
+    tier: "learning",
+    role: "Arquitetura Distribuída & Mensageria",
+    brandColor: "#49B4FF",
+    projects: ["BANKTEF"],
+    provenanceNote: "Estudo contínuo de mensageria com RabbitMQ/Kafka e resiliência",
+  },
+  {
+    index: "34",
+    name: "CI/CD Actions",
+    category: "engineering",
+    tier: "learning",
+    role: "Pipelines Automatizadas de Build",
+    brandColor: "#2088FF",
+    projects: ["alef.dev"],
+    provenanceNote: "Workflows do GitHub Actions para lint, typecheck e testes automáticos",
+  },
+  {
+    index: "35",
+    name: "Testes E2E",
+    category: "engineering",
+    tier: "learning",
+    role: "Playwright & Testes de Integração",
+    brandColor: "#45BA4B",
+    projects: ["alef.dev"],
+    provenanceNote: "Testes automatizados end-to-end simulando navegação de usuários",
   },
 ];
 

@@ -1,0 +1,89 @@
+/* ==========================================================================
+   FAIXA EDITORIAL EM MOVIMENTO CONTÍNUO (MARQUEE COM PAUSA WCAG 2.2.2)
+   ========================================================================== */
+
+@keyframes editorialTickerScroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.editorial-ticker-band {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line-hairline);
+  background: var(--bg-subtle);
+  min-height: 44px;
+  overflow: hidden;
+}
+
+.ticker-track-viewport {
+  flex: 1;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: editorialTickerScroll 34s linear infinite;
+  will-change: transform;
+}
+
+.editorial-ticker-band:hover .ticker-track,
+.editorial-ticker-band:focus-within .ticker-track,
+.editorial-ticker-band.is-paused .ticker-track {
+  animation-play-state: paused;
+}
+
+.ticker-group {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding-right: 32px;
+}
+
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.ticker-dot {
+  color: var(--accent-electric);
+  font-size: 0.55rem;
+}
+
+.ticker-pause-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  border-left: 1px solid var(--line-hairline);
+  background: var(--bg-obsidian);
+  color: var(--text-muted);
+  font-size: 0.625rem;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.ticker-pause-btn:hover {
+  color: var(--text-white);
+  background: var(--bg-concrete);
+}
+
+.ticker-pause-glyph {
+  color: var(--accent-cyan);
+  font-size: 0.6rem;
+}
