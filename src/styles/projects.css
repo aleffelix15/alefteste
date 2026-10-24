@@ -481,7 +481,7 @@
 }
 
 .project-action-primary {
-  background: var(--accent-electric);
+  background: #0d5fd9;
   border: 1px solid rgba(73, 180, 255, 0.35);
   color: var(--text-white);
   box-shadow: 0 4px 16px -6px rgba(22, 119, 255, 0.45);
@@ -489,7 +489,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .project-action-primary:hover {
-    background: var(--accent-electric-hover);
+    background: #0b50b8;
     border-color: var(--accent-cyan);
     box-shadow: 0 8px 20px -6px rgba(22, 119, 255, 0.6);
     transform: translateY(-1px);

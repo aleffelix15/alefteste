@@ -49,7 +49,7 @@ export function CvButton({
     });
   };
 
-  const accessibleLabel = `Baixar currículo de Álef Felix Teixeira em PDF (${cv.sizeLabel}, atualizado em ${cv.updatedAt})`;
+  const accessibleLabel = `${label} — Currículo de Álef Felix Teixeira em PDF (${cv.sizeLabel}, atualizado em ${cv.updatedAt})`;
 
   // Variante Footer: link leve para listagem do rodapé
   if (variant === "footer") {
@@ -59,11 +59,10 @@ export function CvButton({
           href={cv.url}
           download={cv.fileName}
           className="footer-nav-link cv-link-footer"
-          aria-label={accessibleLabel}
           onClick={handleDownloadClick}
         >
           <span>Currículo (PDF)</span>
-          <span className="cv-badge-tiny mono">{cv.sizeLabel.split(" ")[0]}</span>
+          <span className="cv-badge-tiny mono" aria-hidden="true">{cv.sizeLabel.split(" ")[0]}</span>
         </a>
       </div>
     );

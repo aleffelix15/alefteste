@@ -250,7 +250,7 @@ export function OpeningSection() {
             <a
               href="#projetos"
               className="hero-scroll-cue mono"
-              aria-label="Rolar para a seção de projetos"
+              aria-label="ROLAR EDIÇÃO — Rolar para a seção de projetos"
             >
               <span className="scroll-cue-line" aria-hidden="true" />
               <span>ROLAR EDIÇÃO</span>
