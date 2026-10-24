@@ -12,13 +12,13 @@ Concebido sob direção de arte **Editorial Técnica & Cinematográfica** em **t
    - Cenário de estúdio em preto e branco com iluminação chiaroscuro, paralaxe suave, revelação tipográfica em máscara (`Playfair Display`), epígrafe flutuante e indicador animado de leitura.
    - Faixa editorial contínua com pausa acessível (conformidade WCAG 2.2.2).
 2. **`02 | PROJETOS` — "Ideias que viram experiências."**:
-   - Apresentação de **01. VERSO** (`verso-five-psi.vercel.app`) e **02. DECODE** (`decode-ochre.vercel.app`) com capturas reais das aplicações (`.avif`/`.webp`), alternador interativo de telas (`Abertura` / `Painel & Casos`), tilt 3D sutil e dossiê expansível com arquitetura e limitações registradas.
+   - Apresentação de **01. VERSO** (`verso-five-psi.vercel.app`), **02. DECODE** (`decode-ochre.vercel.app`) e **03. NUDEMO** (`nudem.vercel.app`) com capturas reais das aplicações (`.avif`/`.webp`), alternador interativo de telas, tilt 3D sutil e dossiê expansível com arquitetura e limitações registradas.
 3. **`03 | SOBRE MIM` — "Engenharia, clareza e atenção aos detalhes."**:
    - Composição fotográfica dupla combinando fotografia de bancada de estúdio e retrato real em P&B de Álef Felix Teixeira (`alef-portrait-bw`), narrativa documental e método de trabalho em 5 etapas (*Entender, Planejar, Desenvolver, Testar, Documentar & Evoluir*).
 4. **`04 | TECNOLOGIAS` — "Ferramentas que eu utilizo"**:
-   - **32 tecnologias auditadas** diretamente nos manifestos (`package.json`, `pom.xml`, `Dockerfile` e schemas SQL) dos **7 repositórios públicos** (`verso`, `decode`, `BANKTEF`, `biomed`, `loja-de-roupa`, `conektacell` e `alef.dev`), organizadas em 3 categorias:
-     - `01 · Frontend & Interfaces` (12 itens)
-     - `02 · Backend, Dados & APIs` (10 itens)
+   - **24 tecnologias auditadas** diretamente nos manifestos (`package.json`, scripts Python e schemas SQL) dos **7 repositórios públicos** (`verso`, `decode`, `nudem`, `biomed`, `loja-de-roupa`, `conektacell` e `alef.dev`), organizadas em 3 categorias:
+     - `01 · Frontend & Interfaces` (11 itens)
+     - `02 · Backend, Dados & APIs` (3 itens)
      - `03 · Engenharia, Qualidade & Infraestrutura` (10 itens)
    - Emblemas vetoriais SVG nas cores oficiais de cada marca sobre superfície grafite (`#111722`) e base escura (`#080A0F`), com filtros funcionais por categoria e por repositório auditado, badges de origem e dossiê de transparência.
 5. **`05 | CONTATO` — "Vamos conversar?"**:

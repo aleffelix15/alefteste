@@ -6,10 +6,9 @@ export type AnalyticsEventName =
   | "cv_download"
   | "cv_view"
   | "email_copy"
-  | "project_click"
-  | "theme_toggle";
+  | "project_click";
 
-export interface AnalyticsEventProps {
+interface AnalyticsEventProps {
   [key: string]: string | number | boolean | undefined;
 }
 

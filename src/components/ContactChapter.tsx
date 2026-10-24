@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { contactData, links } from "../data";
 import { GithubIcon, LinkedinIcon } from "../icons";
+import { trackEvent } from "../analytics";
 import { RollText } from "./RollText";
 import { CvButton } from "./CvButton";
 
@@ -11,6 +12,7 @@ export function ContactChapter() {
     "https://wa.me/5562985163672?text=Ol%C3%A1%20%C3%81lef%2C%20vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar!";
 
   const handleCopyEmail = async () => {
+    trackEvent("email_copy", { email: emailAddress });
     try {
       if (typeof navigator !== "undefined" && navigator.clipboard) {
         await navigator.clipboard.writeText(emailAddress);

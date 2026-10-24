@@ -1,5 +1,3 @@
-import React from "react";
-
 export function RollText({ text }: { text: string }) {
   return (
     <span className="hover-roll-text">

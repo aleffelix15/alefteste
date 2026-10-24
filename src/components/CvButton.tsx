@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { cv } from "../data";
 import { trackEvent } from "../analytics";
 import { RollText } from "./RollText";
 
-export interface CvButtonProps {
+interface CvButtonProps {
   variant?: "primary" | "secondary" | "ghost" | "header" | "footer" | "contact";
   showMeta?: boolean;
   showViewLink?: boolean;

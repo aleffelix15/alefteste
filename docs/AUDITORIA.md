@@ -1,7 +1,7 @@
 # Auditoria Técnica e Verificação de Fatos — Portfólio de Álef Felix Teixeira
 
-Data de atualização: 23 de outubro de 2026  
-Escopo: Verificação de código-fonte, manifestos (`package.json`, `pom.xml`, `Dockerfile`, `docker-compose.yml`), rotas, schemas SQL e status dos serviços publicados nos 7 repositórios públicos de `@aleffelix15`.
+Data de atualização: 24 de outubro de 2026  
+Escopo: Verificação de código-fonte, manifestos (`package.json`), rotas, scripts Python, schemas SQL e status dos serviços publicados nos 7 repositórios públicos de `@aleffelix15`.
 
 ---
 
@@ -35,19 +35,28 @@ Escopo: Verificação de código-fonte, manifestos (`package.json`, `pom.xml`, `
 - **Limitações reais registradas**:
   - Execução 100% client-side (SPA): o progresso é mantido na sessão local do navegador, sem banco de dados externo.
 
+### Projeto 03: NUDEMO (`https://github.com/aleffelix15/nudem`)
+- **Status declarado**: Publicado.
+- **URL de Deploy Ativa**: https://nudem.vercel.app/ (`HTTP 200 OK`)
+- **Stack comprovada em `package.json` e `scripts/guard-hero-swap.mjs`**:
+  - React 18 (`^18.3.1`), Three.js (`^0.160.1`), `@react-three/fiber` (`^8.17.10`), Framer Motion (`^11.15.0`).
+  - Vite 5 (`^5.4.11`), `@vitejs/plugin-react` (`^4.3.4`), `@fontsource-variable/figtree` (`^5.1.0`).
+  - CSS puro com tokens semânticos, clamp e design system escuro (`#070709`, `#121216`, `#820AD1`).
+  - Deploy em produção na Vercel Edge Network (`vercel.json` com cache estático imutável de 1 ano para `/assets/(.*)`).
+- **Limitações reais registradas**:
+  - Aplicação puramente front-end demonstrativa: sem backend, sem banco de dados e sem conexão a adquirentes ou APIs do Nubank.
+  - Dados financeiros (saldo, extrato, fatura) são estáticos/fictícios para demonstração de interface.
+  - Sem suíte de testes automatizados nos manifests (apenas script de guard pré-build).
+
 ---
 
 ## 3. Auditoria dos Demais Repositórios Públicos (Origem da Seção de Tecnologias)
 
-1. **`BANKTEF`** (`https://github.com/aleffelix15/BANKTEF`):
-   - **Backend (`backend/pom.xml` + `Dockerfile`)**: Java 21 LTS (`eclipse-temurin:21`), Spring Boot `3.2.3`, Spring Security, Spring Data JPA / Hibernate, JWT (`io.jsonwebtoken:jjwt-* 0.11.5`), PostgreSQL (`org.postgresql:postgresql` + `postgres:15-alpine`), H2 Database (`com.h2database:h2`), SpringDoc OpenAPI / Swagger UI (`2.3.0`), Maven `3.9.6`.
-   - **Frontend (`frontend/package.json` + `Dockerfile`)**: React `^19.2.8`, TypeScript `~6.0.2`, Vite `^8.3.0`, Tailwind CSS `^4.3.3`, React Router (`react-router-dom ^7.18.4`), Axios `^1.20.0`, Framer Motion `^13.4.4`, Lucide React `^1.48.0`.
-   - **Infraestrutura**: `docker-compose.yml` orquestrando PostgreSQL, backend Java e frontend Nginx.
-2. **`biomed` / BioStudy** (`https://github.com/aleffelix15/biomed`):
+1. **`biomed` / BioStudy** (`https://github.com/aleffelix15/biomed`):
    - **Manifestos e código**: React `^18.2.0`, Vite `^5.2.0`, Supabase (`@supabase/supabase-js ^2.116.0`, Deno Edge Function em TypeScript `supabase/functions/ai-explain/index.ts`, migrations e políticas RLS em PostgreSQL/PLpgSQL), Python (`42,5 KB` de scripts de automação e curadoria em `scratch/*.py`), Three.js (`scratch/3d-test/package.json`).
-3. **`loja-de-roupa` & `conektacell`** (`https://github.com/aleffelix15/loja-de-roupa` / `conektacell`):
+2. **`loja-de-roupa` & `conektacell`** (`https://github.com/aleffelix15/loja-de-roupa` / `conektacell`):
    - **Manifestos (`package.json`)**: Next.js `16.2.0`, React `19.2.4`, TypeScript `5.7.3`, Tailwind CSS `^4.2.0`, Radix UI (28 pacotes), Zod `^3.24.1`, Lucide React, `@vercel/analytics`.
-4. **`alef.dev`** (`https://github.com/aleffelix15/alef.dev`):
+3. **`alef.dev`** (`https://github.com/aleffelix15/alef.dev`):
    - **Manifesto (`package.json`)**: React `^18.2.0`, TypeScript `^5.2.2`, Vite `^5.0.0`, Tailwind CSS `^3.3.5`, Framer Motion `^11.18.2`, ESLint `^8.53.0`, integração com Google Gemini API.
 
 ---
@@ -56,7 +65,7 @@ Escopo: Verificação de código-fonte, manifestos (`package.json`, `pom.xml`, `
 
 - **Omitidas da grade comprovada por ausência de evidência nos repositórios**:
   - `AWS`: Não encontrada em nenhum manifesto ou código de infraestrutura.
-  - `MySQL`: Não utilizado (`BANKTEF` utiliza **PostgreSQL** e **H2** no `pom.xml`).
-  - `Jest`: Não utilizado (`Verso` utiliza **Vitest** e `BANKTEF` utiliza **JUnit 5**).
+  - `MySQL`: Não utilizado nos projetos auditados (projetos com persistência utilizam **PostgreSQL** e **Supabase**).
+  - `Jest`: Não utilizado nos projetos auditados (projetos com testes utilizam **Vitest**).
 - **Diferenciadas como ferramentas de ambiente local/estudo**:
-  - `VS Code`, `Postman`, `Figma` e `Linux` (`Mint` / `Zorin` / imagens base `Alpine` nos Dockerfiles).
+  - `VS Code`, `Postman`, `Figma` e `Linux` (`Mint` / `Zorin`).

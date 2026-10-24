@@ -271,22 +271,6 @@
     transform 0.22s var(--ease-editorial);
 }
 
-.btn-cv-secondary:hover {
-  border-color: var(--accent-electric);
-  background: var(--bg-elevated);
-  color: var(--accent-cyan);
-  transform: translateY(-2px);
-}
-
-.btn-cv-icon {
-  color: var(--accent-cyan);
-  transition: transform 0.2s ease;
-}
-
-.btn-cv-secondary:hover .btn-cv-icon {
-  transform: translateY(2px);
-}
-
 /* Barra de Prova Rápida com Contadores Animados */
 .hero-proof-bar {
   display: flex;

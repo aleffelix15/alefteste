@@ -1,20 +1,20 @@
-import React, { useState, useId } from "react";
+import { useState } from "react";
 import { links, projectsIntro, projects, type ProjectStory } from "../data";
 import { GithubIcon } from "../icons";
+import { trackEvent } from "../analytics";
 import { RollText } from "./RollText";
-import { BanktefArchitectureDiagram } from "./BanktefArchitectureDiagram";
 
 export function ProjectsChapter() {
   const [activeScreenByProject, setActiveScreenByProject] = useState<Record<string, string>>({
     verso: "verso-home",
     decode: "decode-cover",
-    banktef: "banktef-arch",
+    nudemo: "nudemo-hero",
   });
 
   const [expandedCaseStudy, setExpandedCaseStudy] = useState<Record<string, boolean>>({
     verso: false,
     decode: false,
-    banktef: false,
+    nudemo: false,
   });
 
   const toggleCaseStudy = (projectId: string) => {
@@ -93,7 +93,7 @@ export function ProjectsChapter() {
           </a>
         </div>
 
-        {/* Coluna da Direita: Projetos 01 VERSO, 02 DECODE e 03 BANKTEF */}
+        {/* Coluna da Direita: Projetos 01 VERSO, 02 DECODE e 03 NUDEMO */}
         <div className="projects-showcase-grid">
           {projects.map((project: ProjectStory, projIdx: number) => {
             const selectedScreenId =
@@ -155,56 +155,49 @@ export function ProjectsChapter() {
                     )}
                   </div>
 
-                  {project.isArchitectureDiagram ? (
-                    <div className="project-arch-container">
-                      <BanktefArchitectureDiagram />
-                      <div className="project-plate-spotlight" aria-hidden="true" />
-                    </div>
-                  ) : (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="project-capture-link photo-curtain-wrap"
-                      aria-label={`Visitar projeto ${project.name} publicado (abre em nova aba)`}
-                      data-cursor-label="VISITAR ↗"
-                    >
-                      <picture key={currentScreen.id} className="screen-fade-picture">
-                        <source
-                          type="image/avif"
-                          srcSet={
-                            currentScreen.id === "decode-dashboard"
-                              ? `${currentScreen.base}.avif`
-                              : `${currentScreen.base}-640.avif 640w, ${currentScreen.base}.avif 1200w`
-                          }
-                          sizes="(max-width: 820px) 100vw, 560px"
-                        />
-                        <source
-                          type="image/webp"
-                          srcSet={
-                            currentScreen.id === "decode-dashboard"
-                              ? `${currentScreen.base}.webp`
-                              : `${currentScreen.base}-640.webp 640w, ${currentScreen.base}.webp 1200w`
-                          }
-                          sizes="(max-width: 820px) 100vw, 560px"
-                        />
-                        <img
-                          src={`${currentScreen.base}.webp`}
-                          alt={currentScreen.alt}
-                          width={1200}
-                          height={750}
-                          loading="lazy"
-                          decoding="async"
-                          className="project-capture-img"
-                        />
-                      </picture>
-                      <div className="project-plate-spotlight" aria-hidden="true" />
-                    </a>
-                  )}
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="project-capture-link photo-curtain-wrap"
+                    aria-label={`Visitar projeto ${project.name} publicado (abre em nova aba)`}
+                    data-cursor-label="VISITAR ↗"
+                  >
+                    <picture key={currentScreen.id} className="screen-fade-picture">
+                      <source
+                        type="image/avif"
+                        srcSet={
+                          currentScreen.id === "decode-dashboard"
+                            ? `${currentScreen.base}.avif`
+                            : `${currentScreen.base}-640.avif 640w, ${currentScreen.base}.avif 1200w`
+                        }
+                        sizes="(max-width: 820px) 100vw, 560px"
+                      />
+                      <source
+                        type="image/webp"
+                        srcSet={
+                          currentScreen.id === "decode-dashboard"
+                            ? `${currentScreen.base}.webp`
+                            : `${currentScreen.base}-640.webp 640w, ${currentScreen.base}.webp 1200w`
+                        }
+                        sizes="(max-width: 820px) 100vw, 560px"
+                      />
+                      <img
+                        src={`${currentScreen.base}.webp`}
+                        alt={currentScreen.alt}
+                        width={1200}
+                        height={750}
+                        loading="lazy"
+                        decoding="async"
+                        className="project-capture-img"
+                      />
+                    </picture>
+                    <div className="project-plate-spotlight" aria-hidden="true" />
+                  </a>
 
                   <figcaption className="capture-caption mono">
                     <span>{currentScreen.caption}</span>
-                    <span>{project.isArchitectureDiagram ? "DIAGRAMA TÉCNICO" : "CAPTURA REAL"}</span>
+                    <span>CAPTURA REAL</span>
                   </figcaption>
                 </figure>
 
@@ -309,8 +302,15 @@ export function ProjectsChapter() {
                       className="project-action-primary"
                       data-magnetic
                       data-cursor-label="VISITAR ↗"
+                      onClick={() =>
+                        trackEvent("project_click", {
+                          project: project.name,
+                          action: "live",
+                          url: project.liveUrl,
+                        })
+                      }
                     >
-                      <RollText text={project.isArchitectureDiagram ? "Ver repositório" : "Visitar projeto"} />
+                      <RollText text="Visitar projeto" />
                       <span aria-hidden="true" className="arrow-inline">→</span>
                       <span className="sr-only"> (abre em nova aba)</span>
                     </a>
@@ -322,6 +322,13 @@ export function ProjectsChapter() {
                       className="project-action-secondary"
                       data-magnetic
                       data-cursor-label="CÓDIGO ↗"
+                      onClick={() =>
+                        trackEvent("project_click", {
+                          project: project.name,
+                          action: "repo",
+                          url: project.repoUrl,
+                        })
+                      }
                     >
                       <GithubIcon size={15} />
                       <RollText text="Ver código" />

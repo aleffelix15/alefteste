@@ -50,35 +50,6 @@
   transform: translateY(-2px);
 }
 
-/* Variante Primária (Destaque) */
-.btn-cv-primary {
-  border: 1px solid rgba(73, 180, 255, 0.4);
-  background: var(--accent-electric);
-  color: var(--text-white);
-  box-shadow: 0 6px 20px -6px rgba(22, 119, 255, 0.5);
-}
-
-.btn-cv-primary:hover {
-  background: var(--accent-electric-hover);
-  border-color: var(--accent-cyan);
-  box-shadow: 0 10px 24px -6px rgba(22, 119, 255, 0.65);
-  transform: translateY(-2px);
-}
-
-/* Variante Ghost (Mínima) */
-.btn-cv-ghost {
-  border: 1px solid var(--line-hairline);
-  background: transparent;
-  color: var(--text-body);
-}
-
-.btn-cv-ghost:hover {
-  border-color: var(--accent-electric);
-  background: var(--bg-elevated);
-  color: var(--text-white);
-  transform: translateY(-1px);
-}
-
 /* Variante Header (Discreta e Compacta) */
 .btn-cv-header {
   min-height: 36px;
