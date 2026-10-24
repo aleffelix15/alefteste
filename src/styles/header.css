@@ -330,3 +330,10 @@
     display: inline-flex;
   }
 }
+
+@media (max-width: 768px) {
+  .site-header {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}

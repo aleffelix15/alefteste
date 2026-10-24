@@ -226,7 +226,8 @@ export function initPortfolioMotion(): () => void {
   // 3. Luz direcional sutil nas pranchas e cartões ([data-tilt-card])
   const plateElements = Array.from(document.querySelectorAll<HTMLElement>("[data-tilt-card]"));
 
-  for (const plateEl of plateElements) {
+  if (finePointerQuery.matches) {
+    for (const plateEl of plateElements) {
     let spotRaf = 0;
 
     const handlePointerMove = (e: PointerEvent) => {
@@ -265,13 +266,15 @@ export function initPortfolioMotion(): () => void {
       if (spotRaf) window.cancelAnimationFrame(spotRaf);
       plateEl.removeEventListener("pointermove", handlePointerMove);
       plateEl.removeEventListener("pointerleave", handlePointerLeave);
-    });
+      });
+    }
   }
 
   // 4. Botões e links magnéticos ([data-magnetic])
   const magneticElements = Array.from(document.querySelectorAll<HTMLElement>("[data-magnetic]"));
 
-  for (const magEl of magneticElements) {
+  if (finePointerQuery.matches) {
+    for (const magEl of magneticElements) {
     let magRaf = 0;
 
     const onMagMove = (e: PointerEvent) => {
@@ -313,7 +316,8 @@ export function initPortfolioMotion(): () => void {
       if (magRaf) window.cancelAnimationFrame(magRaf);
       magEl.removeEventListener("pointermove", onMagMove);
       magEl.removeEventListener("pointerleave", onMagLeave);
-    });
+      });
+    }
   }
 
   // 5. Acordeão técnico com Web Animations API (details[data-animated-details])
@@ -393,7 +397,7 @@ export function initPortfolioMotion(): () => void {
   const cursorEl = document.querySelector<HTMLElement>("[data-editorial-cursor]");
   const cursorTextEl = document.querySelector<HTMLElement>("[data-editorial-cursor-text]");
 
-  if (cursorEl && cursorTextEl) {
+  if (cursorEl && cursorTextEl && finePointerQuery.matches) {
     let targetX = -100;
     let targetY = -100;
     let currentX = -100;

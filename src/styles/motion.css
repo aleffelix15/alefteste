@@ -476,3 +476,9 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
     display: none !important;
   }
 }
+
+@media (max-width: 768px), (pointer: coarse) {
+  .editorial-cursor {
+    display: none !important;
+  }
+}

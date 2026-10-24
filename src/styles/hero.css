@@ -515,6 +515,12 @@
   }
 }
 
+@media (max-width: 768px), (pointer: coarse) {
+  .hero-mouse-radial {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
   .hero-proof-bar {
     gap: 10px;

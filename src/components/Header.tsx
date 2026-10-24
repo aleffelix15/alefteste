@@ -19,7 +19,6 @@ export function Header() {
 
   const navListRef = useRef<HTMLUListElement>(null);
   const [sliderStyle, setSliderStyle] = useState<React.CSSProperties>({});
-  const scrollYRef = useRef(0);
   const toggleBtnRef = useRef<HTMLButtonElement>(null);
   const firstNavLinkRef = useRef<HTMLAnchorElement>(null);
 
@@ -73,33 +72,38 @@ export function Header() {
     return () => observer.disconnect();
   }, []);
 
-  // Scroll lock robusto no iOS e gerenciamento de foco acessível
+  // Scroll lock robusto no iOS e mobile sem deslocamento de header
   useEffect(() => {
-    if (mobileMenuOpen) {
-      scrollYRef.current = window.scrollY;
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollYRef.current}px`;
-      document.body.style.width = "100%";
-      document.body.style.overflow = "hidden";
+    if (!mobileMenuOpen) return;
 
-      requestAnimationFrame(() => {
-        firstNavLinkRef.current?.focus();
-      });
-    } else {
-      const top = document.body.style.top;
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      document.body.style.overflow = "";
-      if (top) {
-        window.scrollTo(0, scrollYRef.current);
+    const preventTouchMove = (e: TouchEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target?.closest("#mobile-nav-drawer")) {
+        e.preventDefault();
       }
-    }
+    };
+
+    document.body.style.overflow = "hidden";
+    document.addEventListener("touchmove", preventTouchMove, { passive: false });
+
+    requestAnimationFrame(() => {
+      firstNavLinkRef.current?.focus();
+    });
+
+    return () => {
+      document.body.style.overflow = "";
+      document.removeEventListener("touchmove", preventTouchMove);
+    };
   }, [mobileMenuOpen]);
 
   const closeMenu = () => {
     setMobileMenuOpen(false);
     toggleBtnRef.current?.focus();
+  };
+
+  const handleMobileNavClick = (id: string) => {
+    setActiveSection(id);
+    closeMenu();
   };
 
   useEffect(() => {
@@ -219,8 +223,7 @@ export function Header() {
                     aria-current={isActive ? "location" : undefined}
                     tabIndex={mobileMenuOpen ? 0 : -1}
                     onClick={() => {
-                      setActiveSection(item.id);
-                      closeMenu();
+                      handleMobileNavClick(item.id);
                     }}
                   >
                     <span className="mono mobile-nav-index">0{idx + 1}</span>
