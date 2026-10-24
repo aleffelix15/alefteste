@@ -456,6 +456,9 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   font-weight: 600;
   color: var(--text-white);
   letter-spacing: -0.01em;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  text-align: center;
 }
 
 .tech-symbol-role {
@@ -484,7 +487,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   border: 1px solid var(--line-hairline);
   background: var(--bg-obsidian);
   color: var(--text-muted);
-  font-size: 0.55rem;
+  font-size: 0.75rem;
 }
 
 .tech-symbol-badge.is-featured-badge {
@@ -500,7 +503,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   padding-top: 7px;
   border-top: 1px solid var(--line-hairline);
   width: 100%;
-  font-size: 0.55rem;
+  font-size: 0.75rem;
   line-height: 1.35;
   color: var(--text-muted);
   letter-spacing: 0.04em;
@@ -508,6 +511,23 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
 }
 
 /* Audit Dossier Drawer */
+.audit-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  cursor: pointer;
+  color: var(--text-white);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  padding-block: 4px;
+}
+
+.audit-summary::-webkit-details-marker {
+  display: none;
+}
+
 .tech-audit-dossier {
   margin-bottom: 28px;
   padding: 12px 18px;
@@ -655,5 +675,73 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
 
   .tech-footer-rule {
     display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .tech-filter-toolbar {
+    padding: 14px 12px;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .tech-filter-pills {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 8px;
+    padding-bottom: 6px;
+    mask-image: linear-gradient(90deg, #000 0%, #000 88%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 88%, transparent 100%);
+  }
+
+  .tech-filter-pill {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    white-space: nowrap;
+    min-height: 40px;
+  }
+
+  .tech-tier-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tech-tier-btn {
+    flex: 1 1 calc(50% - 8px);
+    min-height: 44px;
+    justify-content: center;
+  }
+
+  .tech-symbols-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 10px;
+    row-gap: 16px;
+  }
+
+  .tech-symbol-card {
+    padding: 14px 8px 12px;
+  }
+
+  .tech-symbol-name {
+    font-size: 0.8125rem;
+  }
+
+  .tech-symbol-emblem-wrap {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 6px;
+  }
+
+  .tech-audit-dossier {
+    padding: 10px 12px;
+  }
+
+  .audit-summary {
+    font-size: 0.75rem;
+    line-height: 1.4;
   }
 }
