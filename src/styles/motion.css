@@ -31,6 +31,7 @@ html.motion-ready [data-reveal] {
 html.motion-ready [data-reveal].is-visible {
   opacity: 1;
   transform: translate3d(0, 0, 0);
+  will-change: auto;
 }
 
 /* 2. Revelação tipográfica em máscara (curtain text reveal) */
@@ -58,6 +59,7 @@ html.motion-ready [data-reveal] .line-inner {
 html.motion-ready [data-reveal].is-visible .line-inner {
   transform: translate3d(0, 0, 0) rotate(0deg);
   opacity: 1;
+  will-change: auto;
 }
 
 /* 3. Cascata de elementos do Hero (.hero-stagger-fade) */
@@ -73,6 +75,31 @@ html.motion-ready [data-reveal] .hero-stagger-fade {
 html.motion-ready [data-reveal].is-visible .hero-stagger-fade {
   opacity: 1;
   transform: translate3d(0, 0, 0);
+  will-change: auto;
+}
+
+/* Otimização de Reveal para Viewports Móveis (Mais ágil & responsivo ao polegar) */
+@media (max-width: 768px) {
+  html.motion-ready [data-reveal] {
+    transform: translate3d(0, 10px, 0);
+    transition:
+      opacity 0.52s var(--ease-editorial) var(--reveal-delay, 0ms),
+      transform 0.52s var(--ease-editorial) var(--reveal-delay, 0ms);
+  }
+
+  html.motion-ready [data-reveal] .line-inner {
+    transform: translate3d(0, 100%, 0) rotate(0.6deg);
+    transition:
+      transform 0.62s var(--ease-editorial) var(--line-delay, 0ms),
+      opacity 0.52s var(--ease-editorial) var(--line-delay, 0ms);
+  }
+
+  html.motion-ready [data-reveal] .hero-stagger-fade {
+    transform: translate3d(0, 8px, 0);
+    transition:
+      opacity 0.48s var(--ease-editorial) var(--fade-delay, 0ms),
+      transform 0.48s var(--ease-editorial) var(--fade-delay, 0ms);
+  }
 }
 
 /* 4. Paralaxe suave + revelação da fotografia do estúdio (Hero) */
@@ -215,8 +242,26 @@ html.motion-ready [data-reveal].is-visible .project-stack-pill {
   pointer-events: none;
 }
 
-.btn-sheen:hover::after {
-  transform: rotate(24deg) translate3d(380%, 0, 0);
+@media (hover: hover) and (pointer: fine) {
+  .btn-sheen:hover::after {
+    transform: rotate(24deg) translate3d(380%, 0, 0);
+  }
+}
+
+/* Feedback tátil nos botões e elementos interativos no toque (estilo nativo iOS/Android) */
+.project-action-primary:active,
+.project-action-secondary:active,
+.tech-tier-btn:active,
+.tech-filter-pill:active,
+.screen-switch-btn:active,
+.case-study-trigger-btn:active,
+.ticker-pause-btn:active,
+.mobile-menu-toggle:active,
+.btn-email-copy:active,
+.btn-mailto-direct:active,
+.contact-secondary-card:active {
+  transform: scale(0.965);
+  transition: transform 0.1s cubic-bezier(0.25, 1, 0.4, 1);
 }
 
 /* 11. Indicador Animado de Leitura no Hero (.hero-scroll-cue) */

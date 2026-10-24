@@ -130,7 +130,8 @@ export function initPortfolioMotion(): () => void {
     }
 
     if (heroParallaxEl) {
-      if (!reducedMotionQuery.matches && scrollY < window.innerHeight * 1.4) {
+      const isMobile = window.innerWidth <= 768 || !finePointerQuery.matches;
+      if (!reducedMotionQuery.matches && !isMobile && scrollY < window.innerHeight * 1.4) {
         const offset = Math.min(72, scrollY * 0.12);
         heroParallaxEl.style.setProperty("--hero-parallax-y", `${offset.toFixed(1)}px`);
       } else {
@@ -223,98 +224,187 @@ export function initPortfolioMotion(): () => void {
     root.classList.remove("motion-ready");
   });
 
-  // 3. Luz direcional sutil nas pranchas e cartões ([data-tilt-card])
+  // 3 & 4. Efeitos de mouse/ponteiro fino (Tilt nas pranchas, Botões magnéticos e Cursor editorial)
+  // Otimização Mobile: NÃO registrar dezenas de ouvintes pointermove em telas touch
   const plateElements = Array.from(document.querySelectorAll<HTMLElement>("[data-tilt-card]"));
-
-  for (const plateEl of plateElements) {
-    let spotRaf = 0;
-
-    const handlePointerMove = (e: PointerEvent) => {
-      if (reducedMotionQuery.matches || !finePointerQuery.matches) return;
-      const clientX = e.clientX;
-      const clientY = e.clientY;
-
-      if (spotRaf) window.cancelAnimationFrame(spotRaf);
-
-      spotRaf = window.requestAnimationFrame(() => {
-        spotRaf = 0;
-        const rect = plateEl.getBoundingClientRect();
-        if (rect.width === 0 || rect.height === 0) return;
-
-        const relX = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
-        const relY = Math.min(1, Math.max(0, (clientY - rect.top) / rect.height));
-
-        plateEl.style.setProperty("--spot-x", `${(relX * 100).toFixed(1)}%`);
-        plateEl.style.setProperty("--spot-y", `${(relY * 100).toFixed(1)}%`);
-        plateEl.style.setProperty("--spot-opacity", "1");
-      });
-    };
-
-    const handlePointerLeave = () => {
-      if (spotRaf) {
-        window.cancelAnimationFrame(spotRaf);
-        spotRaf = 0;
-      }
-      plateEl.style.setProperty("--spot-opacity", "0");
-    };
-
-    plateEl.addEventListener("pointermove", handlePointerMove, { passive: true });
-    plateEl.addEventListener("pointerleave", handlePointerLeave, { passive: true });
-
-    cleanups.push(() => {
-      if (spotRaf) window.cancelAnimationFrame(spotRaf);
-      plateEl.removeEventListener("pointermove", handlePointerMove);
-      plateEl.removeEventListener("pointerleave", handlePointerLeave);
-    });
-  }
-
-  // 4. Botões e links magnéticos ([data-magnetic])
   const magneticElements = Array.from(document.querySelectorAll<HTMLElement>("[data-magnetic]"));
+  const cursorEl = document.querySelector<HTMLElement>("[data-editorial-cursor]");
+  const cursorTextEl = document.querySelector<HTMLElement>("[data-editorial-cursor-text]");
 
-  for (const magEl of magneticElements) {
-    let magRaf = 0;
+  let pointerCleanups: Array<() => void> = [];
 
-    const onMagMove = (e: PointerEvent) => {
-      if (reducedMotionQuery.matches || !finePointerQuery.matches) return;
-      const clientX = e.clientX;
-      const clientY = e.clientY;
+  const setupPointerInteractions = () => {
+    for (const fn of pointerCleanups) fn();
+    pointerCleanups = [];
 
-      if (magRaf) window.cancelAnimationFrame(magRaf);
+    if (reducedMotionQuery.matches || !finePointerQuery.matches) {
+      return;
+    }
 
-      magRaf = window.requestAnimationFrame(() => {
-        magRaf = 0;
-        const rect = magEl.getBoundingClientRect();
-        if (rect.width === 0 || rect.height === 0) return;
+    // 3. Luz direcional sutil nas pranchas e cartões ([data-tilt-card])
+    for (const plateEl of plateElements) {
+      let spotRaf = 0;
 
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
+      const handlePointerMove = (e: PointerEvent) => {
+        const clientX = e.clientX;
+        const clientY = e.clientY;
 
-        const deltaX = Math.max(-8, Math.min(8, (clientX - centerX) * 0.18));
-        const deltaY = Math.max(-6, Math.min(6, (clientY - centerY) * 0.18));
+        if (spotRaf) window.cancelAnimationFrame(spotRaf);
 
-        magEl.style.setProperty("--mag-x", `${deltaX.toFixed(2)}px`);
-        magEl.style.setProperty("--mag-y", `${deltaY.toFixed(2)}px`);
+        spotRaf = window.requestAnimationFrame(() => {
+          spotRaf = 0;
+          const rect = plateEl.getBoundingClientRect();
+          if (rect.width === 0 || rect.height === 0) return;
+
+          const relX = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+          const relY = Math.min(1, Math.max(0, (clientY - rect.top) / rect.height));
+
+          plateEl.style.setProperty("--spot-x", `${(relX * 100).toFixed(1)}%`);
+          plateEl.style.setProperty("--spot-y", `${(relY * 100).toFixed(1)}%`);
+          plateEl.style.setProperty("--spot-opacity", "1");
+        });
+      };
+
+      const handlePointerLeave = () => {
+        if (spotRaf) {
+          window.cancelAnimationFrame(spotRaf);
+          spotRaf = 0;
+        }
+        plateEl.style.setProperty("--spot-opacity", "0");
+      };
+
+      plateEl.addEventListener("pointermove", handlePointerMove, { passive: true });
+      plateEl.addEventListener("pointerleave", handlePointerLeave, { passive: true });
+
+      pointerCleanups.push(() => {
+        if (spotRaf) window.cancelAnimationFrame(spotRaf);
+        plateEl.removeEventListener("pointermove", handlePointerMove);
+        plateEl.removeEventListener("pointerleave", handlePointerLeave);
       });
-    };
+    }
 
-    const onMagLeave = () => {
-      if (magRaf) {
-        window.cancelAnimationFrame(magRaf);
-        magRaf = 0;
-      }
-      magEl.style.setProperty("--mag-x", "0px");
-      magEl.style.setProperty("--mag-y", "0px");
-    };
+    // 4. Botões e links magnéticos ([data-magnetic])
+    for (const magEl of magneticElements) {
+      let magRaf = 0;
 
-    magEl.addEventListener("pointermove", onMagMove, { passive: true });
-    magEl.addEventListener("pointerleave", onMagLeave, { passive: true });
+      const onMagMove = (e: PointerEvent) => {
+        const clientX = e.clientX;
+        const clientY = e.clientY;
 
-    cleanups.push(() => {
-      if (magRaf) window.cancelAnimationFrame(magRaf);
-      magEl.removeEventListener("pointermove", onMagMove);
-      magEl.removeEventListener("pointerleave", onMagLeave);
-    });
-  }
+        if (magRaf) window.cancelAnimationFrame(magRaf);
+
+        magRaf = window.requestAnimationFrame(() => {
+          magRaf = 0;
+          const rect = magEl.getBoundingClientRect();
+          if (rect.width === 0 || rect.height === 0) return;
+
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+
+          const deltaX = Math.max(-8, Math.min(8, (clientX - centerX) * 0.18));
+          const deltaY = Math.max(-6, Math.min(6, (clientY - centerY) * 0.18));
+
+          magEl.style.setProperty("--mag-x", `${deltaX.toFixed(2)}px`);
+          magEl.style.setProperty("--mag-y", `${deltaY.toFixed(2)}px`);
+        });
+      };
+
+      const onMagLeave = () => {
+        if (magRaf) {
+          window.cancelAnimationFrame(magRaf);
+          magRaf = 0;
+        }
+        magEl.style.setProperty("--mag-x", "0px");
+        magEl.style.setProperty("--mag-y", "0px");
+      };
+
+      magEl.addEventListener("pointermove", onMagMove, { passive: true });
+      magEl.addEventListener("pointerleave", onMagLeave, { passive: true });
+
+      pointerCleanups.push(() => {
+        if (magRaf) window.cancelAnimationFrame(magRaf);
+        magEl.removeEventListener("pointermove", onMagMove);
+        magEl.removeEventListener("pointerleave", onMagLeave);
+      });
+    }
+
+    // 6. Cursor Editorial Contextual ([data-editorial-cursor])
+    if (cursorEl && cursorTextEl) {
+      let targetX = -100;
+      let targetY = -100;
+      let currentX = -100;
+      let currentY = -100;
+      let cursorRaf = 0;
+      let cursorVisible = false;
+
+      const updateCursorPosition = () => {
+        cursorRaf = 0;
+        currentX += (targetX - currentX) * 0.18;
+        currentY += (targetY - currentY) * 0.18;
+
+        cursorEl.style.transform = `translate3d(${currentX.toFixed(1)}px, ${currentY.toFixed(1)}px, 0)`;
+
+        if (Math.abs(targetX - currentX) > 0.15 || Math.abs(targetY - currentY) > 0.15) {
+          cursorRaf = window.requestAnimationFrame(updateCursorPosition);
+        }
+      };
+
+      const onWindowPointerMove = (e: PointerEvent) => {
+        targetX = e.clientX;
+        targetY = e.clientY;
+
+        if (!cursorVisible) {
+          currentX = targetX;
+          currentY = targetY;
+          cursorVisible = true;
+          cursorEl.classList.add("is-active");
+        }
+
+        const targetNode = e.target as HTMLElement | null;
+        const labeledAncestor = targetNode?.closest<HTMLElement>("[data-cursor-label]");
+
+        if (labeledAncestor) {
+          const label = labeledAncestor.getAttribute("data-cursor-label") || "";
+          if (cursorTextEl.textContent !== label) {
+            cursorTextEl.textContent = label;
+          }
+          cursorEl.classList.add("has-label");
+        } else {
+          cursorEl.classList.remove("has-label");
+        }
+
+        if (!cursorRaf) {
+          cursorRaf = window.requestAnimationFrame(updateCursorPosition);
+        }
+      };
+
+      const onWindowPointerLeave = () => {
+        cursorVisible = false;
+        cursorEl.classList.remove("is-active", "has-label");
+      };
+
+      window.addEventListener("pointermove", onWindowPointerMove, { passive: true });
+      document.addEventListener("mouseleave", onWindowPointerLeave, { passive: true });
+
+      pointerCleanups.push(() => {
+        if (cursorRaf) window.cancelAnimationFrame(cursorRaf);
+        window.removeEventListener("pointermove", onWindowPointerMove);
+        document.removeEventListener("mouseleave", onWindowPointerLeave);
+      });
+    }
+  };
+
+  setupPointerInteractions();
+
+  const onPointerCapabilityChange = () => {
+    setupPointerInteractions();
+  };
+
+  finePointerQuery.addEventListener("change", onPointerCapabilityChange);
+  cleanups.push(() => {
+    finePointerQuery.removeEventListener("change", onPointerCapabilityChange);
+    for (const fn of pointerCleanups) fn();
+  });
 
   // 5. Acordeão técnico com Web Animations API (details[data-animated-details])
   const detailsElements = Array.from(
@@ -386,79 +476,6 @@ export function initPortfolioMotion(): () => void {
     cleanups.push(() => {
       summaryEl.removeEventListener("click", onSummaryClick);
       currentAnimation?.cancel();
-    });
-  }
-
-  // 6. Cursor Editorial Contextual ([data-editorial-cursor])
-  const cursorEl = document.querySelector<HTMLElement>("[data-editorial-cursor]");
-  const cursorTextEl = document.querySelector<HTMLElement>("[data-editorial-cursor-text]");
-
-  if (cursorEl && cursorTextEl) {
-    let targetX = -100;
-    let targetY = -100;
-    let currentX = -100;
-    let currentY = -100;
-    let cursorRaf = 0;
-    let cursorVisible = false;
-
-    const updateCursorPosition = () => {
-      cursorRaf = 0;
-      currentX += (targetX - currentX) * 0.18;
-      currentY += (targetY - currentY) * 0.18;
-
-      cursorEl.style.transform = `translate3d(${currentX.toFixed(1)}px, ${currentY.toFixed(1)}px, 0)`;
-
-      if (Math.abs(targetX - currentX) > 0.15 || Math.abs(targetY - currentY) > 0.15) {
-        cursorRaf = window.requestAnimationFrame(updateCursorPosition);
-      }
-    };
-
-    const onWindowPointerMove = (e: PointerEvent) => {
-      if (reducedMotionQuery.matches || !finePointerQuery.matches) {
-        cursorEl.classList.remove("is-active", "has-label");
-        return;
-      }
-
-      targetX = e.clientX;
-      targetY = e.clientY;
-
-      if (!cursorVisible) {
-        currentX = targetX;
-        currentY = targetY;
-        cursorVisible = true;
-        cursorEl.classList.add("is-active");
-      }
-
-      const targetNode = e.target as HTMLElement | null;
-      const labeledAncestor = targetNode?.closest<HTMLElement>("[data-cursor-label]");
-
-      if (labeledAncestor) {
-        const label = labeledAncestor.getAttribute("data-cursor-label") || "";
-        if (cursorTextEl.textContent !== label) {
-          cursorTextEl.textContent = label;
-        }
-        cursorEl.classList.add("has-label");
-      } else {
-        cursorEl.classList.remove("has-label");
-      }
-
-      if (!cursorRaf) {
-        cursorRaf = window.requestAnimationFrame(updateCursorPosition);
-      }
-    };
-
-    const onWindowPointerLeave = () => {
-      cursorVisible = false;
-      cursorEl.classList.remove("is-active", "has-label");
-    };
-
-    window.addEventListener("pointermove", onWindowPointerMove, { passive: true });
-    document.addEventListener("mouseleave", onWindowPointerLeave, { passive: true });
-
-    cleanups.push(() => {
-      if (cursorRaf) window.cancelAnimationFrame(cursorRaf);
-      window.removeEventListener("pointermove", onWindowPointerMove);
-      document.removeEventListener("mouseleave", onWindowPointerLeave);
     });
   }
 

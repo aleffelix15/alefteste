@@ -51,11 +51,13 @@
   font-weight: 600;
 }
 
-.projects-quick-pill:hover {
-  color: var(--text-white);
-  border-color: var(--accent-electric);
-  background: var(--bg-elevated);
-  transform: translateX(4px);
+@media (hover: hover) and (pointer: fine) {
+  .projects-quick-pill:hover {
+    color: var(--text-white);
+    border-color: var(--accent-electric);
+    background: var(--bg-elevated);
+    transform: translateX(4px);
+  }
 }
 
 /* Coluna Direita: Grid de Projetos */
@@ -100,14 +102,16 @@
   pointer-events: none;
 }
 
-.project-editorial-feature:hover {
-  border-color: var(--line-accent);
-  box-shadow: var(--shadow-lg), 0 0 24px -12px var(--accent-electric-glow);
-  transform: translateY(-2px);
-}
+@media (hover: hover) and (pointer: fine) {
+  .project-editorial-feature:hover {
+    border-color: var(--line-accent);
+    box-shadow: var(--shadow-lg), 0 0 24px -12px var(--accent-electric-glow);
+    transform: translateY(-2px);
+  }
 
-.project-editorial-feature:hover::before {
-  opacity: 0.9;
+  .project-editorial-feature:hover::before {
+    opacity: 0.9;
+  }
 }
 
 /* Moldura de Captura / Mockup (Ilha Escura Intencional) */
@@ -460,27 +464,29 @@
   box-shadow: 0 4px 16px -6px rgba(22, 119, 255, 0.45);
 }
 
-.project-action-primary:hover {
-  background: var(--accent-electric-hover);
-  border-color: var(--accent-cyan);
-  box-shadow: 0 8px 20px -6px rgba(22, 119, 255, 0.6);
-  transform: translateY(-1px);
-}
+@media (hover: hover) and (pointer: fine) {
+  .project-action-primary:hover {
+    background: var(--accent-electric-hover);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 8px 20px -6px rgba(22, 119, 255, 0.6);
+    transform: translateY(-1px);
+  }
 
-.project-action-primary:hover .arrow-inline {
-  transform: translateX(4px);
+  .project-action-primary:hover .arrow-inline {
+    transform: translateX(4px);
+  }
+
+  .project-action-secondary:hover {
+    color: var(--text-white);
+    border-color: var(--accent-electric);
+    background: var(--bg-elevated);
+  }
 }
 
 .project-action-secondary {
   background: var(--bg-obsidian);
   border: 1px solid var(--line-hairline);
   color: var(--text-body);
-}
-
-.project-action-secondary:hover {
-  color: var(--text-white);
-  border-color: var(--accent-electric);
-  background: var(--bg-elevated);
 }
 
 /* Responsividade de Projetos */
@@ -497,5 +503,29 @@
   .projects-quick-nav {
     flex-direction: row;
     flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 640px) {
+  .project-editorial-feature {
+    padding: 20px 16px;
+    gap: 20px;
+  }
+
+  .project-links-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .project-action-primary,
+  .project-action-secondary {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+  }
+
+  .screen-switch-btn {
+    min-height: 38px;
+    padding: 6px 12px;
   }
 }

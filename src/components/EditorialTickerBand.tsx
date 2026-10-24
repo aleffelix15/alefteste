@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export const tickerPhrases = [
   "ENGENHARIA DE SOFTWARE",
@@ -6,15 +6,37 @@ export const tickerPhrases = [
   "DIREÇÃO EDITORIAL MONOCROMÁTICA",
   "01. VERSO — LEITURA PROFUNDA",
   "02. DECODE — DESIGN GRÁFICO INTERATIVO",
+  "03. NUDEMO — CONCEITO 3D & MOBILE",
   "INTERFACES AUTORAIS & CÓDIGO LIMPO",
 ];
 
 export function EditorialTickerBand() {
-  const [paused, setPaused] = useState(false);
+  const [userPaused, setUserPaused] = useState(false);
+  const [inView, setInView] = useState(true);
+  const bandRef = useRef<HTMLDivElement>(null);
+
+  // Pausa automática fora da viewport para poupar bateria e ciclos de GPU no mobile
+  useEffect(() => {
+    const el = bandRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setInView(entry.isIntersecting);
+      },
+      { threshold: 0.05 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const isPaused = userPaused || !inView;
 
   return (
     <div
-      className={`editorial-ticker-band ${paused ? "is-paused" : ""}`}
+      ref={bandRef}
+      className={`editorial-ticker-band ${isPaused ? "is-paused" : ""}`}
       role="region"
       aria-label="Faixa editorial de temas e projetos"
     >
@@ -42,14 +64,14 @@ export function EditorialTickerBand() {
       <button
         type="button"
         className="ticker-pause-btn mono"
-        aria-pressed={paused}
-        aria-label={paused ? "Retomar movimento da faixa editorial" : "Pausar movimento da faixa editorial"}
-        onClick={() => setPaused((prev) => !prev)}
+        aria-pressed={userPaused}
+        aria-label={userPaused ? "Retomar movimento da faixa editorial" : "Pausar movimento da faixa editorial"}
+        onClick={() => setUserPaused((prev) => !prev)}
       >
         <span className="ticker-pause-glyph" aria-hidden="true">
-          {paused ? "▶" : "❚❚"}
+          {userPaused ? "▶" : "❚❚"}
         </span>
-        <span>{paused ? "RETOMAR" : "PAUSAR"}</span>
+        <span>{userPaused ? "RETOMAR" : "PAUSAR"}</span>
       </button>
     </div>
   );

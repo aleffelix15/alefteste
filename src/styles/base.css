@@ -173,6 +173,8 @@ main:focus {
 .editorial-chapter {
   padding-block: 88px;
   border-bottom: 1px solid var(--line-hairline);
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 750px;
 }
 
 @media (max-width: 768px) {

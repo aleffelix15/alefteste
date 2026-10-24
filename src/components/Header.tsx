@@ -179,7 +179,7 @@ export function Header() {
             {navItems.map((item, idx) => {
               const isActive = activeSection === item.id;
               return (
-                <li key={item.id}>
+                <li key={item.id} style={{ "--item-idx": idx } as React.CSSProperties}>
                   <a
                     href={`#${item.id}`}
                     className={`mobile-nav-link ${isActive ? "is-active" : ""}`}

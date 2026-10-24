@@ -151,11 +151,13 @@
     transform 0.2s ease;
 }
 
-.tech-tier-btn:hover {
-  color: var(--text-white);
-  border-color: var(--line-strong);
-  background: var(--bg-elevated);
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .tech-tier-btn:hover {
+    color: var(--text-white);
+    border-color: var(--line-strong);
+    background: var(--bg-elevated);
+    transform: translateY(-1px);
+  }
 }
 
 .tech-tier-btn.is-active {
@@ -224,13 +226,13 @@
 }
 
 .tech-filter-pill {
-  min-height: 36px;
-  padding: 5px 12px;
+  min-height: 38px;
+  padding: 6px 13px;
   border-radius: var(--radius-md);
   border: 1px solid var(--line-hairline);
   background: var(--bg-obsidian);
   color: var(--text-body);
-  font-size: 0.66rem;
+  font-size: 0.68rem;
   transition:
     border-color 0.2s ease,
     color 0.2s ease,
@@ -238,10 +240,12 @@
     transform 0.2s ease;
 }
 
-.tech-filter-pill:hover {
-  color: var(--text-white);
-  border-color: rgba(22, 119, 255, 0.55);
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .tech-filter-pill:hover {
+    color: var(--text-white);
+    border-color: rgba(22, 119, 255, 0.55);
+    transform: translateY(-1px);
+  }
 }
 
 .tech-filter-pill.is-primary-repo {
@@ -401,24 +405,37 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   transition: transform 0.36s var(--ease-editorial), filter 0.3s ease;
 }
 
-.tech-symbol-card:hover {
-  border-color: var(--line-accent);
-  background: var(--bg-elevated);
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md), 0 0 18px -8px var(--accent-electric-glow);
+@media (hover: hover) and (pointer: fine) {
+  .tech-symbol-card:hover {
+    border-color: var(--line-accent);
+    background: var(--bg-elevated);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md), 0 0 18px -8px var(--accent-electric-glow);
+  }
+
+  .tech-symbol-card:hover .tech-symbol-halo {
+    opacity: 0.38;
+    transform: scale(1.2);
+  }
+
+  .tech-symbol-card:hover .tech-symbol-emblem-wrap {
+    transform: translate3d(0, -4px, 0) scale(1.07);
+  }
+
+  .tech-symbol-card:hover .emblem-spin-hover {
+    animation: emblemOrbitSpin 8s linear infinite;
+  }
 }
 
-.tech-symbol-card:hover .tech-symbol-halo {
-  opacity: 0.38;
-  transform: scale(1.2);
-}
-
-.tech-symbol-card:hover .tech-symbol-emblem-wrap {
-  transform: translate3d(0, -4px, 0) scale(1.07);
-}
-
-.tech-symbol-card:hover .emblem-spin-hover {
-  animation: emblemOrbitSpin 8s linear infinite;
+@media (hover: none) or (pointer: coarse) {
+  .tech-symbol-card:active {
+    border-color: var(--line-accent);
+    background: var(--bg-elevated);
+    transform: scale(0.975);
+  }
+  .tech-symbol-card:active .tech-symbol-halo {
+    opacity: 0.32;
+  }
 }
 
 .tech-symbol-name {

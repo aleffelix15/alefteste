@@ -42,12 +42,31 @@
   box-shadow: var(--shadow-sm);
 }
 
-.btn-cv-secondary:hover {
-  border-color: var(--accent-electric);
-  background: var(--bg-elevated);
-  color: var(--accent-cyan);
-  box-shadow: var(--shadow-md), 0 4px 14px -6px var(--accent-electric-glow);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .btn-cv-secondary:hover {
+    border-color: var(--accent-electric);
+    background: var(--bg-elevated);
+    color: var(--accent-cyan);
+    box-shadow: var(--shadow-md), 0 4px 14px -6px var(--accent-electric-glow);
+    transform: translateY(-2px);
+  }
+
+  .btn-cv-header:hover {
+    border-color: var(--accent-electric);
+    background: var(--bg-concrete);
+    color: var(--text-white);
+    box-shadow: 0 4px 14px -6px var(--accent-electric-glow);
+    transform: translateY(-1px);
+  }
+
+  .btn-cv-action:hover .btn-cv-download-icon .cv-icon-arrow {
+    transform: translateY(2.5px);
+  }
+}
+
+.btn-cv-action:active {
+  transform: scale(0.965);
+  transition: transform 0.1s cubic-bezier(0.25, 1, 0.4, 1);
 }
 
 /* Variante Header (Discreta e Compacta) */
@@ -61,14 +80,6 @@
   color: var(--text-body);
 }
 
-.btn-cv-header:hover {
-  border-color: var(--accent-electric);
-  background: var(--bg-concrete);
-  color: var(--text-white);
-  box-shadow: 0 4px 14px -6px var(--accent-electric-glow);
-  transform: translateY(-1px);
-}
-
 /* Animação do Ícone de Download */
 .btn-cv-download-icon {
   color: var(--accent-cyan);
@@ -78,10 +89,6 @@
 
 .btn-cv-download-icon .cv-icon-arrow {
   transition: transform 0.24s var(--ease-editorial);
-}
-
-.btn-cv-action:hover .btn-cv-download-icon .cv-icon-arrow {
-  transform: translateY(2.5px);
 }
 
 /* Feedback de Estados */
