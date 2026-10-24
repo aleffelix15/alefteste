@@ -1,15 +1,15 @@
 /* ==========================================================================
-   CAPÍTULO 04 (SEÇÃO 05) — CONTATO ("Vamos conversar?")
+   CAPÍTULO 05 — CONTATO ("Vamos conversar?")
+   Direção de Arte: Editorial Técnica & Foco nos Canais Oficiais
    ========================================================================== */
 
-.contact-editorial-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
-  align-items: start;
+.contact-section {
+  position: relative;
 }
 
-.contact-left-col {
+.contact-editorial-layout {
+  max-width: 760px;
+  margin-inline: auto;
   display: flex;
   flex-direction: column;
 }
@@ -24,27 +24,28 @@
 }
 
 .contact-lead-text {
-  font-size: 1rem;
+  font-size: 1.02rem;
   line-height: 1.68;
   color: var(--text-body);
-  max-width: 50ch;
-  margin-bottom: 24px;
+  max-width: 64ch;
+  margin-bottom: 28px;
 }
 
 /* ==========================================================================
-   BOTÃO DE E-MAIL COM COPIAR E FEEDBACK ANIMADO
+   DESTAQUE PRINCIPAL: CARTÃO DE E-MAIL COM COPIAR E FEEDBACK
    ========================================================================== */
 
 .contact-email-copy-box {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 18px 20px;
+  gap: 12px;
+  padding: 24px 28px;
   border-radius: var(--radius-xl);
   border: 1px solid var(--line-hairline);
   background: var(--bg-concrete);
   margin-bottom: 24px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
+  width: 100%;
 }
 
 .email-copy-header {
@@ -53,7 +54,7 @@
   justify-content: space-between;
   gap: 12px;
   color: var(--text-muted);
-  font-size: 0.65rem;
+  font-size: 0.6875rem;
   letter-spacing: 0.08em;
 }
 
@@ -64,36 +65,38 @@
 
 .email-copy-action-row {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .btn-email-copy {
   flex: 1;
-  min-width: 220px;
+  min-width: 240px;
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  min-height: 44px;
-  padding: 10px 16px;
+  gap: 14px;
+  min-height: 50px;
+  padding: 12px 20px;
   border-radius: var(--radius-md);
   border: 1px solid var(--line-hairline);
   background: var(--bg-obsidian);
   color: var(--text-white);
-  font-size: 0.85rem;
+  font-size: clamp(0.88rem, 1.1vw, 1.02rem);
+  letter-spacing: 0.04em;
   transition:
     border-color 0.2s ease,
     background-color 0.2s ease,
     box-shadow 0.2s ease,
-    color 0.2s ease;
+    color 0.2s ease,
+    transform 0.2s var(--ease-editorial);
 }
 
 .btn-email-copy:hover {
   border-color: var(--accent-electric);
   background: var(--bg-elevated);
-  box-shadow: 0 4px 14px -6px var(--accent-electric-glow);
+  box-shadow: 0 4px 18px -6px var(--accent-electric-glow);
+  transform: translateY(-1px);
 }
 
 .btn-email-copy.is-copied {
@@ -104,13 +107,13 @@
 
 .email-address-text {
   font-family: var(--font-mono);
-  font-size: 0.85rem;
-  letter-spacing: -0.01em;
+  font-weight: 500;
 }
 
 .email-copy-icon {
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--accent-cyan);
+  flex-shrink: 0;
 }
 
 .btn-email-copy.is-copied .email-copy-icon {
@@ -120,283 +123,161 @@
 .btn-mailto-direct {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  min-height: 44px;
-  padding: 10px 16px;
+  min-height: 50px;
+  padding: 12px 20px;
   border-radius: var(--radius-md);
   border: 1px solid var(--line-hairline);
   background: var(--bg-obsidian);
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-family: var(--font-mono);
+  white-space: nowrap;
   transition:
     color 0.2s ease,
     border-color 0.2s ease,
-    background-color 0.2s ease;
+    background-color 0.2s ease,
+    transform 0.2s var(--ease-editorial);
 }
 
 .btn-mailto-direct:hover {
   color: var(--accent-cyan);
-  border-color: var(--line-strong);
+  border-color: var(--accent-electric);
   background: var(--bg-elevated);
+  transform: translateY(-1px);
 }
 
-/* Links Rápidos de Contato */
-.contact-fast-actions {
-  display: flex;
-  flex-wrap: wrap;
+/* ==========================================================================
+   GRADE DE CANAIS SECUNDÁRIOS (WHATSAPP, CV, GITHUB, LINKEDIN)
+   ========================================================================== */
+
+.contact-secondary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 12px;
+  align-items: start;
+  width: 100%;
 }
 
-.contact-editorial-link {
+.contact-action-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  min-height: 42px;
-  padding: 8px 16px;
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 14px;
   border-radius: var(--radius-md);
   border: 1px solid var(--line-hairline);
   background: var(--bg-concrete);
   font-size: 0.82rem;
   font-weight: 500;
   color: var(--text-white);
-  transition:
-    border-color 0.22s ease,
-    background-color 0.22s ease,
-    box-shadow 0.22s ease;
-}
-
-.contact-editorial-link:hover {
-  border-color: var(--accent-electric);
-  background: var(--bg-elevated);
-  box-shadow: 0 6px 18px -8px var(--accent-electric-glow);
-}
-
-.contact-editorial-link:hover .arrow-inline {
-  transform: translateX(3px);
-  color: var(--accent-cyan);
-}
-
-/* ==========================================================================
-   FORMULÁRIO DE CONTATO COM VALIDAÇÃO INLINE
-   ========================================================================== */
-
-.contact-form-card {
-  position: relative;
-  border-radius: var(--radius-xl);
-  border: 1px solid var(--line-hairline);
-  background: var(--bg-concrete);
-  padding: 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
-}
-
-.form-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--line-hairline);
-  color: var(--accent-cyan);
-  font-size: 0.6875rem;
-  letter-spacing: 0.1em;
-}
-
-.form-status-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent-electric);
-}
-
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.form-field-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.form-label {
-  font-size: 0.65rem;
-  color: var(--text-muted);
-  letter-spacing: 0.08em;
-}
-
-.form-label span {
-  color: var(--accent-cyan);
-}
-
-.form-input {
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--line-hairline);
-  background: var(--bg-obsidian);
-  color: var(--text-white);
-  font-family: var(--font-sans);
-  font-size: 0.9rem;
-  line-height: 1.5;
-  transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: var(--accent-electric);
-  box-shadow: 0 0 0 3px var(--accent-electric-soft);
-  background: var(--bg-elevated);
-}
-
-.form-input.has-error {
-  border-color: var(--danger-border);
-  box-shadow: 0 0 0 2px var(--danger-bg);
-}
-
-.form-textarea {
-  resize: vertical;
-  min-height: 110px;
-}
-
-.form-error-msg {
-  font-size: 0.65rem;
-  color: var(--danger-text);
-  padding-top: 2px;
-}
-
-/* Prevenção de fundo amarelo/escuro no autofill do navegador */
-.form-input:-webkit-autofill,
-.form-input:-webkit-autofill:hover,
-.form-input:-webkit-autofill:focus,
-.form-textarea:-webkit-autofill,
-.form-textarea:-webkit-autofill:hover,
-.form-textarea:-webkit-autofill:focus {
-  -webkit-text-fill-color: var(--text-white);
-  -webkit-box-shadow: 0 0 0px 1000px var(--bg-obsidian) inset;
-  box-shadow: 0 0 0px 1000px var(--bg-obsidian) inset;
-  transition: background-color 5000s ease-in-out 0s;
-}
-
-.btn-form-submit {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  min-height: 48px;
-  padding: 12px 24px;
-  border-radius: var(--radius-md);
-  background: var(--accent-electric);
-  color: var(--text-white);
-  font-size: 0.85rem;
-  font-weight: 600;
-  border: 1px solid rgba(73, 180, 255, 0.4);
-  box-shadow: 0 6px 20px -6px rgba(22, 119, 255, 0.5);
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
   cursor: pointer;
   transition:
-    background-color 0.22s ease,
     border-color 0.22s ease,
+    background-color 0.22s ease,
+    color 0.22s ease,
     box-shadow 0.22s ease,
     transform 0.22s var(--ease-editorial);
 }
 
-.btn-form-submit:hover:not(:disabled) {
-  background: var(--accent-electric-hover);
-  border-color: var(--accent-cyan);
-  box-shadow: 0 10px 24px -6px rgba(22, 119, 255, 0.65);
+.contact-action-btn:hover {
+  border-color: var(--accent-electric);
+  background: var(--bg-elevated);
+  color: var(--accent-cyan);
+  box-shadow: var(--shadow-md), 0 4px 14px -6px var(--accent-electric-glow);
   transform: translateY(-2px);
 }
 
-.btn-form-submit:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
+.contact-action-btn .btn-arrow {
+  display: inline-block;
+  color: var(--text-muted);
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
-/* Estado de Sucesso */
-.form-success-state {
+.contact-action-btn:hover .btn-arrow {
+  transform: translateX(3px);
+  color: var(--accent-cyan);
+}
+
+.btn-cv-contact:hover .btn-arrow {
+  transform: translateY(2.5px);
+  color: var(--accent-cyan);
+}
+
+/* Bloco do Currículo com Metadados Alinhados */
+.contact-cv-block {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 14px;
-  padding: 32px 16px;
+  width: 100%;
 }
 
-.success-icon {
+.contact-cv-submeta {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 2px solid var(--success-border);
-  background: var(--success-bg);
-  color: var(--success-text);
-  font-size: 1.4rem;
-  font-weight: 700;
-}
-
-.success-title {
-  font-family: var(--font-serif);
-  font-size: 1.35rem;
-  color: var(--text-white);
-}
-
-.success-desc {
-  font-size: 0.88rem;
-  line-height: 1.6;
-  color: var(--text-body);
-  max-width: 36ch;
-}
-
-.btn-form-reset {
-  padding: 8px 18px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--line-hairline);
-  background: var(--bg-obsidian);
-  color: var(--accent-cyan);
-  font-size: 0.72rem;
-  margin-top: 8px;
-  transition: border-color 0.2s ease, color 0.2s ease;
-}
-
-.btn-form-reset:hover {
-  border-color: var(--accent-electric);
-  color: var(--text-white);
-}
-
-/* Banner de Erro */
-.form-error-banner {
-  padding: 12px 14px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--danger-border);
-  background: var(--danger-bg);
-  font-size: 0.78rem;
-  line-height: 1.5;
-  color: var(--danger-text);
-  display: flex;
-  flex-direction: column;
   gap: 6px;
+  padding-top: 8px;
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  text-align: center;
 }
 
-.form-mailto-fallback {
-  color: inherit;
-  font-weight: 600;
+.contact-cv-submeta .submeta-sep {
+  color: var(--line-strong);
+}
+
+.contact-cv-view-link {
+  color: var(--accent-cyan);
+  transition: color 0.2s ease, text-decoration 0.2s ease;
   text-decoration: underline;
-  font-size: 0.72rem;
+  text-underline-offset: 3px;
+  font-size: 0.6875rem;
 }
 
-@media (max-width: 960px) {
-  .contact-editorial-grid {
+.contact-cv-view-link:hover {
+  color: var(--text-white);
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE (DESKTOP -> TABLET -> MOBILE)
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  .contact-secondary-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .contact-email-copy-box {
+    padding: 20px 16px;
+  }
+
+  .email-copy-action-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-email-copy,
+  .btn-mailto-direct {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 440px) {
+  .contact-secondary-grid {
     grid-template-columns: 1fr;
-    gap: 36px;
+  }
+
+  .contact-cv-submeta {
+    flex-wrap: wrap;
   }
 }

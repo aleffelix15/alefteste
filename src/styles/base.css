@@ -70,8 +70,8 @@ body {
 .about-editorial-grid > *,
 .about-photos-montage > *,
 .tech-editorial-layout > *,
-.contact-editorial-grid > *,
-.contact-right-cards > * {
+.contact-editorial-layout > *,
+.contact-secondary-grid > * {
   min-width: 0;
 }
 
