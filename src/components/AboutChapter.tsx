@@ -66,12 +66,12 @@ export function AboutChapter() {
                     <source
                       type="image/avif"
                       srcSet={`${aboutData.studioDeskImage.base}-640.avif 640w, ${aboutData.studioDeskImage.base}.avif 1120w`}
-                      sizes="(max-width: 900px) 100vw, 38vw"
+                      sizes="(max-width: 768px) 100vw, 38vw"
                     />
                     <source
                       type="image/webp"
                       srcSet={`${aboutData.studioDeskImage.base}-640.webp 640w, ${aboutData.studioDeskImage.base}.webp 1120w`}
-                      sizes="(max-width: 900px) 100vw, 38vw"
+                      sizes="(max-width: 768px) 100vw, 38vw"
                     />
                     <img
                       src={`${aboutData.studioDeskImage.base}.webp`}
@@ -99,11 +99,13 @@ export function AboutChapter() {
                   <picture>
                     <source
                       type="image/avif"
-                      srcSet={`${aboutData.realPortraitImage.base}.avif`}
+                      srcSet={`${aboutData.realPortraitImage.base}-640.avif 640w, ${aboutData.realPortraitImage.base}.avif 720w`}
+                      sizes="(max-width: 768px) 100vw, 30vw"
                     />
                     <source
                       type="image/webp"
-                      srcSet={`${aboutData.realPortraitImage.base}.webp`}
+                      srcSet={`${aboutData.realPortraitImage.base}-640.webp 640w, ${aboutData.realPortraitImage.base}.webp 720w`}
+                      sizes="(max-width: 768px) 100vw, 30vw"
                     />
                     <img
                       src={`${aboutData.realPortraitImage.base}.webp`}

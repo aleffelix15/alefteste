@@ -74,6 +74,7 @@ export const heroData = {
   ],
   portraitImage: {
     base: "/images/alef-portrait-bw",
+    base640: "/images/alef-portrait-bw-640",
     alt: "Retrato em preto e branco de Álef Felix Teixeira, estudante de Engenharia de Software.",
     caption: "ÁLEF FELIX TEIXEIRA · ENGENHARIA DE SOFTWARE",
   },

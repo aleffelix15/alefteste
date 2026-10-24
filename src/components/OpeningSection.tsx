@@ -100,6 +100,16 @@ export function OpeningSection() {
       <div className="hero-backdrop-wrap" aria-hidden="true">
         <picture>
           <source
+            media="(max-width: 640px)"
+            type="image/avif"
+            srcSet={`${heroData.portraitImage.base640}.avif`}
+          />
+          <source
+            media="(max-width: 640px)"
+            type="image/webp"
+            srcSet={`${heroData.portraitImage.base640}.webp`}
+          />
+          <source
             type="image/avif"
             srcSet={`${heroData.portraitImage.base}.avif`}
           />
@@ -112,6 +122,7 @@ export function OpeningSection() {
             alt=""
             width={720}
             height={900}
+            sizes="(max-width: 640px) 100vw, 46vw"
             fetchPriority="high"
             decoding="async"
             className="hero-backdrop-img hero-portrait-duotone"
