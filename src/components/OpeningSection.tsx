@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { heroData } from "../data";
 import { RollText } from "./RollText";
 import { CvButton } from "./CvButton";

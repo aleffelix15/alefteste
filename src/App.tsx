@@ -1,14 +1,12 @@
-import React, { useEffect } from "react";
-import {
-  Header,
-  OpeningSection,
-  EditorialTickerBand,
-  ProjectsChapter,
-  AboutChapter,
-  TechChapter,
-  ContactChapter,
-  Footer,
-} from "./sections";
+import { useEffect } from "react";
+import { Header } from "./components/Header";
+import { OpeningSection } from "./components/OpeningSection";
+import { EditorialTickerBand } from "./components/EditorialTickerBand";
+import { ProjectsChapter } from "./components/ProjectsChapter";
+import { AboutChapter } from "./components/AboutChapter";
+import { TechChapter } from "./components/TechChapter";
+import { ContactChapter } from "./components/ContactChapter";
+import { Footer } from "./components/Footer";
 import { Preloader } from "./components/Preloader";
 import { initPortfolioMotion } from "./motion";
 

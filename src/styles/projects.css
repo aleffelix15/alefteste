@@ -211,25 +211,6 @@
   transition: opacity 0.3s ease;
 }
 
-/* Container do Diagrama Vetorial BANKTEF (Ilha Escura Intencional) */
-.project-arch-container {
-  position: relative;
-  overflow: hidden;
-  background: var(--surface-inverse);
-}
-
-.banktef-diagram-wrap {
-  width: 100%;
-  overflow-x: auto;
-  background: var(--surface-inverse);
-}
-
-.banktef-diagram-svg {
-  width: 100%;
-  height: auto;
-  display: block;
-  min-width: 600px;
-}
 
 .capture-caption {
   display: flex;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { footerData, links } from "../data";
 import { ArrowUpIcon, GithubIcon, LinkedinIcon } from "../icons";
 import { RollText } from "./RollText";

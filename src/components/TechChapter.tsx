@@ -88,7 +88,7 @@ export function TechChapter() {
     { id: "ALL", label: "Todos os Repositórios" },
     { id: "VERSO", label: "Verso" },
     { id: "DECODE", label: "DECODE" },
-    { id: "BANKTEF", label: "BANKTEF (Java/Spring)" },
+    { id: "NUDEMO", label: "NUDEMO (React/Three.js)" },
     { id: "BioStudy", label: "BioStudy (Supabase)" },
     { id: "Loja de Roupa", label: "Loja & ConektaCell" },
   ];
@@ -222,7 +222,7 @@ export function TechChapter() {
             <div className="tech-filter-pills" role="group" aria-label="Filtrar por repositório auditado">
               {repoFilters.map((repo) => {
                 const isActive = selectedRepo === repo.id;
-                const isPrimary = repo.id === "VERSO" || repo.id === "DECODE" || repo.id === "BANKTEF";
+                const isPrimary = repo.id === "VERSO" || repo.id === "DECODE" || repo.id === "NUDEMO";
                 return (
                   <button
                     key={repo.id}
@@ -291,7 +291,7 @@ export function TechChapter() {
                         aria-label={`Comprovado em ${item.projects.join(", ")}`}
                       >
                         {item.projects.slice(0, 3).map((proj) => {
-                          const isMain = proj === "VERSO" || proj === "DECODE" || proj === "BANKTEF";
+                          const isMain = proj === "VERSO" || proj === "DECODE" || proj === "NUDEMO";
                           return (
                             <span
                               key={proj}
@@ -327,7 +327,7 @@ export function TechChapter() {
           </summary>
           <div className="audit-drawer tech-audit-drawer-grid">
             <div className="tech-audit-repos-col">
-              <h4 className="audit-subhead mono">REPOSITÓRIOS VERIFICADOS (PACKAGE.JSON / POM.XML / DOCKERFILE / SQL)</h4>
+              <h4 className="audit-subhead mono">REPOSITÓRIOS VERIFICADOS (PACKAGE.JSON / PYTHON / SQL)</h4>
               <ul className="tech-repo-evidence-list">
                 {techChapterData.auditTransparency.verifiedRepos.map((repo) => (
                   <li key={repo.name} className="tech-repo-evidence-item">

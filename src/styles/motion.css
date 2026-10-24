@@ -136,9 +136,8 @@ html.motion-ready [data-reveal].is-visible .marker-line {
   animation: screenSwitchFade 0.42s var(--ease-editorial) both;
 }
 
-/* 8. Stagger nas pílulas de stack e etapas de processo */
-html.motion-ready [data-reveal] .project-stack-pill,
-html.motion-ready [data-reveal] .process-compact-item {
+/* 8. Stagger nas pílulas de stack dos projetos */
+html.motion-ready [data-reveal] .project-stack-pill {
   opacity: 0;
   transform: translate3d(0, 10px, 0);
   transition:
@@ -149,8 +148,7 @@ html.motion-ready [data-reveal] .process-compact-item {
     color 0.2s ease;
 }
 
-html.motion-ready [data-reveal].is-visible .project-stack-pill,
-html.motion-ready [data-reveal].is-visible .process-compact-item {
+html.motion-ready [data-reveal].is-visible .project-stack-pill {
   opacity: 1;
   transform: translate3d(0, 0, 0);
 }
@@ -444,7 +442,6 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
   html.motion-ready [data-reveal] .line-inner,
   html.motion-ready [data-reveal] .hero-stagger-fade,
   html.motion-ready [data-reveal] .project-stack-pill,
-  html.motion-ready [data-reveal] .process-compact-item,
   html.motion-ready [data-reveal] .tech-symbol-card,
   html.motion-ready [data-reveal] .spine-rule,
   html.motion-ready [data-reveal] .marker-line,
