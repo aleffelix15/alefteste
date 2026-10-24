@@ -219,14 +219,14 @@
   color: var(--text-body);
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1024px) {
   .about-editorial-grid {
     grid-template-columns: 1fr;
     gap: 40px;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .about-photos-montage {
     grid-template-columns: 1fr;
   }

@@ -1,4 +1,12 @@
 /* ==========================================================================
+   BREAKPOINTS CANÔNICOS (Referência para Media Queries)
+   - --bp-mobile:  480px  (celulares em retrato estreitos até padrão)
+   - --bp-tablet:  768px  (transição mobile largo / tablet retrato)
+   - --bp-desktop: 1024px (tablet paisagem / desktop padrão)
+   - --bp-wide:    1280px (telas largas)
+   ========================================================================== */
+
+/* ==========================================================================
    FONTES LOCAIS (WOFF2 — SUBSET LATINO & LATINO-EXT)
    - Playfair Display: Serifada editorial de alto contraste (Títulos & Capítulos)
    - Bricolage Grotesque: Sans arquitetônica (Corpo & Interface)
@@ -237,6 +245,12 @@
 @media (max-width: 768px) {
   :root {
     --container-pad: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --container-pad: 16px;
   }
 }
 

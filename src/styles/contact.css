@@ -248,14 +248,14 @@
    RESPONSIVIDADE (DESKTOP -> TABLET -> MOBILE)
    ========================================================================== */
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .contact-secondary-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .contact-email-copy-box {
     padding: 20px 16px;
   }
@@ -272,7 +272,7 @@
   }
 }
 
-@media (max-width: 440px) {
+@media (max-width: 480px) {
   .contact-secondary-grid {
     grid-template-columns: 1fr;
   }

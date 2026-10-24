@@ -4,7 +4,7 @@
 
 .tech-showcase-section {
   position: relative;
-  overflow: hidden;
+ 
   background:
     radial-gradient(60% 50% at 50% 42%, rgba(22, 119, 255, 0.08), transparent 72%),
     linear-gradient(180deg, var(--bg-obsidian) 0%, var(--bg-subtle) 50%, var(--bg-obsidian) 100%);
@@ -529,7 +529,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   color: var(--accent-cyan);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .tech-audit-drawer-grid {
     grid-template-columns: 1fr;
   }
@@ -585,14 +585,14 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   color: var(--line-strong);
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 1280px) {
   .tech-symbols-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     row-gap: 28px;
   }
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1024px) {
   .tech-showcase-top {
     flex-direction: column;
     gap: 24px;
@@ -619,7 +619,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .tech-symbols-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: 12px;

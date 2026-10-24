@@ -20,17 +20,48 @@ html {
   scroll-padding-top: var(--header-height);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
   background-color: var(--bg-obsidian);
   color: var(--text-body);
-  overflow-x: hidden;
+  overflow-x: clip;
   width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
   background-image: radial-gradient(rgba(73, 180, 255, 0.032) 1px, transparent 0);
   background-size: 28px 28px;
+}
+
+@supports not (overflow-x: clip) {
+  body {
+    overflow-x: hidden;
+  }
+}
+
+
+/* Otimização de Toque e Prevenção de Atraso 300ms */
+a,
+button,
+input,
+textarea,
+select,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+/* Text Wrapping Seguro em Mobile */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+li {
+  overflow-wrap: break-word;
 }
 
 /* Scrollbar com Suporte a Tema Escuro */

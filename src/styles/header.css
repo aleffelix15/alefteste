@@ -265,7 +265,7 @@
   padding-top: 24px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .desktop-nav,
   .header-social-links {
     display: none;

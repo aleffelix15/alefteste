@@ -5,11 +5,12 @@
 .hero-editorial-stage {
   position: relative;
   min-height: calc(90vh - var(--header-height));
+  min-height: calc(90dvh - var(--header-height));
   display: flex;
   align-items: center;
   padding-block: 72px;
   border-bottom: 1px solid var(--line-hairline);
-  overflow: hidden;
+ 
   background-color: var(--bg-obsidian);
 }
 
@@ -497,7 +498,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .hero-proof-bar {
     gap: 10px;
   }
