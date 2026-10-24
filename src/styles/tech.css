@@ -396,14 +396,6 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   transition: transform 0.28s var(--ease-editorial);
 }
 
-/* Ilha Escura Intencional para Emblemas Oficiais no Tema Claro */
-:root[data-theme="light"] .tech-symbol-emblem-wrap {
-  background: var(--surface-inverse);
-  border: 1px solid var(--surface-inverse-border);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 4px 12px -2px rgba(15, 40, 90, 0.18);
-}
-
 .tech-emblem-svg {
   filter: drop-shadow(0 4px 10px rgba(var(--shadow-color), 0.35));
   transition: transform 0.3s var(--ease-editorial), filter 0.28s ease;

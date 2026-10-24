@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#070A10" />
+    <meta name="color-scheme" content="dark" />
     <title>Álef Felix Teixeira — Portfólio Editorial &amp; Engenharia de Software</title>
     <meta
       name="description"
@@ -94,21 +95,6 @@
           }
         ]
       }
-    </script>
-    <!-- Inicialização de Tema com persistência e sem flash (FOUC) -->
-    <script>
-      (function() {
-        try {
-          var saved = localStorage.getItem('theme');
-          var pref = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-          var theme = saved || pref;
-          document.documentElement.setAttribute('data-theme', theme);
-          var metaThemeColor = document.querySelector('meta[name="theme-color"]');
-          if (metaThemeColor) {
-            metaThemeColor.setAttribute('content', theme === 'light' ? '#f6f8fc' : '#070A10');
-          }
-        } catch (e) {}
-      })();
     </script>
   </head>
   <body>

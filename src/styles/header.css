@@ -120,32 +120,7 @@
 .header-right {
   display: flex;
   align-items: center;
-  gap: 14px;
-}
-
-/* Botão de Alternância de Tema */
-.theme-toggle-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--line-hairline);
-  background: var(--bg-concrete);
-  color: var(--accent-cyan);
-  transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s var(--ease-editorial);
-}
-
-.theme-toggle-btn:hover {
-  border-color: var(--accent-electric);
-  background: var(--bg-elevated);
-  color: var(--text-white);
-  transform: translateY(-1px);
+  gap: 10px;
 }
 
 .header-social-links {

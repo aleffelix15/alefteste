@@ -33,19 +33,7 @@ body {
   background-size: 28px 28px;
 }
 
-/* Transição de Tema Segura e Controlada */
-html.theme-transitioning,
-html.theme-transitioning *,
-html.theme-transitioning *::before,
-html.theme-transitioning *::after {
-  transition:
-    background-color 220ms ease,
-    color 220ms ease,
-    border-color 220ms ease,
-    box-shadow 220ms ease !important;
-}
-
-/* Scrollbar com Suporte a Tema Claro e Escuro */
+/* Scrollbar com Suporte a Tema Escuro */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--line-strong) transparent;

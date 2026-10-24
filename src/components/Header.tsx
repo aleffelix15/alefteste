@@ -16,42 +16,9 @@ export const navItems = [
 export function Header() {
   const [activeSection, setActiveSection] = useState<string>("abertura");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [theme, setTheme] = useState<"dark" | "light">(() => {
-    if (typeof window !== "undefined") {
-      const current = document.documentElement.getAttribute("data-theme");
-      if (current === "light" || current === "dark") return current;
-      const pref = window.matchMedia?.("(prefers-color-scheme: light)").matches ? "light" : "dark";
-      return pref;
-    }
-    return "dark";
-  });
 
   const navListRef = useRef<HTMLUListElement>(null);
   const [sliderStyle, setSliderStyle] = useState<React.CSSProperties>({});
-
-  // Sincroniza listener de prefers-color-scheme caso não haja preferência salva
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mq = window.matchMedia?.("(prefers-color-scheme: light)");
-    if (!mq) return;
-
-    const handleSchemeChange = (e: MediaQueryListEvent) => {
-      try {
-        if (!localStorage.getItem("theme")) {
-          const next = e.matches ? "light" : "dark";
-          setTheme(next);
-          document.documentElement.setAttribute("data-theme", next);
-          const meta = document.querySelector('meta[name="theme-color"]');
-          if (meta) {
-            meta.setAttribute("content", next === "light" ? "#f6f8fc" : "#070A10");
-          }
-        }
-      } catch {}
-    };
-
-    mq.addEventListener?.("change", handleSchemeChange);
-    return () => mq.removeEventListener?.("change", handleSchemeChange);
-  }, []);
 
   // Atualiza posição do indicador deslizante ativo
   useEffect(() => {
@@ -70,26 +37,6 @@ export function Header() {
       });
     }
   }, [activeSection]);
-
-  const toggleTheme = () => {
-    const nextTheme = theme === "dark" ? "light" : "dark";
-    setTheme(nextTheme);
-    if (typeof document !== "undefined") {
-      const root = document.documentElement;
-      root.classList.add("theme-transitioning");
-      root.setAttribute("data-theme", nextTheme);
-      try {
-        localStorage.setItem("theme", nextTheme);
-      } catch {}
-      const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-      if (metaThemeColor) {
-        metaThemeColor.setAttribute("content", nextTheme === "light" ? "#f6f8fc" : "#070A10");
-      }
-      window.setTimeout(() => {
-        root.classList.remove("theme-transitioning");
-      }, 260);
-    }
-  };
 
   useEffect(() => {
     const sections = navItems
@@ -205,55 +152,6 @@ export function Header() {
           {/* Botão de Acesso Rápido ao Currículo */}
           <CvButton variant="header" label="CV" />
 
-          {/* Botão de Alternância de Tema Claro / Escuro */}
-          <button
-            type="button"
-            className="theme-toggle-btn mono"
-            onClick={toggleTheme}
-            aria-label={`Alternar para tema ${theme === "dark" ? "claro" : "escuro"}`}
-            title={`Alternar para tema ${theme === "dark" ? "claro" : "escuro"}`}
-            data-magnetic
-            data-cursor-label="TEMA"
-          >
-            {theme === "dark" ? (
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <circle cx="12" cy="12" r="5" />
-                <line x1="12" y1="1" x2="12" y2="3" />
-                <line x1="12" y1="21" x2="12" y2="23" />
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                <line x1="1" y1="12" x2="3" y2="12" />
-                <line x1="21" y1="12" x2="23" y2="12" />
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-              </svg>
-            ) : (
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-              </svg>
-            )}
-          </button>
-
           <button
             type="button"
             className="mobile-menu-toggle mono"
@@ -321,13 +219,6 @@ export function Header() {
               <span>LinkedIn ↗</span>
             </a>
             <CvButton variant="header" label="Baixar CV" showViewLink />
-            <button
-              type="button"
-              className="header-social-link mono"
-              onClick={toggleTheme}
-            >
-              <span>TEMA: {theme === "dark" ? "CLARO ☀" : "ESCURO ☾"}</span>
-            </button>
           </div>
         </nav>
       </div>
