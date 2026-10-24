@@ -140,7 +140,7 @@
   grid-template-columns: 36px 1fr;
   gap: 16px;
   align-items: start;
-  opacity: 0.55;
+  opacity: 0.78;
   transform: translateX(-4px);
   transition:
     opacity 0.4s var(--ease-editorial),
