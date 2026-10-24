@@ -6,7 +6,7 @@
  * - Cursor editorial contextual ([data-editorial-cursor] + [data-cursor-label]) com interpolação suave
  * - Paralaxe suave de profundidade no cenário fotográfico do estúdio (Hero)
  * - Botões e links magnéticos ([data-magnetic]) + texto em rolagem dupla (.hover-roll-text)
- * - Tilt 3D sutil (±2.8°) + luz direcional de estúdio ([data-tilt-card]) em dispositivos com mouse
+ * - Luz direcional sutil de estúdio ([data-tilt-card]) em dispositivos com ponteiro fino (sem tilt 3D exagerado)
  * - Acordeão técnico suave via Web Animations API (details[data-animated-details])
  * - Respeito estrito a prefers-reduced-motion: reduce
  */
@@ -222,7 +222,7 @@ export function initPortfolioMotion(): () => void {
     root.classList.remove("motion-ready");
   });
 
-  // 3. Luz direcional + Tilt 3D sutil nas pranchas e molduras ([data-tilt-card])
+  // 3. Luz direcional sutil nas pranchas e cartões ([data-tilt-card])
   const plateElements = Array.from(document.querySelectorAll<HTMLElement>("[data-tilt-card]"));
 
   for (const plateEl of plateElements) {
@@ -243,14 +243,9 @@ export function initPortfolioMotion(): () => void {
         const relX = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
         const relY = Math.min(1, Math.max(0, (clientY - rect.top) / rect.height));
 
-        const tiltX = (0.5 - relY) * 5.6;
-        const tiltY = (relX - 0.5) * 5.6;
-
         plateEl.style.setProperty("--spot-x", `${(relX * 100).toFixed(1)}%`);
         plateEl.style.setProperty("--spot-y", `${(relY * 100).toFixed(1)}%`);
         plateEl.style.setProperty("--spot-opacity", "1");
-        plateEl.style.setProperty("--tilt-x", `${tiltX.toFixed(2)}deg`);
-        plateEl.style.setProperty("--tilt-y", `${tiltY.toFixed(2)}deg`);
       });
     };
 
@@ -260,8 +255,6 @@ export function initPortfolioMotion(): () => void {
         spotRaf = 0;
       }
       plateEl.style.setProperty("--spot-opacity", "0");
-      plateEl.style.setProperty("--tilt-x", "0deg");
-      plateEl.style.setProperty("--tilt-y", "0deg");
     };
 
     plateEl.addEventListener("pointermove", handlePointerMove, { passive: true });

@@ -57,7 +57,7 @@ function MonogramLogo() {
         d="M12 3L3.5 20.5H7.2L12 10.2L16.8 20.5H20.5L12 3Z"
         fill="currentColor"
       />
-      <circle cx="12" cy="17.5" r="1.7" fill="currentColor" />
+      <circle cx="12" cy="17.5" r="1.7" fill="currentColor" className="monogram-dot" />
     </svg>
   );
 }
@@ -284,7 +284,7 @@ export function OpeningSection() {
           </span>
           <span className="spine-rule" aria-hidden="true" />
           <span className="spine-text mono">
-            PORTFÓLIO
+            PORTFÓLIO{" "}
             <br />
             2026
           </span>
@@ -960,7 +960,6 @@ export function TechChapter() {
                       style={
                         {
                           "--stagger-index": idx,
-                          "--float-delay": `${(idx % 6) * 0.42}s`,
                           "--brand-color": item.brandColor,
                         } as React.CSSProperties
                       }
