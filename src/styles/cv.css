@@ -1,0 +1,220 @@
+/* ==========================================================================
+   COMPONENTE DO CURRÍCULO (BOTÕES, FEEDBACK & METADADOS)
+   ========================================================================== */
+
+.cv-button-container {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cv-action-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-cv-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-size: 0.86rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.22s ease,
+    border-color 0.22s ease,
+    color 0.22s ease,
+    box-shadow 0.22s ease,
+    transform 0.22s var(--ease-editorial);
+}
+
+/* Variante Secundária (Hero e Seções Principais) */
+.btn-cv-secondary {
+  border: 1px solid var(--line-hairline);
+  background: var(--bg-concrete);
+  color: var(--text-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-cv-secondary:hover {
+  border-color: var(--accent-electric);
+  background: var(--bg-elevated);
+  color: var(--accent-cyan);
+  box-shadow: var(--shadow-md), 0 4px 14px -6px var(--accent-electric-glow);
+  transform: translateY(-2px);
+}
+
+/* Variante Primária (Destaque) */
+.btn-cv-primary {
+  border: 1px solid rgba(73, 180, 255, 0.4);
+  background: var(--accent-electric);
+  color: var(--text-white);
+  box-shadow: 0 6px 20px -6px rgba(22, 119, 255, 0.5);
+}
+
+.btn-cv-primary:hover {
+  background: var(--accent-electric-hover);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 10px 24px -6px rgba(22, 119, 255, 0.65);
+  transform: translateY(-2px);
+}
+
+/* Variante Ghost (Mínima) */
+.btn-cv-ghost {
+  border: 1px solid var(--line-hairline);
+  background: transparent;
+  color: var(--text-body);
+}
+
+.btn-cv-ghost:hover {
+  border-color: var(--accent-electric);
+  background: var(--bg-elevated);
+  color: var(--text-white);
+  transform: translateY(-1px);
+}
+
+/* Variante Header (Discreta e Compacta) */
+.btn-cv-header {
+  min-height: 36px;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-hairline);
+  background: var(--glass-bg);
+  font-size: 0.8rem;
+  color: var(--text-body);
+}
+
+.btn-cv-header:hover {
+  border-color: var(--accent-electric);
+  background: var(--bg-concrete);
+  color: var(--text-white);
+  box-shadow: 0 4px 14px -6px var(--accent-electric-glow);
+  transform: translateY(-1px);
+}
+
+/* Animação do Ícone de Download */
+.btn-cv-download-icon {
+  color: var(--accent-cyan);
+  transition: transform 0.22s var(--ease-editorial);
+  flex-shrink: 0;
+}
+
+.btn-cv-download-icon .cv-icon-arrow {
+  transition: transform 0.24s var(--ease-editorial);
+}
+
+.btn-cv-action:hover .btn-cv-download-icon .cv-icon-arrow {
+  transform: translateY(2.5px);
+}
+
+/* Feedback de Estados */
+.btn-cv-action.is-downloading {
+  border-color: var(--accent-electric);
+  color: var(--accent-cyan);
+  background: var(--bg-elevated);
+}
+
+.cv-spinner-icon {
+  animation: cvSpin 0.9s linear infinite;
+  color: var(--accent-electric);
+}
+
+@keyframes cvSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btn-cv-action.is-downloaded {
+  border-color: var(--success-border) !important;
+  background: var(--success-bg) !important;
+  color: var(--success-text) !important;
+}
+
+.cv-check-icon {
+  color: var(--success-text);
+}
+
+/* Botão Visualizar em Nova Aba */
+.btn-cv-view-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-hairline);
+  background: var(--bg-obsidian);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-decoration: none;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.btn-cv-view-inline:hover {
+  border-color: var(--line-strong);
+  color: var(--accent-cyan);
+  background: var(--bg-elevated);
+}
+
+/* Metadados Técnicos do CV */
+.cv-meta-caption {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.cv-meta-pill {
+  padding: 1px 7px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line-hairline);
+  background: var(--bg-obsidian);
+  color: var(--accent-cyan);
+}
+
+.cv-meta-dot {
+  color: var(--line-strong);
+}
+
+/* Variante Footer */
+.cv-footer-wrap {
+  display: inline-block;
+}
+
+.cv-link-footer {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cv-badge-tiny {
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line-hairline);
+  background: var(--bg-concrete);
+  color: var(--accent-cyan);
+  font-size: 0.58rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-cv-download-icon .cv-icon-arrow,
+  .cv-spinner-icon {
+    animation: none !important;
+    transform: none !important;
+  }
+}

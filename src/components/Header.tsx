@@ -3,6 +3,7 @@ import { links } from "../data";
 import { GithubIcon, LinkedinIcon } from "../icons";
 import { RollText } from "./RollText";
 import { MonogramLogo } from "./MonogramLogo";
+import { CvButton } from "./CvButton";
 
 export const navItems = [
   { id: "abertura", label: "Início" },
@@ -18,13 +19,39 @@ export function Header() {
   const [theme, setTheme] = useState<"dark" | "light">(() => {
     if (typeof window !== "undefined") {
       const current = document.documentElement.getAttribute("data-theme");
-      return current === "light" ? "light" : "dark";
+      if (current === "light" || current === "dark") return current;
+      const pref = window.matchMedia?.("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      return pref;
     }
     return "dark";
   });
 
   const navListRef = useRef<HTMLUListElement>(null);
   const [sliderStyle, setSliderStyle] = useState<React.CSSProperties>({});
+
+  // Sincroniza listener de prefers-color-scheme caso não haja preferência salva
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia?.("(prefers-color-scheme: light)");
+    if (!mq) return;
+
+    const handleSchemeChange = (e: MediaQueryListEvent) => {
+      try {
+        if (!localStorage.getItem("theme")) {
+          const next = e.matches ? "light" : "dark";
+          setTheme(next);
+          document.documentElement.setAttribute("data-theme", next);
+          const meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) {
+            meta.setAttribute("content", next === "light" ? "#f6f8fc" : "#070A10");
+          }
+        }
+      } catch {}
+    };
+
+    mq.addEventListener?.("change", handleSchemeChange);
+    return () => mq.removeEventListener?.("change", handleSchemeChange);
+  }, []);
 
   // Atualiza posição do indicador deslizante ativo
   useEffect(() => {
@@ -48,10 +75,19 @@ export function Header() {
     const nextTheme = theme === "dark" ? "light" : "dark";
     setTheme(nextTheme);
     if (typeof document !== "undefined") {
-      document.documentElement.setAttribute("data-theme", nextTheme);
+      const root = document.documentElement;
+      root.classList.add("theme-transitioning");
+      root.setAttribute("data-theme", nextTheme);
       try {
         localStorage.setItem("theme", nextTheme);
       } catch {}
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+      if (metaThemeColor) {
+        metaThemeColor.setAttribute("content", nextTheme === "light" ? "#f6f8fc" : "#070A10");
+      }
+      window.setTimeout(() => {
+        root.classList.remove("theme-transitioning");
+      }, 260);
     }
   };
 
@@ -165,6 +201,9 @@ export function Header() {
               <span className="sr-only"> (abre em nova aba)</span>
             </a>
           </div>
+
+          {/* Botão de Acesso Rápido ao Currículo */}
+          <CvButton variant="header" label="CV" />
 
           {/* Botão de Alternância de Tema Claro / Escuro */}
           <button
@@ -281,6 +320,7 @@ export function Header() {
               <LinkedinIcon size={16} />
               <span>LinkedIn ↗</span>
             </a>
+            <CvButton variant="header" label="Baixar CV" showViewLink />
             <button
               type="button"
               className="header-social-link mono"

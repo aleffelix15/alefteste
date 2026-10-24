@@ -1,8 +1,19 @@
 export const links = {
-  siteUrl: "",
+  siteUrl: "https://portfolio-alef-felix.vercel.app",
   github: "https://github.com/aleffelix15",
   linkedin: "https://www.linkedin.com/in/alef-felix-teixeira-a5030b236/",
+  email: "aleffelix81@gmail.com",
+  phone: "(62) 98516-3672",
+  whatsapp: "https://wa.me/5562985163672?text=Ol%C3%A1%20%C3%81lef%2C%20vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar!",
   disponivel: true,
+};
+
+export const cv = {
+  url: "/curriculo-alef-felix.pdf",
+  fileName: "Curriculo-Alef-Felix.pdf",
+  available: true,
+  updatedAt: "10/2026",
+  sizeLabel: "4.7 KB · PDF",
 };
 
 export type ProjectScreen = {
@@ -56,7 +67,7 @@ export const heroData = {
   epigraph: "Tecnologia é sobre pessoas. É sobre resolver problemas reais.",
   ctaPrimary: "Ver projetos",
   ctaSecondary: "Baixar CV",
-  cvUrl: "/curriculo-alef-felix.pdf",
+  cvUrl: cv.url,
   proofMetrics: [
     { value: 12, suffix: "+", label: "Repositórios", detail: "Projetos no GitHub" },
     { value: 3, suffix: "", label: "Deploys Ativos", detail: "Vercel & Produção" },

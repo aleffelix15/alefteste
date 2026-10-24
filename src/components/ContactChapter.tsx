@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { contactData, links } from "../data";
 import { GithubIcon, LinkedinIcon } from "../icons";
 import { RollText } from "./RollText";
+import { CvButton } from "./CvButton";
 
 export function ContactChapter() {
   const [copied, setCopied] = useState(false);
-  const emailAddress = "aleffelix15@gmail.com";
-  const whatsappUrl = "https://wa.me/5511999999999?text=Ol%C3%A1%20%C3%81lef%2C%20vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar!";
+  const emailAddress = "aleffelix81@gmail.com";
+  const whatsappUrl = "https://wa.me/5562985163672?text=Ol%C3%A1%20%C3%81lef%2C%20vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar!";
 
   // Estado do Formulário
   const [formData, setFormData] = useState({
@@ -87,7 +88,7 @@ export function ContactChapter() {
     } catch {
       // Fallback para mailto se serviço estiver offline
       setFormStatus("error");
-      setErrorMessage("Não foi possível enviar automaticamente. Você pode enviar diretamente para aleffelix15@gmail.com.");
+      setErrorMessage("Não foi possível enviar automaticamente. Você pode enviar diretamente para aleffelix81@gmail.com.");
     }
   };
 
@@ -170,17 +171,7 @@ export function ContactChapter() {
                 <span aria-hidden="true" className="arrow-inline">→</span>
               </a>
 
-              <a
-                href="/curriculo-alef-felix.pdf"
-                download="Curriculo-Alef-Felix.pdf"
-                className="contact-editorial-link"
-                data-magnetic
-                data-cursor-label="BAIXAR CV"
-              >
-                <span aria-hidden="true">📄</span>
-                <RollText text="Baixar Currículo (PDF)" />
-                <span aria-hidden="true" className="arrow-inline">↓</span>
-              </a>
+              <CvButton variant="secondary" showMeta showViewLink label="Baixar Currículo (PDF)" />
 
               <a
                 href={links.github}

@@ -3,6 +3,7 @@ import { footerData, links } from "../data";
 import { ArrowUpIcon, GithubIcon, LinkedinIcon } from "../icons";
 import { RollText } from "./RollText";
 import { navItems } from "./Header";
+import { CvButton } from "./CvButton";
 
 export function Footer() {
   // Relógio local em tempo real (Horário de Brasília / America/Sao_Paulo)
@@ -38,9 +39,9 @@ export function Footer() {
           <span className="footer-role-tag mono">{footerData.role}</span>
           
           {/* Relógio Local de Brasília */}
-          <div className="footer-live-clock mono" aria-label="Horário local em São Paulo, Brasil">
+          <div className="footer-live-clock mono" aria-label="Horário local oficial de Brasília">
             <span className="clock-beacon" aria-hidden="true" />
-            <span>{localTime || "--:--"} (BRT) · SÃO PAULO, BRASIL</span>
+            <span>{localTime || "--:--"} (BRT) · GOIÁS, BRASIL</span>
           </div>
 
           <p className="footer-copy-note">{footerData.copyright}</p>
@@ -57,6 +58,9 @@ export function Footer() {
                 </a>
               </li>
             ))}
+            <li>
+              <CvButton variant="footer" />
+            </li>
           </ul>
         </div>
 
@@ -94,13 +98,13 @@ export function Footer() {
             </li>
             <li>
               <a
-                href="mailto:aleffelix15@gmail.com"
+                href={`mailto:${links.email}`}
                 className="footer-social-link"
                 data-magnetic
                 data-cursor-label="E-MAIL"
               >
                 <span aria-hidden="true">✉</span>
-                <span>aleffelix15@gmail.com</span>
+                <span>{links.email}</span>
               </a>
             </li>
           </ul>

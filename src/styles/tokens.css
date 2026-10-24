@@ -113,6 +113,8 @@
    ========================================================================== */
 
 :root {
+  color-scheme: dark;
+
   /* Cores de Superfície & Fundo */
   --bg-obsidian: #070a10;
   --bg-subtle: #0a0f18;
@@ -138,6 +140,46 @@
   --accent-electric-soft: rgba(22, 119, 255, 0.14);
   --accent-cyan-soft: rgba(73, 180, 255, 0.1);
   --accent-electric-glow: rgba(22, 119, 255, 0.36);
+
+  /* Hero & Vinheta Editorial */
+  --hero-fade: #070a10;
+  --hero-fade-rgb: 7, 10, 16;
+  --hero-fade-88: rgba(var(--hero-fade-rgb), 0.88);
+  --hero-fade-42: rgba(var(--hero-fade-rgb), 0.42);
+  --hero-fade-90: rgba(var(--hero-fade-rgb), 0.9);
+  --hero-fade-70: rgba(var(--hero-fade-rgb), 0.7);
+  --grain-color: rgba(255, 255, 255, 0.04);
+
+  /* Header & Efeitos Glass */
+  --header-bg: rgba(7, 10, 16, 0.84);
+  --header-bg-scrolled: rgba(7, 10, 16, 0.96);
+  --glass-bg: rgba(13, 20, 32, 0.65);
+  --glass-bg-strong: rgba(13, 20, 32, 0.94);
+
+  /* Sombras Semânticas */
+  --shadow-color: 0, 0, 0;
+  --shadow-sm: 0 4px 14px -4px rgba(var(--shadow-color), 0.5);
+  --shadow-md: 0 12px 30px -14px rgba(var(--shadow-color), 0.65);
+  --shadow-lg: 0 18px 42px -16px rgba(var(--shadow-color), 0.78);
+
+  /* Estados: Sucesso & Erro (WCAG AA) */
+  --success-text: #86efac;
+  --danger-text: #f87171;
+  --success-border: rgba(34, 197, 94, 0.32);
+  --danger-border: rgba(239, 68, 68, 0.4);
+  --success-bg: rgba(34, 197, 94, 0.08);
+  --danger-bg: rgba(239, 68, 68, 0.08);
+
+  /* Ilhas Escuras Intencionais (Diagrama BANKTEF, Molduras de Mockup, Emblemas) */
+  --surface-inverse: #070a10;
+  --surface-inverse-elevated: #0d1420;
+  --surface-inverse-border: #202b3a;
+  --text-inverse: #f4f7fb;
+  --text-inverse-muted: #8896ab;
+
+  /* Seleção & Foco */
+  --selection-bg: rgba(22, 119, 255, 0.32);
+  --selection-color: #f4f7fb;
 
   /* Tipografia */
   --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
@@ -197,38 +239,80 @@
 }
 
 /* ==========================================================================
-   TEMA CLARO (PRETO E AZUL TÉCNICO INVERTIDO)
+   TEMA CLARO (DESIGN SYSTEM EDITORIAL REFINADO & WCAG AA)
    ========================================================================== */
 
-[data-theme="light"] {
-  --bg-obsidian: #f4f7fb;
-  --bg-subtle: #e9eef5;
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  /* Cores de Superfície & Fundo */
+  --bg-obsidian: #f6f8fc;
+  --bg-subtle: #eef2f8;
   --bg-concrete: #ffffff;
   --bg-elevated: #ffffff;
   --bg-card: rgba(255, 255, 255, 0.94);
 
+  /* Linhas & Bordas Estruturais */
   --line-hairline: #d8e2ec;
   --line-strong: #bac7d5;
-  --line-accent: rgba(22, 119, 255, 0.35);
+  --line-accent: rgba(0, 86, 214, 0.35);
 
-  --text-white: #070a10;
-  --text-body: #475569;
-  --text-muted: #64748b;
+  /* Tipografia: Contraste Rigoroso WCAG AA */
+  --text-white: #0b1220;
+  --text-body: #3b4757;
+  --text-muted: #5b6779;
   --text-ink: #ffffff;
 
+  /* Destaques: Azul Técnico & Ciano */
   --accent-electric: #0056d6;
   --accent-electric-hover: #0045b0;
   --accent-cyan: #0284c7;
   --accent-electric-soft: rgba(0, 86, 214, 0.08);
   --accent-cyan-soft: rgba(2, 132, 199, 0.08);
   --accent-electric-glow: rgba(0, 86, 214, 0.22);
+
+  /* Hero & Vinheta Editorial */
+  --hero-fade: #f6f8fc;
+  --hero-fade-rgb: 246, 248, 252;
+  --hero-fade-88: rgba(var(--hero-fade-rgb), 0.88);
+  --hero-fade-42: rgba(var(--hero-fade-rgb), 0.42);
+  --hero-fade-90: rgba(var(--hero-fade-rgb), 0.9);
+  --hero-fade-70: rgba(var(--hero-fade-rgb), 0.7);
+  --grain-color: rgba(15, 40, 90, 0.035);
+
+  /* Header & Efeitos Glass */
+  --header-bg: rgba(246, 248, 252, 0.82);
+  --header-bg-scrolled: rgba(255, 255, 255, 0.94);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-bg-strong: rgba(240, 244, 250, 0.96);
+
+  /* Sombras Tingidas de Azul */
+  --shadow-color: 15, 40, 90;
+  --shadow-sm: 0 2px 8px -2px rgba(var(--shadow-color), 0.08), 0 1px 3px rgba(var(--shadow-color), 0.05);
+  --shadow-md: 0 8px 24px -8px rgba(var(--shadow-color), 0.12), 0 2px 6px rgba(var(--shadow-color), 0.04);
+  --shadow-lg: 0 16px 36px -10px rgba(var(--shadow-color), 0.16), 0 4px 12px rgba(var(--shadow-color), 0.06);
+
+  /* Estados: Sucesso & Erro (WCAG AA > 4.5:1) */
+  --success-text: #15803d;
+  --danger-text: #b91c1c;
+  --success-border: rgba(21, 128, 61, 0.35);
+  --danger-border: rgba(185, 28, 28, 0.35);
+  --success-bg: rgba(21, 128, 61, 0.08);
+  --danger-bg: rgba(185, 28, 28, 0.08);
+
+  /* Ilhas Escuras Intencionais ("Janelas de Código" sobre papel claro) */
+  --surface-inverse: #0b101b;
+  --surface-inverse-elevated: #0f1726;
+  --surface-inverse-border: rgba(73, 180, 255, 0.22);
+  --text-inverse: #f4f7fb;
+  --text-inverse-muted: #94a3b8;
+
+  /* Seleção & Foco */
+  --selection-bg: rgba(0, 86, 214, 0.22);
+  --selection-color: #0b1220;
 }
 
-[data-theme="light"] html {
-  color-scheme: light;
-}
-
-[data-theme="light"] body {
+:root[data-theme="light"] body {
   background-image: radial-gradient(rgba(0, 86, 214, 0.04) 1px, transparent 0);
 }
 

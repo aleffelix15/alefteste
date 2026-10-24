@@ -62,10 +62,24 @@
             "url": "https://portfolio-alef-felix.vercel.app/",
             "jobTitle": "Estudante de Engenharia de Software e Desenvolvedor Full-Stack",
             "description": "Desenvolvedor de aplicações web e full-stack com React, TypeScript e Java.",
+            "email": "mailto:aleffelix81@gmail.com",
+            "telephone": "+55-62-98516-3672",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Senador Canedo",
+              "addressRegion": "GO",
+              "addressCountry": "BR"
+            },
             "sameAs": [
               "https://github.com/aleffelix15",
               "https://www.linkedin.com/in/alef-felix-teixeira-a5030b236/"
-            ]
+            ],
+            "subjectOf": {
+              "@type": "DigitalDocument",
+              "name": "Currículo de Álef Felix Teixeira",
+              "encodingFormat": "application/pdf",
+              "url": "https://portfolio-alef-felix.vercel.app/curriculo-alef-felix.pdf"
+            }
           },
           {
             "@type": "WebSite",
@@ -86,9 +100,13 @@
       (function() {
         try {
           var saved = localStorage.getItem('theme');
-          var pref = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-          var theme = saved || 'dark';
+          var pref = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          var theme = saved || pref;
           document.documentElement.setAttribute('data-theme', theme);
+          var metaThemeColor = document.querySelector('meta[name="theme-color"]');
+          if (metaThemeColor) {
+            metaThemeColor.setAttribute('content', theme === 'light' ? '#f6f8fc' : '#070A10');
+          }
         } catch (e) {}
       })();
     </script>

@@ -44,7 +44,7 @@
   border: 1px solid var(--line-hairline);
   background: var(--bg-concrete);
   margin-bottom: 24px;
-  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.6);
+  box-shadow: var(--shadow-sm);
 }
 
 .email-copy-header {
@@ -97,9 +97,9 @@
 }
 
 .btn-email-copy.is-copied {
-  border-color: #22c55e;
-  background: rgba(34, 197, 94, 0.08);
-  color: #86efac;
+  border-color: var(--success-border);
+  background: var(--success-bg);
+  color: var(--success-text);
 }
 
 .email-address-text {
@@ -114,7 +114,7 @@
 }
 
 .btn-email-copy.is-copied .email-copy-icon {
-  color: #22c55e;
+  color: var(--success-text);
 }
 
 .btn-mailto-direct {
@@ -190,7 +190,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  box-shadow: 0 16px 36px -16px rgba(0, 0, 0, 0.7);
+  box-shadow: var(--shadow-md);
   overflow: hidden;
 }
 
@@ -253,13 +253,13 @@
 .form-input:focus {
   outline: none;
   border-color: var(--accent-electric);
-  box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.18);
+  box-shadow: 0 0 0 3px var(--accent-electric-soft);
   background: var(--bg-elevated);
 }
 
 .form-input.has-error {
-  border-color: #ef4444;
-  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.15);
+  border-color: var(--danger-border);
+  box-shadow: 0 0 0 2px var(--danger-bg);
 }
 
 .form-textarea {
@@ -269,8 +269,21 @@
 
 .form-error-msg {
   font-size: 0.65rem;
-  color: #f87171;
+  color: var(--danger-text);
   padding-top: 2px;
+}
+
+/* Prevenção de fundo amarelo/escuro no autofill do navegador */
+.form-input:-webkit-autofill,
+.form-input:-webkit-autofill:hover,
+.form-input:-webkit-autofill:focus,
+.form-textarea:-webkit-autofill,
+.form-textarea:-webkit-autofill:hover,
+.form-textarea:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text-white);
+  -webkit-box-shadow: 0 0 0px 1000px var(--bg-obsidian) inset;
+  box-shadow: 0 0 0px 1000px var(--bg-obsidian) inset;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 .btn-form-submit {
@@ -324,9 +337,9 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 2px solid #22c55e;
-  background: rgba(34, 197, 94, 0.12);
-  color: #22c55e;
+  border: 2px solid var(--success-border);
+  background: var(--success-bg);
+  color: var(--success-text);
   font-size: 1.4rem;
   font-weight: 700;
 }
@@ -364,18 +377,19 @@
 .form-error-banner {
   padding: 12px 14px;
   border-radius: var(--radius-md);
-  border: 1px solid rgba(239, 68, 68, 0.4);
-  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid var(--danger-border);
+  background: var(--danger-bg);
   font-size: 0.78rem;
   line-height: 1.5;
-  color: #fca5a5;
+  color: var(--danger-text);
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
 .form-mailto-fallback {
-  color: #ffffff;
+  color: inherit;
+  font-weight: 600;
   text-decoration: underline;
   font-size: 0.72rem;
 }

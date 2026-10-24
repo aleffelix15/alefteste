@@ -372,7 +372,7 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
     margin-top: -8px;
     border-radius: var(--radius-full);
     border: 1px solid rgba(73, 180, 255, 0.42);
-    background: rgba(7, 10, 16, 0.78);
+    background: var(--glass-bg);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     pointer-events: none;
@@ -415,7 +415,7 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
     margin-left: 14px;
     margin-top: 14px;
     border-color: var(--accent-electric);
-    background: rgba(13, 20, 32, 0.94);
+    background: var(--glass-bg-strong);
     box-shadow: 0 6px 18px -6px var(--accent-electric-glow);
   }
 

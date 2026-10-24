@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { heroData } from "../data";
 import { RollText } from "./RollText";
+import { CvButton } from "./CvButton";
 
 function AnimatedCounter({
   target,
@@ -194,31 +195,7 @@ export function OpeningSection() {
               </span>
             </a>
 
-            <a
-              href={heroData.cvUrl}
-              download="Curriculo-Alef-Felix.pdf"
-              className="btn-cv-secondary"
-              data-magnetic
-              data-cursor-label="CURRÍCULO ↓"
-            >
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-                className="btn-cv-icon"
-              >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              <RollText text={heroData.ctaSecondary} />
-            </a>
+            <CvButton variant="secondary" showViewLink />
           </div>
 
           {/* Barra de Prova Rápida com Contadores Animados */}

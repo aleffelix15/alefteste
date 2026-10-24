@@ -44,6 +44,7 @@
   border-radius: var(--radius-sm);
   border: 1px solid var(--line-hairline);
   background: var(--bg-concrete);
+  box-shadow: var(--shadow-sm);
   color: var(--accent-cyan);
   font-size: 0.64rem;
   letter-spacing: 0.08em;
@@ -125,6 +126,7 @@
   border-radius: var(--radius-md);
   border: 1px solid var(--line-hairline);
   background: var(--bg-concrete);
+  box-shadow: var(--shadow-sm);
   color: var(--text-white);
   font-size: 0.72rem;
   transition:
@@ -137,7 +139,7 @@
 .footer-top-link:hover {
   border-color: var(--accent-electric);
   background: var(--bg-elevated);
-  box-shadow: 0 4px 14px -6px var(--accent-electric-glow);
+  box-shadow: var(--shadow-md), 0 4px 14px -6px var(--accent-electric-glow);
   transform: translateY(-2px);
 }
 

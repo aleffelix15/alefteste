@@ -74,7 +74,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  box-shadow: 0 14px 36px -18px rgba(0, 0, 0, 0.65);
+  box-shadow: var(--shadow-md);
   transition:
     border-color 0.28s ease,
     box-shadow 0.28s ease,
@@ -101,28 +101,30 @@
 }
 
 .project-editorial-feature:hover {
-  border-color: var(--line-strong);
-  box-shadow: 0 20px 44px -18px rgba(0, 0, 0, 0.8), 0 0 24px -12px rgba(22, 119, 255, 0.22);
+  border-color: var(--line-accent);
+  box-shadow: var(--shadow-lg), 0 0 24px -12px var(--accent-electric-glow);
+  transform: translateY(-2px);
 }
 
 .project-editorial-feature:hover::before {
   opacity: 0.9;
 }
 
-/* Moldura de Captura / Mockup */
+/* Moldura de Captura / Mockup (Ilha Escura Intencional) */
 .project-capture-frame {
   border-radius: var(--radius-md);
-  border: 1px solid var(--line-hairline);
-  background: var(--bg-obsidian);
+  border: 1px solid var(--surface-inverse-border);
+  background: var(--surface-inverse);
+  box-shadow: 0 8px 24px -6px rgba(var(--shadow-color), 0.2);
   overflow: hidden;
   --spot-x: 50%;
   --spot-y: 50%;
   --spot-opacity: 0;
-  transition: border-color 0.25s ease;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .project-editorial-feature:hover .project-capture-frame {
-  border-color: rgba(73, 180, 255, 0.28);
+  border-color: rgba(73, 180, 255, 0.38);
 }
 
 .capture-window-bar {
@@ -131,9 +133,9 @@
   justify-content: space-between;
   gap: 10px;
   padding: 10px 16px;
-  border-bottom: 1px solid var(--line-hairline);
-  background: var(--bg-subtle);
-  color: var(--text-muted);
+  border-bottom: 1px solid var(--surface-inverse-border);
+  background: var(--surface-inverse-elevated);
+  color: var(--text-inverse-muted);
   font-size: 0.6875rem;
 }
 
@@ -161,20 +163,20 @@
   padding: 3px 9px;
   border-radius: var(--radius-sm);
   font-size: 0.65rem;
-  border: 1px solid var(--line-hairline);
-  color: var(--text-muted);
-  background: var(--bg-obsidian);
+  border: 1px solid var(--surface-inverse-border);
+  color: var(--text-inverse-muted);
+  background: var(--surface-inverse);
   transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
 }
 
 .screen-switch-btn:hover {
-  color: var(--text-white);
+  color: var(--text-inverse);
   border-color: var(--line-strong);
 }
 
 .screen-switch-btn.is-active {
   border-color: var(--accent-electric);
-  color: var(--text-white);
+  color: var(--text-inverse);
   background: var(--accent-electric-soft);
 }
 
@@ -209,17 +211,17 @@
   transition: opacity 0.3s ease;
 }
 
-/* Container do Diagrama Vetorial BANKTEF */
+/* Container do Diagrama Vetorial BANKTEF (Ilha Escura Intencional) */
 .project-arch-container {
   position: relative;
   overflow: hidden;
-  background: #070a10;
+  background: var(--surface-inverse);
 }
 
 .banktef-diagram-wrap {
   width: 100%;
   overflow-x: auto;
-  background: #070a10;
+  background: var(--surface-inverse);
 }
 
 .banktef-diagram-svg {
@@ -235,9 +237,9 @@
   justify-content: space-between;
   gap: 12px;
   padding: 9px 16px;
-  border-top: 1px solid var(--line-hairline);
-  background: var(--bg-subtle);
-  color: var(--text-muted);
+  border-top: 1px solid var(--surface-inverse-border);
+  background: var(--surface-inverse-elevated);
+  color: var(--text-inverse-muted);
   font-size: 0.65rem;
 }
 

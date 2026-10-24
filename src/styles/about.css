@@ -20,13 +20,18 @@
   border-radius: var(--radius-lg);
   border: 1px solid var(--line-hairline);
   background: var(--bg-concrete);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s var(--ease-editorial);
 }
 
 .about-photo-card:hover {
-  border-color: var(--line-strong);
-  box-shadow: 0 14px 32px -16px rgba(0, 0, 0, 0.7);
+  border-color: var(--line-accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 .about-studio-img {
@@ -182,10 +187,12 @@
   border-radius: var(--radius-lg);
   border: 1px solid var(--line-hairline);
   background: var(--bg-concrete);
+  box-shadow: var(--shadow-sm);
   transition:
     border-color 0.25s ease,
     background-color 0.25s ease,
-    box-shadow 0.25s ease;
+    box-shadow 0.25s ease,
+    transform 0.25s var(--ease-editorial);
 }
 
 .timeline-vertical-step.is-active .timeline-step-card {
@@ -193,9 +200,10 @@
 }
 
 .timeline-vertical-step:hover .timeline-step-card {
-  border-color: var(--accent-electric);
+  border-color: var(--line-accent);
   background: var(--bg-elevated);
-  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.6);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 .timeline-step-title {

@@ -7,7 +7,7 @@
   overflow: hidden;
   background:
     radial-gradient(60% 50% at 50% 42%, rgba(22, 119, 255, 0.08), transparent 72%),
-    linear-gradient(180deg, var(--bg-obsidian) 0%, #080d16 50%, var(--bg-obsidian) 100%);
+    linear-gradient(180deg, var(--bg-obsidian) 0%, var(--bg-subtle) 50%, var(--bg-obsidian) 100%);
 }
 
 .tech-ambient-glow {
@@ -187,7 +187,7 @@
 .tech-tier-btn.is-active .tier-badge {
   border-color: rgba(73, 180, 255, 0.4);
   color: var(--accent-cyan);
-  background: rgba(13, 20, 32, 0.9);
+  background: var(--bg-card);
 }
 
 /* Dual Filter Toolbar */
@@ -202,6 +202,7 @@
   border-radius: var(--radius-xl);
   border: 1px solid var(--line-hairline);
   background: var(--bg-concrete);
+  box-shadow: var(--shadow-sm);
 }
 
 .tech-filter-group {
@@ -352,6 +353,7 @@
   border-radius: var(--radius-xl);
   border: 1px solid var(--line-hairline);
   background: var(--bg-concrete);
+  box-shadow: var(--shadow-sm);
   animation: techSymbolEntrance 0.48s var(--ease-editorial) both;
   animation-delay: calc(var(--stagger-index, 0) * 32ms);
   transition:
@@ -394,16 +396,24 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   transition: transform 0.28s var(--ease-editorial);
 }
 
+/* Ilha Escura Intencional para Emblemas Oficiais no Tema Claro */
+:root[data-theme="light"] .tech-symbol-emblem-wrap {
+  background: var(--surface-inverse);
+  border: 1px solid var(--surface-inverse-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 12px -2px rgba(15, 40, 90, 0.18);
+}
+
 .tech-emblem-svg {
-  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.45));
+  filter: drop-shadow(0 4px 10px rgba(var(--shadow-color), 0.35));
   transition: transform 0.3s var(--ease-editorial), filter 0.28s ease;
 }
 
 .tech-symbol-card:hover {
-  border-color: rgba(22, 119, 255, 0.55);
+  border-color: var(--line-accent);
   background: var(--bg-elevated);
   transform: translateY(-3px);
-  box-shadow: 0 16px 32px -14px rgba(0, 0, 0, 0.72), 0 0 18px -8px rgba(22, 119, 255, 0.22);
+  box-shadow: var(--shadow-md), 0 0 18px -8px var(--accent-electric-glow);
 }
 
 .tech-symbol-card:hover .tech-symbol-halo {
@@ -469,7 +479,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   z-index: 1;
   margin-top: 8px;
   padding-top: 7px;
-  border-top: 1px solid rgba(32, 43, 58, 0.75);
+  border-top: 1px solid var(--line-hairline);
   width: 100%;
   font-size: 0.55rem;
   line-height: 1.35;
@@ -485,6 +495,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   border-radius: var(--radius-lg);
   border: 1px solid var(--line-hairline);
   background: var(--bg-concrete);
+  box-shadow: var(--shadow-sm);
 }
 
 .tech-audit-drawer-grid {
