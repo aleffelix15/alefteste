@@ -66,6 +66,9 @@ export function ContactChapter() {
               <span className="email-copy-badge">
                 {copied ? "COPIADO! ✓" : "CLIQUE P/ COPIAR"}
               </span>
+              <span className="sr-only" aria-live="polite" role="status">
+                {copied ? "Endereço de e-mail copiado para a área de transferência." : ""}
+              </span>
             </div>
 
             <div className="email-copy-action-row">

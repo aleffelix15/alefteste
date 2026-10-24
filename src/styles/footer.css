@@ -188,6 +188,16 @@
 @media (max-width: 480px) {
   .footer-content-grid {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 32px;
+  }
+
+  .footer-col-top {
+    justify-content: flex-start;
+  }
+
+  .footer-top-link {
+    width: 100%;
+    justify-content: center;
+    min-height: 48px;
   }
 }

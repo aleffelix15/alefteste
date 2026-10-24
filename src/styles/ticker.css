@@ -101,3 +101,14 @@
   color: var(--accent-cyan);
   font-size: 0.75rem;
 }
+
+@media (max-width: 480px) {
+  .ticker-track {
+    animation-duration: 38s;
+  }
+
+  .ticker-pause-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
