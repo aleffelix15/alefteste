@@ -69,7 +69,7 @@
   border-top: 1px solid var(--line-hairline);
   background: var(--bg-subtle);
   color: var(--text-muted);
-  font-size: 0.625rem;
+  font-size: 0.75rem;
 }
 
 .about-narrative-zone {
@@ -164,7 +164,7 @@
   border: 1px solid var(--line-strong);
   background: var(--bg-obsidian);
   color: var(--text-muted);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 600;
   transition:
     border-color 0.3s ease,

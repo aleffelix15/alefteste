@@ -239,7 +239,8 @@ html.motion-ready [data-reveal].is-visible .project-stack-pill {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
+  min-height: 44px;
   color: var(--text-body);
   padding-block: 4px;
   transition: color 0.2s ease;

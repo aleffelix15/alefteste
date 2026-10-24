@@ -190,7 +190,7 @@
   border: 1px solid var(--line-hairline);
   background: var(--bg-obsidian);
   color: var(--text-muted);
-  font-size: 0.62rem;
+  font-size: 0.75rem;
 }
 
 .tech-tier-btn.is-active .tier-badge {
@@ -221,7 +221,7 @@
 }
 
 .tech-filter-group-label {
-  font-size: 0.625rem;
+  font-size: 0.75rem;
   color: var(--accent-cyan);
   letter-spacing: 0.14em;
 }
@@ -233,13 +233,13 @@
 }
 
 .tech-filter-pill {
-  min-height: 36px;
+  min-height: 40px;
   padding: 5px 12px;
   border-radius: var(--radius-md);
   border: 1px solid var(--line-hairline);
   background: var(--bg-obsidian);
   color: var(--text-body);
-  font-size: 0.66rem;
+  font-size: 0.75rem;
   transition:
     border-color 0.2s ease,
     color 0.2s ease,
@@ -323,7 +323,7 @@
   border: 1px solid rgba(73, 180, 255, 0.3);
   background: var(--accent-cyan-soft);
   color: var(--accent-cyan);
-  font-size: 0.6rem;
+  font-size: 0.75rem;
 }
 
 .tech-category-desc {
@@ -461,7 +461,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
 .tech-symbol-role {
   position: relative;
   z-index: 1;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   line-height: 1.35;
   color: var(--text-body);
   margin-top: 3px;
@@ -572,7 +572,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   padding-top: 24px;
   border-top: 1px solid var(--line-hairline);
   color: var(--text-muted);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
 }
 
 .tech-footer-left {

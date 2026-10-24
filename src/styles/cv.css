@@ -61,7 +61,7 @@
 
 /* Variante Header (Discreta e Compacta) */
 .btn-cv-header {
-  min-height: 36px;
+  min-height: 44px;
   padding: 6px 12px;
   border-radius: var(--radius-md);
   border: 1px solid var(--line-hairline);
@@ -174,7 +174,7 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   letter-spacing: 0.04em;
 }

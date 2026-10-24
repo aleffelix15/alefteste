@@ -132,7 +132,7 @@
 
 .spine-text {
   color: var(--text-muted);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   line-height: 1.5;
 }
 
@@ -155,7 +155,7 @@
   border: 1px solid var(--success-border);
   background: var(--success-bg);
   color: var(--success-text);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   letter-spacing: 0.08em;
 }
 
@@ -218,6 +218,7 @@
   align-items: center;
   gap: 16px;
   padding-top: 6px;
+  gap: 12px;
 }
 
 .btn-white-editorial {
@@ -320,13 +321,13 @@
 }
 
 .proof-metric-label {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: var(--accent-cyan);
   font-weight: 600;
 }
 
 .proof-metric-detail {
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
 }
 
@@ -360,7 +361,7 @@
 
 .hero-studio-caption {
   max-width: 340px;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   background: var(--glass-bg);
   backdrop-filter: blur(8px);
@@ -438,7 +439,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   letter-spacing: 0.16em;
   opacity: 0;
@@ -505,6 +506,12 @@
     align-items: flex-start;
     text-align: left;
     gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-serif-title {
+    font-size: clamp(2rem, 1.8rem + 1.5vw, 2.35rem);
   }
 }
 

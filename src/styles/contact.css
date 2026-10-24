@@ -54,7 +54,7 @@
   justify-content: space-between;
   gap: 12px;
   color: var(--text-muted);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   letter-spacing: 0.08em;
 }
 
@@ -252,7 +252,7 @@
   justify-content: center;
   gap: 6px;
   padding-top: 8px;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   letter-spacing: 0.04em;
   text-align: center;
@@ -267,7 +267,7 @@
   transition: color 0.2s ease, text-decoration 0.2s ease;
   text-decoration: underline;
   text-underline-offset: 3px;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
 }
 
 @media (hover: hover) and (pointer: fine) {

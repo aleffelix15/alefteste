@@ -58,7 +58,7 @@
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   white-space: nowrap;
 }
@@ -79,7 +79,7 @@
   border-left: 1px solid var(--line-hairline);
   background: var(--bg-obsidian);
   color: var(--text-muted);
-  font-size: 0.625rem;
+  font-size: 0.75rem;
   transition: color 0.2s ease, background-color 0.2s ease;
 }
 
@@ -99,5 +99,5 @@
 
 .ticker-pause-glyph {
   color: var(--accent-cyan);
-  font-size: 0.6rem;
+  font-size: 0.75rem;
 }
