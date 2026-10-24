@@ -25,17 +25,17 @@ export function Preloader() {
   useEffect(() => {
     if (!mounted) return;
 
-    // Tempo total de desenho de ~900ms + fade out de 250ms = ~1150ms (< 1.2s)
+    // Tempo total de desenho de ~880ms + fade out de 350ms = ~1230ms
     const fadeTimer = window.setTimeout(() => {
       setIsFading(true);
-    }, 900);
+    }, 880);
 
     const endTimer = window.setTimeout(() => {
       try {
         sessionStorage.setItem("alef_preloader_seen", "1");
       } catch {}
       setMounted(false);
-    }, 1150);
+    }, 1230);
 
     return () => {
       window.clearTimeout(fadeTimer);

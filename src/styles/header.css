@@ -91,9 +91,9 @@
   pointer-events: none;
   opacity: 0;
   transition:
-    left 0.3s var(--ease-editorial),
-    width 0.3s var(--ease-editorial),
-    opacity 0.2s ease;
+    left 0.38s var(--ease-editorial),
+    width 0.38s var(--ease-editorial),
+    opacity 0.25s ease;
 }
 
 .nav-link {

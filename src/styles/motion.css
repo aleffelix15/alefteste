@@ -13,6 +13,7 @@
   box-shadow: 0 0 10px var(--accent-electric-glow);
   transform-origin: 0% 50%;
   transform: scaleX(0);
+  transition: transform 0.08s linear;
   z-index: 200;
   pointer-events: none;
 }
@@ -20,15 +21,16 @@
 /* 1. Revelação de blocos e capítulos no scroll */
 html.motion-ready [data-reveal] {
   opacity: 0;
-  transform: translateY(18px);
+  transform: translate3d(0, 18px, 0);
+  will-change: opacity, transform;
   transition:
-    opacity 0.72s var(--ease-editorial) var(--reveal-delay, 0ms),
-    transform 0.72s var(--ease-editorial) var(--reveal-delay, 0ms);
+    opacity 0.85s var(--ease-editorial) var(--reveal-delay, 0ms),
+    transform 0.85s var(--ease-editorial) var(--reveal-delay, 0ms);
 }
 
 html.motion-ready [data-reveal].is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
 }
 
 /* 2. Revelação tipográfica em máscara (curtain text reveal) */
@@ -45,16 +47,16 @@ html.motion-ready [data-reveal].is-visible {
 }
 
 html.motion-ready [data-reveal] .line-inner {
-  transform: translate3d(0, 104%, 0);
+  transform: translate3d(0, 106%, 0) rotate(1.2deg);
   opacity: 0;
-  transform-origin: left bottom;
+  transform-origin: 0% 100%;
   transition:
-    transform 0.82s var(--ease-editorial) var(--line-delay, 0ms),
-    opacity 0.6s var(--ease-editorial) var(--line-delay, 0ms);
+    transform 0.92s var(--ease-editorial) var(--line-delay, 0ms),
+    opacity 0.72s var(--ease-editorial) var(--line-delay, 0ms);
 }
 
 html.motion-ready [data-reveal].is-visible .line-inner {
-  transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0) rotate(0deg);
   opacity: 1;
 }
 
@@ -62,9 +64,10 @@ html.motion-ready [data-reveal].is-visible .line-inner {
 html.motion-ready [data-reveal] .hero-stagger-fade {
   opacity: 0;
   transform: translate3d(0, 14px, 0);
+  will-change: opacity, transform;
   transition:
-    opacity 0.68s var(--ease-editorial) var(--fade-delay, 0ms),
-    transform 0.68s var(--ease-editorial) var(--fade-delay, 0ms);
+    opacity 0.76s var(--ease-editorial) var(--fade-delay, 0ms),
+    transform 0.76s var(--ease-editorial) var(--fade-delay, 0ms);
 }
 
 html.motion-ready [data-reveal].is-visible .hero-stagger-fade {
@@ -87,8 +90,8 @@ html.motion-ready [data-reveal].is-visible .hero-stagger-fade {
 .hero-backdrop-img {
   will-change: transform;
   transform: scale(1.015) translate3d(0, var(--hero-parallax-y, 0px), 0);
-  transition: transform 0.14s linear;
-  animation: heroStudioReveal 1.25s var(--ease-editorial) both;
+  transition: transform 0.22s var(--ease-editorial);
+  animation: heroStudioReveal 1.35s var(--ease-editorial) both;
 }
 
 /* 5. Linhas arquitetônicas verticais (.spine-rule & .marker-line) */
@@ -96,7 +99,7 @@ html.motion-ready [data-reveal] .spine-rule,
 html.motion-ready [data-reveal] .marker-line {
   transform: scaleY(0);
   transform-origin: top center;
-  transition: transform 0.82s var(--ease-editorial) 160ms;
+  transition: transform 0.95s var(--ease-curtain) 160ms;
 }
 
 html.motion-ready [data-reveal].is-visible .spine-rule,
@@ -108,7 +111,7 @@ html.motion-ready [data-reveal].is-visible .marker-line {
 [data-magnetic] {
   transform: translate3d(var(--mag-x, 0px), var(--mag-y, 0px), 0);
   transition:
-    transform 0.26s var(--ease-editorial),
+    transform 0.34s var(--ease-spring-smooth),
     border-color 0.2s ease,
     background-color 0.2s ease,
     box-shadow 0.2s ease,
@@ -130,7 +133,7 @@ html.motion-ready [data-reveal].is-visible .marker-line {
 
 .screen-fade-picture {
   display: block;
-  animation: screenSwitchFade 0.38s var(--ease-editorial) both;
+  animation: screenSwitchFade 0.42s var(--ease-editorial) both;
 }
 
 /* 8. Stagger nas pílulas de stack e etapas de processo */
@@ -139,8 +142,8 @@ html.motion-ready [data-reveal] .process-compact-item {
   opacity: 0;
   transform: translate3d(0, 10px, 0);
   transition:
-    opacity 0.48s var(--ease-editorial) calc(var(--stagger-index, 0) * 40ms + 120ms),
-    transform 0.48s var(--ease-editorial) calc(var(--stagger-index, 0) * 40ms + 120ms),
+    opacity 0.52s var(--ease-editorial) calc(var(--stagger-index, 0) * 45ms + 120ms),
+    transform 0.52s var(--ease-editorial) calc(var(--stagger-index, 0) * 45ms + 120ms),
     border-color 0.2s ease,
     background-color 0.2s ease,
     color 0.2s ease;
@@ -164,7 +167,7 @@ html.motion-ready [data-reveal].is-visible .process-compact-item {
 .hover-roll-primary,
 .hover-roll-clone {
   display: block;
-  transition: transform 0.34s var(--ease-editorial);
+  transition: transform 0.38s var(--ease-editorial);
   will-change: transform;
 }
 
@@ -305,7 +308,7 @@ html.motion-ready [data-reveal].is-visible .process-compact-item {
 
 html.motion-ready [data-reveal] .photo-curtain-wrap::after {
   transform: scaleX(1);
-  transition: transform 0.88s var(--ease-editorial) 100ms;
+  transition: transform 0.95s var(--ease-curtain) 100ms;
 }
 
 html.motion-ready [data-reveal].is-visible .photo-curtain-wrap::after {
@@ -314,7 +317,7 @@ html.motion-ready [data-reveal].is-visible .photo-curtain-wrap::after {
 
 html.motion-ready [data-reveal] .photo-curtain-wrap img {
   transform: scale(1.05);
-  transition: transform 1.05s var(--ease-editorial) 100ms;
+  transition: transform 1.15s var(--ease-editorial) 100ms;
 }
 
 html.motion-ready [data-reveal].is-visible .photo-curtain-wrap img {
@@ -343,7 +346,7 @@ html.motion-ready [data-chapter-section]::after {
   );
   transform: scaleX(0);
   transform-origin: left center;
-  transition: transform 1.05s var(--ease-editorial);
+  transition: transform 1.15s var(--ease-curtain);
   pointer-events: none;
 }
 
@@ -378,11 +381,12 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
     pointer-events: none;
     opacity: 0;
     transition:
-      opacity 0.25s ease,
-      padding 0.25s var(--ease-editorial),
-      margin 0.25s var(--ease-editorial),
+      opacity 0.28s ease,
+      padding 0.32s var(--ease-editorial),
+      margin 0.32s var(--ease-editorial),
       border-color 0.25s ease,
-      background-color 0.25s ease;
+      background-color 0.25s ease,
+      box-shadow 0.3s ease;
     will-change: transform;
   }
 
@@ -406,8 +410,8 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
     overflow: hidden;
     white-space: nowrap;
     transition:
-      max-width 0.28s var(--ease-editorial),
-      opacity 0.2s ease;
+      max-width 0.32s var(--ease-editorial),
+      opacity 0.22s ease;
   }
 
   .editorial-cursor.has-label {

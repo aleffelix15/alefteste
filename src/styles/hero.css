@@ -384,7 +384,7 @@
   align-items: center;
   justify-content: center;
   background: var(--bg-obsidian);
-  transition: opacity 0.25s ease, visibility 0.25s ease;
+  transition: opacity 0.35s var(--ease-editorial), visibility 0.35s var(--ease-editorial);
 }
 
 .site-preloader.is-fading-out {

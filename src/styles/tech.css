@@ -381,7 +381,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   filter: blur(24px);
   opacity: 0.12;
   pointer-events: none;
-  transition: opacity 0.28s ease, transform 0.28s ease;
+  transition: opacity 0.35s ease, transform 0.35s var(--ease-editorial);
 }
 
 .tech-symbol-emblem-wrap {
@@ -393,12 +393,12 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   width: 62px;
   height: 62px;
   margin-bottom: 10px;
-  transition: transform 0.28s var(--ease-editorial);
+  transition: transform 0.36s var(--ease-editorial);
 }
 
 .tech-emblem-svg {
   filter: drop-shadow(0 4px 10px rgba(var(--shadow-color), 0.35));
-  transition: transform 0.3s var(--ease-editorial), filter 0.28s ease;
+  transition: transform 0.36s var(--ease-editorial), filter 0.3s ease;
 }
 
 .tech-symbol-card:hover {

@@ -289,8 +289,8 @@ export function initPortfolioMotion(): () => void {
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
 
-        const deltaX = Math.max(-7, Math.min(7, (clientX - centerX) * 0.16));
-        const deltaY = Math.max(-5, Math.min(5, (clientY - centerY) * 0.16));
+        const deltaX = Math.max(-8, Math.min(8, (clientX - centerX) * 0.18));
+        const deltaY = Math.max(-6, Math.min(6, (clientY - centerY) * 0.18));
 
         magEl.style.setProperty("--mag-x", `${deltaX.toFixed(2)}px`);
         magEl.style.setProperty("--mag-y", `${deltaY.toFixed(2)}px`);
@@ -403,12 +403,12 @@ export function initPortfolioMotion(): () => void {
 
     const updateCursorPosition = () => {
       cursorRaf = 0;
-      currentX += (targetX - currentX) * 0.24;
-      currentY += (targetY - currentY) * 0.24;
+      currentX += (targetX - currentX) * 0.18;
+      currentY += (targetY - currentY) * 0.18;
 
       cursorEl.style.transform = `translate3d(${currentX.toFixed(1)}px, ${currentY.toFixed(1)}px, 0)`;
 
-      if (Math.abs(targetX - currentX) > 0.2 || Math.abs(targetY - currentY) > 0.2) {
+      if (Math.abs(targetX - currentX) > 0.15 || Math.abs(targetY - currentY) > 0.15) {
         cursorRaf = window.requestAnimationFrame(updateCursorPosition);
       }
     };
