@@ -154,17 +154,22 @@
 
 .screen-switcher {
   display: inline-flex;
-  gap: 4px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .screen-switch-btn {
-  padding: 3px 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 6px 12px;
   border-radius: var(--radius-sm);
   font-size: 0.75rem;
   border: 1px solid var(--surface-inverse-border);
   color: var(--text-inverse-muted);
   background: var(--surface-inverse);
-  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -182,9 +187,11 @@
 }
 
 .screen-switch-btn.is-active {
-  border-color: var(--accent-electric);
-  color: var(--text-inverse);
+  border-color: var(--accent-cyan);
+  color: var(--text-white);
   background: var(--accent-electric-soft);
+  font-weight: 600;
+  box-shadow: 0 0 10px rgba(73, 180, 255, 0.25);
 }
 
 .project-capture-link {
@@ -531,9 +538,63 @@
   .projects-intro-column {
     position: static;
   }
+}
 
+@media (max-width: 768px) {
   .projects-quick-nav {
+    display: flex;
     flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 8px;
+    padding-bottom: 8px;
+    mask-image: linear-gradient(90deg, #000 0%, #000 85%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 85%, transparent 100%);
+  }
+
+  .projects-quick-pill {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    white-space: nowrap;
+    min-height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-editorial-feature {
+    padding: 18px 14px;
+    gap: 18px;
+  }
+
+  .capture-window-bar {
+    padding: 8px 12px;
     flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .project-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .project-actions-row {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .project-action-primary,
+  .project-action-secondary {
+    width: 100%;
+    justify-content: center;
+    min-height: 48px;
+  }
+
+  .case-study-content-panel {
+    padding-top: 12px;
+    padding-bottom: 4px;
   }
 }
