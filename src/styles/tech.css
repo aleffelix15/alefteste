@@ -382,29 +382,16 @@
     transform 0.28s var(--ease-out-expo);
 }
 
-/* Borda iluminada de proximidade (Mouse-Tracked Proximity Glow em 380px circle) */
-.tech-symbol-card::after {
+/* Brilho e realce fixo por CSS puro no :hover (Zero Paint no mousemove) */
+.tech-symbol-card::before {
   content: "";
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  padding: 1.5px;
-  background: radial-gradient(
-    380px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
-    var(--brand-color, var(--accent-cyan)) 0%,
-    rgba(73, 180, 255, 0.55) 28%,
-    rgba(22, 119, 255, 0.18) 52%,
-    transparent 75%
-  );
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: var(--grid-glow-opacity, 0);
-  transition: opacity 0.3s ease;
+  border: 1px solid var(--brand-color, var(--accent-cyan));
+  opacity: 0;
+  transition: opacity 0.28s ease;
   pointer-events: none;
-  z-index: 2;
 }
 
 html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
@@ -447,13 +434,17 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
 
 @media (hover: hover) and (pointer: fine) {
   .tech-symbol-card:hover {
-    border-color: var(--line-accent);
+    border-color: var(--brand-color, var(--line-accent));
     background: var(--bg-elevated);
     box-shadow: var(--shadow-md), 0 0 22px -8px var(--accent-electric-glow);
+    transform: translate3d(0, -4px, 0);
+  }
+
+  .tech-symbol-card:hover::before {
+    opacity: 1;
   }
 
   .tech-symbol-card:hover .tech-symbol-emblem-wrap {
-    will-change: transform;
     transform: scale(1.12) rotate(-4deg);
   }
 

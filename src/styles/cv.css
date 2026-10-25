@@ -42,25 +42,25 @@
   isolation: isolate;
 }
 
-/* Preenchimento Líquido Direcional (Directional Spotlight Fill: scale(0) -> scale(2.8)) */
+/* Preenchimento Líquido com escala pura a partir do centro (Zero Paint no mousemove) */
 .cv-liquid-fill {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  height: 220%;
+  margin-top: -110%;
+  margin-left: -60%;
+  border-radius: var(--radius-md);
   background: var(--text-white);
   pointer-events: none;
   z-index: 0;
-  transform: translate3d(
-      calc(var(--mouse-x, 55px) - 55px),
-      calc(var(--mouse-y, 24px) - 55px),
-      0
-    )
-    scale(0);
-  transition: transform 0.62s var(--ease-out-expo);
-  will-change: transform;
+  transform: scale(0);
+  transition: transform 0.45s var(--ease-out-expo);
+}
+
+.btn-cv-liquid:hover .cv-liquid-fill {
+  transform: scale(1);
 }
 
 .btn-cv-content-inner {
@@ -70,7 +70,6 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  will-change: transform;
 }
 
 /* Variante Secundária (Hero e Seções Principais) */
@@ -121,17 +120,12 @@
 }
 
 .cv-icon-cascade {
-  will-change: transform, opacity;
+  position: relative;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .btn-cv-liquid:hover .cv-liquid-fill {
-    transform: translate3d(
-        calc(var(--mouse-x, 55px) - 55px),
-        calc(var(--mouse-y, 24px) - 55px),
-        0
-      )
-      scale(2.8);
+    transform: scale(1);
   }
 
   .btn-cv-liquid:hover {

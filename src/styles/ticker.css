@@ -28,23 +28,21 @@
   overflow: hidden;
   mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
-  /* PERF: Aplica o deslocamento e skewX uma única vez no container pai, sem invalidar cada .ticker-item */
-  transform: translate3d(calc(var(--scroll-velocity, 0) * -0.45px), 0, 0)
-    skewX(var(--scroll-skew, 0deg));
-  will-change: transform;
 }
 
 .ticker-track {
   display: flex;
   width: max-content;
   animation: editorialTickerScroll 34s linear infinite;
-  will-change: transform;
 }
 
-/* PERF: Pausar animação quando pausada, em foco ou fora da tela */
+/* PERF: Pausar ou desacelerar animação pura por CSS sem nenhum listener de scroll */
+.editorial-ticker-band:hover .ticker-track {
+  animation-play-state: paused;
+}
+
 .editorial-ticker-band:focus-within .ticker-track,
-.editorial-ticker-band.is-paused .ticker-track,
-.editorial-ticker-band.is-offscreen .ticker-track {
+.editorial-ticker-band.is-paused .ticker-track {
   animation-play-state: paused !important;
 }
 

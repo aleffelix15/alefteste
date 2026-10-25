@@ -2,7 +2,7 @@
    COREOGRAFIA DE ANIMAÇÕES CINEMATOGRÁFICAS E PREFERS-REDUCED-MOTION
    ========================================================================== */
 
-/* Barra de progresso de scroll global */
+/* Barra de progresso de scroll global via CSS Scroll Timeline (100% GPU, zero JavaScript) */
 .scroll-progress-bar {
   position: fixed;
   top: 0;
@@ -13,16 +13,30 @@
   box-shadow: 0 0 10px var(--accent-electric-glow);
   transform-origin: 0% 50%;
   transform: scaleX(0);
-  transition: transform 0.08s linear;
   z-index: 200;
   pointer-events: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress-bar {
+    animation: scrollProgressFill auto linear;
+    animation-timeline: scroll(root block);
+  }
+
+  @keyframes scrollProgressFill {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
 }
 
 /* 1. Revelação de blocos e capítulos no scroll */
 html.motion-ready [data-reveal] {
   opacity: 0;
   transform: translate3d(0, 18px, 0);
-  will-change: opacity, transform;
   transition:
     opacity 0.85s var(--ease-out-expo) var(--reveal-delay, 0ms),
     transform 0.85s var(--ease-out-expo) var(--reveal-delay, 0ms);
@@ -43,7 +57,6 @@ html.motion-ready [data-reveal].is-visible {
 
 .line-inner {
   display: block;
-  will-change: transform, opacity;
 }
 
 html.motion-ready [data-reveal] .line-inner {
@@ -64,7 +77,6 @@ html.motion-ready [data-reveal].is-visible .line-inner {
 html.motion-ready [data-reveal] .hero-stagger-fade {
   opacity: 0;
   transform: translate3d(0, 14px, 0);
-  will-change: opacity, transform;
   transition:
     opacity 0.76s var(--ease-out-expo) var(--fade-delay, 0ms),
     transform 0.76s var(--ease-out-expo) var(--fade-delay, 0ms);
@@ -75,7 +87,7 @@ html.motion-ready [data-reveal].is-visible .hero-stagger-fade {
   transform: translate3d(0, 0, 0);
 }
 
-/* 4. Paralaxe suave + revelação da fotografia do estúdio (Hero) */
+/* 4. Fotografia do estúdio (Hero) */
 @keyframes heroStudioReveal {
   0% {
     opacity: 0;
@@ -83,13 +95,12 @@ html.motion-ready [data-reveal].is-visible .hero-stagger-fade {
   }
   100% {
     opacity: 0.86;
-    transform: scale(1.015) translate3d(0, var(--hero-parallax-y, 0px), 0);
+    transform: scale(1.015) translate3d(0, 0, 0);
   }
 }
 
 .hero-backdrop-img {
-  will-change: transform;
-  transform: scale(1.015) translate3d(0, var(--hero-parallax-y, 0px), 0);
+  transform: scale(1.015) translate3d(0, 0, 0);
   transition: transform 0.22s var(--ease-out-expo);
   animation: heroStudioReveal 1.35s var(--ease-out-expo) both;
 }
@@ -109,14 +120,13 @@ html.motion-ready [data-reveal].is-visible .marker-line {
 
 /* 6. Botões e links magnéticos ([data-magnetic]) */
 [data-magnetic] {
-  transform: translate3d(var(--mag-x, 0px), var(--mag-y, 0px), 0);
+  transform: translate3d(0, 0, 0);
   transition:
-    transform 0.34s var(--ease-spring-smooth),
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
     border-color 0.2s ease,
     background-color 0.2s ease,
     box-shadow 0.2s ease,
     color 0.2s ease;
-  will-change: transform;
 }
 
 /* 7. Transição de tela nos projetos (.screen-fade-picture) */
@@ -160,48 +170,30 @@ html.motion-ready [data-reveal].is-visible .project-stack-pill {
 .hover-roll-text {
   position: relative;
   display: inline-flex;
-  align-items: baseline;
   overflow: hidden;
   line-height: 1.25;
+  vertical-align: middle;
 }
 
-.roll-char-cell {
-  position: relative;
-  display: inline-flex;
-  flex-direction: column;
-  overflow: hidden;
-  vertical-align: bottom;
-}
-
-.roll-char {
+.roll-line {
   display: inline-block;
-  transition: transform 0.55s var(--ease-out-expo);
-  transition-delay: calc(var(--char-index, 0) * 15ms);
+  white-space: nowrap;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (hover: hover) and (pointer: fine) {
-  a:hover .roll-char,
-  button:hover .roll-char,
-  a:focus-visible .roll-char,
-  button:focus-visible .roll-char,
-  .is-animating .roll-char {
-    will-change: transform;
-  }
+.roll-line--top {
+  transform: translate3d(0, 0, 0);
 }
 
-.roll-char--top {
-  transform: translate3d(0, 0%, 0);
-}
-
-.roll-char--bottom {
+.roll-line--bottom {
   position: absolute;
   top: 100%;
   left: 0;
   width: 100%;
-  transform: translate3d(0, 0%, 0);
+  transform: translate3d(0, 0, 0);
 }
 
-.hover-roll-text.has-serif-accent .roll-char--bottom {
+.hover-roll-text.has-serif-accent .roll-line--bottom {
   font-family: var(--font-serif);
   font-style: italic;
   font-weight: 400;
@@ -209,17 +201,17 @@ html.motion-ready [data-reveal].is-visible .project-stack-pill {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  a:hover .roll-char--top,
-  button:hover .roll-char--top,
-  a:focus-visible .roll-char--top,
-  button:focus-visible .roll-char--top {
+  a:hover .roll-line--top,
+  button:hover .roll-line--top,
+  a:focus-visible .roll-line--top,
+  button:focus-visible .roll-line--top {
     transform: translate3d(0, -100%, 0);
   }
 
-  a:hover .roll-char--bottom,
-  button:hover .roll-char--bottom,
-  a:focus-visible .roll-char--bottom,
-  button:focus-visible .roll-char--bottom {
+  a:hover .roll-line--bottom,
+  button:hover .roll-line--bottom,
+  a:focus-visible .roll-line--bottom,
+  button:focus-visible .roll-line--bottom {
     transform: translate3d(0, -100%, 0);
   }
 }
@@ -438,7 +430,6 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
       border-color 0.25s ease,
       background-color 0.25s ease,
       box-shadow 0.3s ease;
-    will-change: transform;
   }
 
   .editorial-cursor.is-active {
@@ -464,7 +455,7 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
       opacity 0.22s ease;
   }
 
-  /* PERF: Removido mix-blend-mode: difference para eliminar repintura pesada a cada frame de mouse */
+  /* Cursor Magnético sem mix-blend-mode: 0 impacto de composição na GPU */
   .editorial-cursor.is-magnetic {
     width: 36px;
     height: 36px;
@@ -476,7 +467,7 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
     box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
   }
 
-  /* PERF: Removido backdrop-filter do cursor dinâmico; background opaco evita recomposição do framebuffer */
+  /* Cursor com Rótulo com fundo sólido escuro elegante (0 blur, 0 compositing lag) */
   .editorial-cursor.has-label {
     width: auto;
     height: auto;
@@ -486,7 +477,7 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
     margin-top: -16px;
     border-radius: var(--radius-full);
     border: 1px solid var(--accent-electric);
-    background: rgba(13, 20, 32, 0.95);
+    background: rgba(16, 16, 18, 0.94);
     box-shadow: 0 8px 24px -6px var(--accent-electric-glow);
     mix-blend-mode: normal;
   }
@@ -519,10 +510,9 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
   html.motion-ready [data-reveal] .spine-rule,
   html.motion-ready [data-reveal] .marker-line,
   html.motion-ready [data-reveal] .photo-curtain-wrap img,
-  .roll-char,
-  .roll-char--top,
-  .roll-char--bottom,
-  .editorial-reading-phrase {
+  .roll-line,
+  .roll-line--top,
+  .roll-line--bottom {
     opacity: 1 !important;
     transform: none !important;
     animation: none !important;

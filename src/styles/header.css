@@ -8,7 +8,8 @@
   z-index: 120;
   height: var(--header-height);
   background: var(--header-bg);
-  /* PERF: Removido backdrop-filter para eliminar custo de composição a cada frame de rolagem */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--line-hairline);
   transform: translate3d(0, 0, 0);
   transition:
@@ -16,7 +17,6 @@
     background-color 0.25s ease,
     border-color 0.25s ease,
     box-shadow 0.25s ease;
-  will-change: transform;
 }
 
 .site-header.is-compact {
@@ -48,7 +48,6 @@
 .monogram-svg {
   color: var(--text-white);
   transition: transform 0.35s var(--ease-out-expo);
-  will-change: transform;
 }
 
 @keyframes monogramStrokeDraw {
@@ -135,7 +134,6 @@
   transition:
     transform 0.48s var(--ease-out-expo),
     opacity 0.25s ease;
-  will-change: transform, opacity;
 }
 
 .nav-link {

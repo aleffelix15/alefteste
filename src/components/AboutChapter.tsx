@@ -2,13 +2,6 @@ import React, { useRef, useEffect } from "react";
 import { aboutData } from "../data";
 import { RollText } from "./RollText";
 
-function splitIntoHighlightSentences(text: string): string[] {
-  return text
-    .split(/(?<=\.)\s+/)
-    .map((s) => s.trim())
-    .filter(Boolean);
-}
-
 export function AboutChapter() {
   const timelineRef = useRef<HTMLOListElement>(null);
 
@@ -31,19 +24,16 @@ export function AboutChapter() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("is-active");
+            observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.35, rootMargin: "0px 0px -40px 0px" }
+      { threshold: 0.25, rootMargin: "0px 0px -40px 0px" }
     );
 
     items.forEach((it) => observer.observe(it));
     return () => observer.disconnect();
   }, []);
-
-  const p1Sentences = splitIntoHighlightSentences(aboutData.paragraph1);
-  const p2Sentences = splitIntoHighlightSentences(aboutData.paragraph2);
-  const p3Sentences = splitIntoHighlightSentences(aboutData.paragraph3);
 
   return (
     <section
@@ -69,29 +59,27 @@ export function AboutChapter() {
             <div className="about-photos-montage">
               <figure
                 className="about-photo-card about-photo-studio"
-                data-tilt-card
-                data-tilt-max="4"
                 data-cursor-label="[ ESTÚDIO ↗ ]"
               >
                 <div className="photo-curtain-wrap about-depth-viewport">
                   <picture>
                     <source
                       media="(max-width: 767px)"
-                      type="image/avif"
-                      srcSet={`${aboutData.studioDeskImage.base}-640.avif`}
-                    />
-                    <source
-                      media="(max-width: 767px)"
                       type="image/webp"
                       srcSet={`${aboutData.studioDeskImage.base}-640.webp`}
                     />
                     <source
+                      media="(max-width: 767px)"
                       type="image/avif"
-                      srcSet={`${aboutData.studioDeskImage.base}.avif`}
+                      srcSet={`${aboutData.studioDeskImage.base}-640.avif`}
                     />
                     <source
                       type="image/webp"
                       srcSet={`${aboutData.studioDeskImage.base}.webp`}
+                    />
+                    <source
+                      type="image/avif"
+                      srcSet={`${aboutData.studioDeskImage.base}.avif`}
                     />
                     <img
                       src={`${aboutData.studioDeskImage.base}.webp`}
@@ -103,8 +91,6 @@ export function AboutChapter() {
                       className="about-studio-img"
                     />
                   </picture>
-                  <div className="about-photo-grain" aria-hidden="true" />
-                  <div className="project-plate-spotlight" aria-hidden="true" />
                 </div>
                 <figcaption className="photo-micro-caption mono">
                   {aboutData.studioDeskImage.caption}
@@ -113,29 +99,27 @@ export function AboutChapter() {
 
               <figure
                 className="about-photo-card about-photo-portrait"
-                data-tilt-card
-                data-tilt-max="4"
                 data-cursor-label="[ RETRATO ↗ ]"
               >
                 <div className="photo-curtain-wrap about-depth-viewport">
                   <picture>
                     <source
                       media="(max-width: 767px)"
-                      type="image/avif"
-                      srcSet={`${aboutData.realPortraitImage.base}-640.avif`}
-                    />
-                    <source
-                      media="(max-width: 767px)"
                       type="image/webp"
                       srcSet={`${aboutData.realPortraitImage.base}-640.webp`}
                     />
                     <source
+                      media="(max-width: 767px)"
                       type="image/avif"
-                      srcSet={`${aboutData.realPortraitImage.base}.avif`}
+                      srcSet={`${aboutData.realPortraitImage.base}-640.avif`}
                     />
                     <source
                       type="image/webp"
                       srcSet={`${aboutData.realPortraitImage.base}.webp`}
+                    />
+                    <source
+                      type="image/avif"
+                      srcSet={`${aboutData.realPortraitImage.base}.avif`}
                     />
                     <img
                       src={`${aboutData.realPortraitImage.base}.webp`}
@@ -147,8 +131,6 @@ export function AboutChapter() {
                       className="about-portrait-img"
                     />
                   </picture>
-                  <div className="about-photo-grain" aria-hidden="true" />
-                  <div className="project-plate-spotlight" aria-hidden="true" />
                 </div>
                 <figcaption className="photo-micro-caption mono">
                   {aboutData.realPortraitImage.caption}
@@ -167,41 +149,11 @@ export function AboutChapter() {
               </span>
             </h2>
 
-            {/* Destaque Progressivo de Leitura (Editorial Scroll Highlight) */}
+            {/* Narrativa Editorial com renderização de nós DOM limpa e leve */}
             <div className="about-prose-stack">
-              <p className="about-lead-p">
-                {p1Sentences.map((sentence, idx) => (
-                  <span
-                    key={idx}
-                    className="editorial-reading-phrase"
-                    data-scroll-highlight
-                  >
-                    {sentence}{idx < p1Sentences.length - 1 ? " " : ""}
-                  </span>
-                ))}
-              </p>
-              <p>
-                {p2Sentences.map((sentence, idx) => (
-                  <span
-                    key={idx}
-                    className="editorial-reading-phrase"
-                    data-scroll-highlight
-                  >
-                    {sentence}{idx < p2Sentences.length - 1 ? " " : ""}
-                  </span>
-                ))}
-              </p>
-              <p>
-                {p3Sentences.map((sentence, idx) => (
-                  <span
-                    key={idx}
-                    className="editorial-reading-phrase"
-                    data-scroll-highlight
-                  >
-                    {sentence}{idx < p3Sentences.length - 1 ? " " : ""}
-                  </span>
-                ))}
-              </p>
+              <p className="about-lead-p">{aboutData.paragraph1}</p>
+              <p>{aboutData.paragraph2}</p>
+              <p>{aboutData.paragraph3}</p>
             </div>
 
             {/* Linha do Tempo Vertical do Método de Trabalho */}

@@ -81,6 +81,28 @@ export function Header() {
     return () => observer.disconnect();
   }, []);
 
+  // O ÚNICO listener de scroll permitido no projeto: guarda booleana simples (scrollY > 80)
+  // Só executa escrita no DOM quando o limiar for cruzado, com custo zero durante o restante da rolagem.
+  useEffect(() => {
+    let isScrolled = false;
+    const headerEl = document.querySelector<HTMLElement>(".site-header");
+
+    const onScroll = () => {
+      const scrolled = window.scrollY > 80;
+      if (scrolled !== isScrolled) {
+        isScrolled = scrolled;
+        if (headerEl) {
+          headerEl.classList.toggle("is-compact", isScrolled);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   // Scroll lock robusto no iOS e mobile sem deslocamento de header
   useEffect(() => {
     if (!mobileMenuOpen) return;

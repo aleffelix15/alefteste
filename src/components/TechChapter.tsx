@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
+import React, { useState, useRef, useLayoutEffect } from "react";
 import {
   techCategories,
   techChapterData,
@@ -9,7 +9,6 @@ import {
   type AuditedRepoName,
 } from "../data";
 import { getColorTechEmblem } from "../icons";
-import { scrambleElementText } from "../motion";
 
 export function TechChapter() {
   const [selectedTier, setSelectedTier] = useState<"ALL" | TechTier>("daily");
@@ -19,7 +18,6 @@ export function TechChapter() {
   const cardsContainerRef = useRef<HTMLDivElement>(null);
   const prevPositions = useRef<Map<string, DOMRect>>(new Map());
   const isFirstRender = useRef(true);
-  const gridRafRef = useRef<number>(0);
 
   // FLIP Animation: First - Last - Invert - Play
   useLayoutEffect(() => {
@@ -83,87 +81,6 @@ export function TechChapter() {
       prevPositions.current = positions;
     }
     setSelectedTier(tier);
-  };
-
-  const cachedContainerRect = useRef<DOMRect | null>(null);
-
-  useEffect(() => {
-    const updateContainerRect = () => {
-      if (cardsContainerRef.current) {
-        cachedContainerRect.current = cardsContainerRef.current.getBoundingClientRect();
-      }
-    };
-    window.addEventListener("scroll", updateContainerRect, { passive: true });
-    window.addEventListener("resize", updateContainerRect, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", updateContainerRect);
-      window.removeEventListener("resize", updateContainerRect);
-      if (gridRafRef.current) {
-        window.cancelAnimationFrame(gridRafRef.current);
-      }
-    };
-  }, []);
-
-  const handleGridPointerEnter = () => {
-    if (cardsContainerRef.current) {
-      cachedContainerRect.current = cardsContainerRef.current.getBoundingClientRect();
-    }
-  };
-
-  // Mouse-Tracked Proximity Glow na grade inteira (Zero Layout Thrashing)
-  const handleGridPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (typeof window === "undefined") return;
-    if (
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-      !window.matchMedia("(pointer: fine)").matches
-    ) {
-      return;
-    }
-
-    const container = cardsContainerRef.current;
-    if (!container) return;
-
-    if (!cachedContainerRect.current) {
-      cachedContainerRect.current = container.getBoundingClientRect();
-    }
-
-    const clientX = e.clientX;
-    const clientY = e.clientY;
-
-    if (gridRafRef.current) {
-      window.cancelAnimationFrame(gridRafRef.current);
-    }
-
-    gridRafRef.current = window.requestAnimationFrame(() => {
-      gridRafRef.current = 0;
-      if (!cachedContainerRect.current) return;
-      const x = clientX - cachedContainerRect.current.left;
-      const y = clientY - cachedContainerRect.current.top;
-      container.style.setProperty("--grid-mouse-x", `${x.toFixed(1)}px`);
-      container.style.setProperty("--grid-mouse-y", `${y.toFixed(1)}px`);
-      container.style.setProperty("--grid-glow-opacity", "1");
-    });
-  };
-
-  const handleGridPointerLeave = () => {
-    if (gridRafRef.current) {
-      window.cancelAnimationFrame(gridRafRef.current);
-      gridRafRef.current = 0;
-    }
-    const container = cardsContainerRef.current;
-    if (container) {
-      container.style.setProperty("--grid-glow-opacity", "0");
-    }
-  };
-
-  const handleCardMouseEnter = (e: React.MouseEvent<HTMLLIElement>) => {
-    if (typeof window === "undefined") return;
-    if (!window.matchMedia("(pointer: fine)").matches) return;
-    const cardEl = e.currentTarget;
-    const monoMeta = cardEl.querySelector<HTMLElement>("[data-tech-scramble]");
-    if (monoMeta) {
-      scrambleElementText(monoMeta, 280);
-    }
   };
 
   const repoFilters: { id: "ALL" | AuditedRepoName; label: string }[] = [
@@ -323,13 +240,10 @@ export function TechChapter() {
           </div>
         </div>
 
-        {/* 3. GRADE DE SÍMBOLOS AGRUPADOS COM PROXIMITY GLOW & FLIP */}
+        {/* 3. GRADE DE SÍMBOLOS AGRUPADOS COM FLIP */}
         <div
           ref={cardsContainerRef}
           className="tech-categories-stack"
-          onPointerEnter={handleGridPointerEnter}
-          onPointerMove={handleGridPointerMove}
-          onPointerLeave={handleGridPointerLeave}
         >
           {activeCategories.map((cat) => {
             const itemsInCat = filteredTechs.filter((t) => t.category === cat.id);
@@ -355,10 +269,7 @@ export function TechChapter() {
                       data-flip-card
                       data-flip-key={item.name}
                       className="tech-symbol-card"
-                      data-tilt-card
-                      data-tilt-max="4"
                       data-cursor-label={`[ ${item.projects.slice(0, 2).join(" · ") || item.name} ]`}
-                      onMouseEnter={handleCardMouseEnter}
                       style={
                         {
                           "--stagger-index": idx,
@@ -367,7 +278,6 @@ export function TechChapter() {
                       }
                     >
                       <div className="tech-symbol-halo" aria-hidden="true" />
-                      <div className="project-plate-spotlight" aria-hidden="true" />
 
                       <div className="tech-symbol-emblem-wrap">
                         {getColorTechEmblem(item.name, 54)}
