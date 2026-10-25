@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { getScrollVelocity } from "../motion";
 
 export const tickerPhrases = [
   "ENGENHARIA DE SOFTWARE",
@@ -11,8 +12,11 @@ export const tickerPhrases = [
 
 export function EditorialTickerBand() {
   const [paused, setPaused] = useState(false);
+  const bandRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const isHoveredRef = useRef(false);
+  const kickRef = useRef<() => void>(() => {});
+  const cachedAnimationsRef = useRef<Animation[]>([]);
 
   useEffect(() => {
     const trackEl = trackRef.current;
@@ -22,14 +26,26 @@ export function EditorialTickerBand() {
     let rafId = 0;
     let currentRate = 1;
 
+    // PERF: Cachear trackEl.getAnimations() para não instanciar novos objetos a cada frame
+    if (cachedAnimationsRef.current.length === 0) {
+      cachedAnimationsRef.current = trackEl.getAnimations?.() || [];
+    }
+
     const syncPlaybackRate = () => {
       rafId = 0;
-      const animations = trackEl.getAnimations?.() || [];
-      if (animations.length === 0) return;
 
-      const rawVelStr =
-        document.documentElement.style.getPropertyValue("--scroll-velocity") || "0";
-      const velocity = Math.abs(parseFloat(rawVelStr) || 0);
+      // PERF: Pular loop rAF se a faixa editorial estiver fora da tela
+      if (bandRef.current?.classList.contains("is-offscreen")) {
+        return;
+      }
+
+      if (cachedAnimationsRef.current.length === 0) {
+        cachedAnimationsRef.current = trackEl.getAnimations?.() || [];
+      }
+      if (cachedAnimationsRef.current.length === 0) return;
+
+      // PERF: Ler velocidade via variável de módulo getScrollVelocity() sem consultar o DOM
+      const velocity = Math.abs(getScrollVelocity());
 
       let targetRate = 1;
       if (paused) {
@@ -42,13 +58,20 @@ export function EditorialTickerBand() {
 
       currentRate += (targetRate - currentRate) * 0.14;
 
-      for (const anim of animations) {
+      for (const anim of cachedAnimationsRef.current) {
         try {
           anim.playbackRate = Number(currentRate.toFixed(3));
         } catch {}
       }
 
       if (Math.abs(targetRate - currentRate) > 0.02 || velocity > 0.1) {
+        rafId = window.requestAnimationFrame(syncPlaybackRate);
+      }
+    };
+
+    // PERF: Função kick para despertar o loop sem disparar window.dispatchEvent('scroll')
+    kickRef.current = () => {
+      if (!rafId) {
         rafId = window.requestAnimationFrame(syncPlaybackRate);
       }
     };
@@ -70,20 +93,17 @@ export function EditorialTickerBand() {
 
   const handleMouseEnter = () => {
     isHoveredRef.current = true;
-    const trackEl = trackRef.current;
-    if (!trackEl) return;
-    window.dispatchEvent(new Event("scroll"));
+    kickRef.current();
   };
 
   const handleMouseLeave = () => {
     isHoveredRef.current = false;
-    const trackEl = trackRef.current;
-    if (!trackEl) return;
-    window.dispatchEvent(new Event("scroll"));
+    kickRef.current();
   };
 
   return (
     <div
+      ref={bandRef}
       className={`editorial-ticker-band ${paused ? "is-paused" : ""}`}
       role="region"
       aria-label="Faixa editorial de temas e projetos"

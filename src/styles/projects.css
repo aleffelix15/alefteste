@@ -272,7 +272,7 @@
   z-index: 1;
   clip-path: inset(0% 0% 0% 0% round 12px);
   transition: clip-path 1.2s var(--ease-out-expo);
-  will-change: clip-path;
+  /* PERF: Removido will-change: clip-path permanente para evitar compositing layers ociosas no scroll */
 }
 
 html.motion-ready [data-reveal]:not(.is-visible) .project-blade-layer--primary {
@@ -286,7 +286,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .project-blade-layer--primary {
   object-fit: cover;
   transform: scale(1);
   transition: transform 1.2s var(--ease-out-expo);
-  will-change: transform;
+  /* PERF: Removido will-change: transform permanente */
 }
 
 html.motion-ready [data-reveal]:not(.is-visible) .project-blade-layer--primary .project-capture-img {
@@ -300,7 +300,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .project-blade-layer--primary .
   z-index: 2;
   clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
   transition: clip-path 0.82s var(--ease-curtain);
-  will-change: clip-path;
+  /* PERF: Removido will-change: clip-path permanente */
   pointer-events: none;
 }
 
@@ -324,7 +324,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .project-blade-layer--primary .
   transition:
     transform 0.82s var(--ease-curtain),
     opacity 0.25s ease;
-  will-change: transform, opacity;
+  /* PERF: Removido will-change permanente */
 }
 
 .blade-specular-seam::before {
@@ -402,9 +402,8 @@ html.motion-ready [data-reveal]:not(.is-visible) .project-blade-layer--primary .
   gap: 8px;
   padding: 6px 14px;
   border-radius: var(--radius-full);
-  background: rgba(7, 10, 16, 0.82);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  /* PERF: Usando background sólido opaco em vez de backdrop-filter para eliminar overhead de rasterização no mobile */
+  background: rgba(7, 10, 16, 0.94);
   border: 1px solid rgba(73, 180, 255, 0.35);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }

@@ -413,17 +413,17 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   transform: translate3d(0, 16px, 0);
 }
 
+/* PERF: Substituído filter: blur(24px) por gradiente radial puro (elimina 24 instâncias de Gaussian blur por frame) */
 .tech-symbol-halo {
   position: absolute;
-  top: 12px;
+  top: -6px;
   left: 50%;
-  width: 68px;
-  height: 68px;
-  margin-left: -34px;
+  width: 104px;
+  height: 104px;
+  margin-left: -52px;
   border-radius: 50%;
-  background: var(--brand-color, var(--accent-electric));
-  filter: blur(24px);
-  opacity: 0.12;
+  background: radial-gradient(closest-side, var(--brand-color, var(--accent-electric)) 0%, transparent 100%);
+  opacity: 0.2;
   pointer-events: none;
   transition: opacity 0.35s ease, transform 0.35s var(--ease-out-expo);
 }
@@ -441,8 +441,8 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
 }
 
 .tech-emblem-svg {
-  filter: drop-shadow(0 4px 10px rgba(var(--shadow-color), 0.35));
-  transition: transform 0.36s var(--ease-out-expo), filter 0.3s ease;
+  /* PERF: Removido filter: drop-shadow pesado em SVG durante scroll */
+  transition: transform 0.36s var(--ease-out-expo);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -458,8 +458,8 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   }
 
   .tech-symbol-card:hover .tech-symbol-halo {
-    opacity: 0.42;
-    transform: scale(1.25);
+    opacity: 0.5;
+    transform: scale(1.15);
   }
 
   .tech-symbol-card:hover .emblem-spin-hover {
@@ -481,8 +481,8 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   }
 
   .tech-symbol-card.is-mobile-focused .tech-symbol-halo {
-    opacity: 0.35;
-    transform: scale(1.2);
+    opacity: 0.45;
+    transform: scale(1.12);
   }
 
   .tech-symbol-card.is-mobile-focused .tech-symbol-emblem-wrap {

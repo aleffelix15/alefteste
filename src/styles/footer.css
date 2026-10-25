@@ -17,7 +17,7 @@
   transition:
     transform 0.18s var(--ease-out-expo),
     opacity 0.22s ease;
-  will-change: transform, opacity;
+  /* PERF: Sem will-change estático e sem content-visibility para preservar a altura total estável da página */
 }
 
 .footer-content-grid {

@@ -109,11 +109,18 @@ export function scrambleElementText(el: HTMLElement, durationMs = 240): () => vo
   };
 }
 
+/* PERF: Variável de módulo compartilhada para ler a velocidade sem forçar style recalcs no DOM */
+let moduleScrollVelocity = 0;
+
+export function getScrollVelocity(): number {
+  return moduleScrollVelocity;
+}
+
 /**
  * 1. Rastreamento de velocidade de scroll com física independente de frame rate (damp)
- *    Isolamento total: injeta --scroll-velocity e --scroll-skew EXCLUSIVAMENTE
+ *    PERF: Isolamento total — injeta --scroll-velocity e --scroll-skew EXCLUSIVAMENTE
  *    no elemento da faixa editorial (sem poluir o documentElement :root).
- *    Usa IntersectionObserver para pausar o loop quando a faixa estiver fora da viewport.
+ *    Usa IntersectionObserver para não agendar rAF nem escrever CSS fora da tela.
  */
 export function initScrollVelocityTracker(): () => void {
   if (typeof window === "undefined" || typeof document === "undefined") {
@@ -121,7 +128,7 @@ export function initScrollVelocityTracker(): () => void {
   }
 
   const tickerEl = document.querySelector<HTMLElement>(".editorial-ticker-band");
-  if (!tickerEl) return () => {};
+  const targetEl = tickerEl || document.documentElement;
 
   const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -136,22 +143,28 @@ export function initScrollVelocityTracker(): () => void {
   const tickerObserver = new IntersectionObserver(
     (entries) => {
       isTickerInViewport = entries[0].isIntersecting;
-      if (!isTickerInViewport && rafId) {
-        window.cancelAnimationFrame(rafId);
-        rafId = 0;
+      if (!isTickerInViewport) {
+        if (rafId) {
+          window.cancelAnimationFrame(rafId);
+          rafId = 0;
+        }
+        resetVariables();
       }
     },
     { threshold: 0 }
   );
 
-  tickerObserver.observe(tickerEl);
+  if (tickerEl) {
+    tickerObserver.observe(tickerEl);
+  }
 
   const resetVariables = () => {
     currentVelocity = 0;
     targetVelocity = 0;
     currentSkew = 0;
-    tickerEl.style.setProperty("--scroll-velocity", "0");
-    tickerEl.style.setProperty("--scroll-skew", "0deg");
+    moduleScrollVelocity = 0;
+    targetEl.style.setProperty("--scroll-velocity", "0");
+    targetEl.style.setProperty("--scroll-skew", "0deg");
   };
 
   const tick = (now: number) => {
@@ -168,8 +181,9 @@ export function initScrollVelocityTracker(): () => void {
     const targetSkew = Math.max(-5, Math.min(5, currentVelocity * 0.11));
     currentSkew = damp(currentSkew, targetSkew, 12, dt);
 
-    tickerEl.style.setProperty("--scroll-velocity", currentVelocity.toFixed(2));
-    tickerEl.style.setProperty("--scroll-skew", `${currentSkew.toFixed(2)}deg`);
+    moduleScrollVelocity = currentVelocity;
+    targetEl.style.setProperty("--scroll-velocity", currentVelocity.toFixed(2));
+    targetEl.style.setProperty("--scroll-skew", `${currentSkew.toFixed(2)}deg`);
 
     // Amortece o targetVelocity gradualmente em direção a 0
     targetVelocity = damp(targetVelocity, 0, 8, dt);
@@ -829,6 +843,22 @@ export function initPortfolioMotion(): () => void {
   cleanups.push(initMobileCenterFocus(".project-editorial-feature"));
   cleanups.push(initMobileCenterFocus(".tech-symbol-card"));
 
+  /* PERF: Pausar animações infinitas quando estiverem fora da viewport */
+  const offscreenObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        entry.target.classList.toggle("is-offscreen", !entry.isIntersecting);
+      }
+    },
+    { threshold: 0 }
+  );
+
+  const infiniteAnimEls = document.querySelectorAll<HTMLElement>(
+    ".editorial-ticker-band, .scroll-cue-line, .status-beacon-pulse"
+  );
+  infiniteAnimEls.forEach((el) => offscreenObserver.observe(el));
+  cleanups.push(() => offscreenObserver.disconnect());
+
   const progressBar = document.querySelector<HTMLElement>("[data-scroll-progress]");
   const header = document.querySelector<HTMLElement>(".site-header");
   const heroParallaxEl = document.querySelector<HTMLElement>("[data-hero-parallax]");
@@ -890,24 +920,68 @@ export function initPortfolioMotion(): () => void {
   };
 
   let prevScrollY = window.scrollY || window.pageYOffset;
+  let heroWasActive = true;
 
-  // Atualização métrica de rolagem (Header inteligente + Scroll Highlight + Parallax vertical)
+  /* PERF: Atualização métrica de rolagem sem layout thrashing
+     FASE 1: Todas as leituras de layout antes de qualquer escrita.
+     FASE 2: Todas as escritas de estilo sem nenhuma leitura subsequente. */
   const updateScrollMetrics = () => {
     rafScrollId = 0;
+
+    // --- FASE 1: LEITURAS PURAS ---
     const scrollY = window.scrollY || window.pageYOffset;
     const vh = window.innerHeight || 1;
     const docHeight = document.documentElement.scrollHeight - vh;
     const progress = docHeight > 0 ? Math.min(1, Math.max(0, scrollY / docHeight)) : 0;
 
+    const isScrollingDown = scrollY > prevScrollY + 2;
+    const isScrollingUp = scrollY < prevScrollY - 2;
+    prevScrollY = scrollY;
+
+    // Leitura Sobre Mim
+    let aboutPortraitY: string | null = null;
+    let aboutStudioY: string | null = null;
+    if (aboutSectionEl && !reducedMotionQuery.matches) {
+      const rect = aboutSectionEl.getBoundingClientRect();
+      if (rect.top < vh && rect.bottom > 0) {
+        const centerProgress = (vh / 2 - (rect.top + rect.height / 2)) / (vh * 0.85);
+        const clamped = Math.max(-1, Math.min(1, centerProgress));
+        aboutPortraitY = `${(clamped * 3).toFixed(2)}%`;
+        aboutStudioY = `${(-clamped * 6).toFixed(2)}%`;
+      } else {
+        aboutPortraitY = "0%";
+        aboutStudioY = "0%";
+      }
+    }
+
+    // Leitura Destaques de Leitura (ignora parágrafos fora do campo)
+    const highlightUpdates: Array<{ el: HTMLElement; opacity: string; isLit: boolean }> = [];
+    if (highlightSentences.length > 0) {
+      for (const item of highlightSentences) {
+        if (reducedMotionQuery.matches) {
+          highlightUpdates.push({ el: item, opacity: "1", isLit: true });
+          continue;
+        }
+        const rect = item.getBoundingClientRect();
+        // PERF: Ignorar parágrafos longe da viewport (-0.5vh a 1.5vh)
+        if (rect.bottom < -0.5 * vh || rect.top > 1.5 * vh) {
+          continue;
+        }
+        const itemCenter = rect.top + rect.height / 2;
+        const rawProgress = (vh * 0.82 - itemCenter) / (vh * 0.28);
+        const clamped = Math.max(0, Math.min(1, rawProgress));
+        const opacity = (0.3 + clamped * 0.7).toFixed(3);
+        highlightUpdates.push({ el: item, opacity, isLit: clamped > 0.65 });
+      }
+    }
+
+    // --- FASE 2: ESCRITAS PURAS ---
     if (progressBar) {
       progressBar.style.transform = `scaleX(${progress.toFixed(4)})`;
     }
 
     if (header) {
-      const isScrollingDown = scrollY > prevScrollY + 2;
-      const isScrollingUp = scrollY < prevScrollY - 2;
       header.classList.toggle("is-compact", scrollY > 32);
-
       if (scrollY <= 120) {
         header.classList.remove("is-collapsed");
       } else if (isScrollingDown) {
@@ -916,50 +990,27 @@ export function initPortfolioMotion(): () => void {
         header.classList.remove("is-collapsed");
       }
     }
-    prevScrollY = scrollY;
 
-    // Parallax de saída no Hero (deslocamento vertical da imagem de fundo)
+    // PERF: Parallax do hero: zerar uma única vez ao sair do hero via flag heroWasActive
     if (!reducedMotionQuery.matches && scrollY < vh * 1.4) {
+      heroWasActive = true;
       const offset = Math.min(72, scrollY * 0.12);
       heroParallaxEl?.style.setProperty("--hero-parallax-y", `${offset.toFixed(1)}px`);
-    } else {
+    } else if (heroWasActive) {
+      heroWasActive = false;
       heroParallaxEl?.style.setProperty("--hero-parallax-y", "0px");
+      heroStageEl?.style.setProperty("--hero-mouse-x", "50%");
+      heroStageEl?.style.setProperty("--hero-mouse-y", "50%");
     }
 
-    // Parallax de dupla profundidade nas imagens de Sobre Mim (alef-portrait-bw: -3% a 3%, studio-desk: 6% a -6%)
-    if (aboutSectionEl) {
-      if (!reducedMotionQuery.matches) {
-        const rect = aboutSectionEl.getBoundingClientRect();
-        if (rect.top < vh && rect.bottom > 0) {
-          const centerProgress = (vh / 2 - (rect.top + rect.height / 2)) / (vh * 0.85);
-          const clamped = Math.max(-1, Math.min(1, centerProgress));
-          const portraitY = (clamped * 3).toFixed(2);
-          const studioY = (-clamped * 6).toFixed(2);
-          aboutSectionEl.style.setProperty("--about-portrait-y", `${portraitY}%`);
-          aboutSectionEl.style.setProperty("--about-studio-y", `${studioY}%`);
-        }
-      } else {
-        aboutSectionEl.style.setProperty("--about-portrait-y", "0%");
-        aboutSectionEl.style.setProperty("--about-studio-y", "0%");
-      }
+    if (aboutSectionEl && aboutPortraitY && aboutStudioY) {
+      aboutSectionEl.style.setProperty("--about-portrait-y", aboutPortraitY);
+      aboutSectionEl.style.setProperty("--about-studio-y", aboutStudioY);
     }
 
-    // Destaque progressivo de leitura (Editorial Scroll Highlight: 0.3 a 1)
-    if (highlightSentences.length > 0) {
-      for (const item of highlightSentences) {
-        if (reducedMotionQuery.matches) {
-          item.style.setProperty("--reading-opacity", "1");
-          item.classList.add("is-lit");
-          continue;
-        }
-        const rect = item.getBoundingClientRect();
-        const itemCenter = rect.top + rect.height / 2;
-        const rawProgress = (vh * 0.82 - itemCenter) / (vh * 0.28);
-        const clamped = Math.max(0, Math.min(1, rawProgress));
-        const opacity = (0.3 + clamped * 0.7).toFixed(3);
-        item.style.setProperty("--reading-opacity", opacity);
-        item.classList.toggle("is-lit", clamped > 0.65);
-      }
+    for (const update of highlightUpdates) {
+      update.el.style.setProperty("--reading-opacity", update.opacity);
+      update.el.classList.toggle("is-lit", update.isLit);
     }
 
     revealVisibleInViewport();

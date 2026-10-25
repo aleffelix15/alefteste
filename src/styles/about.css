@@ -44,8 +44,8 @@
   z-index: 2;
   background-image: radial-gradient(rgba(255, 255, 255, 0.075) 1px, transparent 0);
   background-size: 3px 3px;
-  opacity: 0.35;
-  mix-blend-mode: overlay;
+  /* PERF: Removido mix-blend-mode: overlay; usando opacity direta de 0.2 */
+  opacity: 0.2;
   pointer-events: none;
   transition: opacity 0.45s ease;
 }
@@ -57,7 +57,7 @@
   }
 
   .about-photo-card:hover .about-photo-grain {
-    opacity: 0.65;
+    opacity: 0.35;
   }
 }
 
@@ -71,7 +71,7 @@
   height: auto;
   aspect-ratio: 16 / 10;
   object-fit: cover;
-  filter: grayscale(100%) contrast(1.08);
+  /* PERF: Removido filter grayscale/contrast (imagem já é P&B com chroma 0.33) */
   transform: scale(1.08) translate3d(0, var(--about-studio-y, 0%), 0);
   transition: transform 0.45s var(--ease-out-quart);
 }
@@ -82,7 +82,7 @@
   height: auto;
   aspect-ratio: 4 / 5;
   object-fit: cover;
-  filter: grayscale(100%) contrast(1.06);
+  /* PERF: Removido filter grayscale/contrast (imagem já é P&B com chroma 1.0) */
   transform: scale(1.06) translate3d(0, var(--about-portrait-y, 0%), 0);
   transition: transform 0.45s var(--ease-out-quart);
 }
