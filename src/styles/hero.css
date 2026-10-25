@@ -62,18 +62,17 @@
   opacity: 0.6;
 }
 
-/* Gradiente radial interativo no mouse */
+/* Gradiente atmosférico fixo (Zero Paint no mousemove) */
 .hero-mouse-radial {
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    650px circle at var(--hero-mouse-x, 62%) var(--hero-mouse-y, 44%),
+    650px circle at 62% 44%,
     rgba(22, 119, 255, 0.14) 0%,
     rgba(73, 180, 255, 0.04) 38%,
     transparent 70%
   );
   pointer-events: none;
-  transition: opacity 0.3s ease;
 }
 
 .hero-backdrop-vignette {
@@ -104,17 +103,6 @@
   grid-template-columns: 96px 1.25fr 0.75fr;
   gap: 36px;
   align-items: center;
-}
-
-/* Parallax Diferencial de Saída no Hero */
-.hero-parallax-title {
-  transform: translate3d(0, var(--hero-title-parallax, 0px), 0);
-  will-change: transform;
-}
-
-.hero-parallax-meta {
-  transform: translate3d(0, var(--hero-meta-parallax, 0px), 0);
-  will-change: transform;
 }
 
 /* Coluna Vertical 01 | PORTFÓLIO 2026 */
@@ -454,7 +442,6 @@ html.motion-ready:not(.preloader-running) [data-reveal].is-visible .line-inner.h
   background: var(--bg-obsidian);
   transform: translate3d(0, 0, 0);
   transition: transform 0.95s var(--ease-curtain);
-  will-change: transform;
 }
 
 .site-preloader.is-lifting-curtain {

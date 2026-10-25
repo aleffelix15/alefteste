@@ -30,53 +30,6 @@ export function Footer() {
     return () => clearInterval(interval);
   }, []);
 
-  // Efeito Uncover Parallax: emerge de trás do ContactChapter nos últimos pixels de rolagem
-  useEffect(() => {
-    const footerEl = footerRef.current;
-    if (!footerEl || typeof window === "undefined") return;
-
-    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let rafId = 0;
-
-    const updateUncover = () => {
-      rafId = 0;
-      if (reducedMotionQuery.matches) {
-        footerEl.style.setProperty("--footer-uncover-y", "0px");
-        footerEl.style.setProperty("--footer-sig-y", "0px");
-        footerEl.style.setProperty("--footer-uncover-opacity", "1");
-        return;
-      }
-
-      const rect = footerEl.getBoundingClientRect();
-      const vh = window.innerHeight || 1;
-      if (rect.top <= vh) {
-        const visibleRatio = Math.max(0, Math.min(1, (vh - rect.top) / Math.max(1, rect.height)));
-        const yOffset = ((1 - visibleRatio) * -54).toFixed(1);
-        const sigOffset = ((1 - visibleRatio) * 32).toFixed(1);
-        const opacity = (0.35 + visibleRatio * 0.65).toFixed(3);
-        footerEl.style.setProperty("--footer-uncover-y", `${yOffset}px`);
-        footerEl.style.setProperty("--footer-sig-y", `${sigOffset}px`);
-        footerEl.style.setProperty("--footer-uncover-opacity", opacity);
-      }
-    };
-
-    const onScroll = () => {
-      if (!rafId) {
-        rafId = window.requestAnimationFrame(updateUncover);
-      }
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-    updateUncover();
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      if (rafId) window.cancelAnimationFrame(rafId);
-    };
-  }, []);
-
   return (
     <footer ref={footerRef} className="site-footer">
       <div className="footer-uncover-stage">

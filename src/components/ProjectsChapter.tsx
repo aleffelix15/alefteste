@@ -131,11 +131,9 @@ export function ProjectsChapter() {
                 className="project-editorial-feature"
                 aria-labelledby={`proj-title-${project.id}`}
                 data-reveal
-                data-tilt-card
-                data-tilt-max="4.5"
                 style={{ "--reveal-delay": `${projIdx * 100}ms` } as React.CSSProperties}
               >
-                {/* Mockup em moldura de navegador com Revelação Dupla em Lâmina (Blade Crossfade) */}
+                {/* Mockup em moldura de navegador com Crossfade Ótico 100% GPU */}
                 <figure
                   className={`project-capture-frame ${
                     isSecondaryManuallyActive ? "is-blade-active" : ""
@@ -190,26 +188,26 @@ export function ProjectsChapter() {
                     data-cursor-label="[ EXPLORAR CASO ↗ ]"
                     onClick={handleImageStageClick}
                   >
-                    {/* Camada 1 (Primária): Revelação de máscara clip-path inset + zoom-out scale(1.1 -> 1) */}
+                    {/* Camada 1 (Primária): Crossfade Ótico com scale3d(0.98) no hover */}
                     <div className="project-blade-layer project-blade-layer--primary">
-                      <picture className="screen-fade-picture">
-                        <source
-                          media="(max-width: 767px)"
-                          type="image/avif"
-                          srcSet={`${primaryScreen.base}-640.avif`}
-                        />
+                      <picture className="project-img-primary screen-fade-picture">
                         <source
                           media="(max-width: 767px)"
                           type="image/webp"
                           srcSet={`${primaryScreen.base}-640.webp`}
                         />
                         <source
+                          media="(max-width: 767px)"
                           type="image/avif"
-                          srcSet={`${primaryScreen.base}.avif`}
+                          srcSet={`${primaryScreen.base}-640.avif`}
                         />
                         <source
                           type="image/webp"
                           srcSet={`${primaryScreen.base}.webp`}
+                        />
+                        <source
+                          type="image/avif"
+                          srcSet={`${primaryScreen.base}.avif`}
                         />
                         <img
                           src={`${primaryScreen.base}.webp`}
@@ -223,35 +221,35 @@ export function ProjectsChapter() {
                       </picture>
                     </div>
 
-                    {/* Camada 2 (Secundária - Preview Interno em Corte de Lâmina) */}
+                    {/* Camada 2 (Secundária): Crossfade Ótico com opacity 1 e scale3d(1) no hover */}
                     <div
                       className={`project-blade-layer project-blade-layer--secondary ${
                         project.id === "verso" ? "is-verso-editorial-zoom" : ""
                       }`}
                       aria-hidden="true"
                     >
-                      <picture>
+                      <picture className="project-img-secondary">
                         {secondaryScreen.id !== "decode-dashboard" && (
                           <>
-                            <source
-                              media="(max-width: 767px)"
-                              type="image/avif"
-                              srcSet={`${secondaryScreen.base}-640.avif`}
-                            />
                             <source
                               media="(max-width: 767px)"
                               type="image/webp"
                               srcSet={`${secondaryScreen.base}-640.webp`}
                             />
+                            <source
+                              media="(max-width: 767px)"
+                              type="image/avif"
+                              srcSet={`${secondaryScreen.base}-640.avif`}
+                            />
                           </>
                         )}
                         <source
-                          type="image/avif"
-                          srcSet={`${secondaryScreen.base}.avif`}
-                        />
-                        <source
                           type="image/webp"
                           srcSet={`${secondaryScreen.base}.webp`}
+                        />
+                        <source
+                          type="image/avif"
+                          srcSet={`${secondaryScreen.base}.avif`}
                         />
                         <img
                           src={`${secondaryScreen.base}.webp`}
@@ -264,12 +262,6 @@ export function ProjectsChapter() {
                         />
                       </picture>
                     </div>
-
-                    {/* Linha de brilho especular acompanhando a borda do corte */}
-                    <span className="blade-specular-seam" aria-hidden="true" />
-
-                    {/* Spotlight radial de proximidade e feixe de luz */}
-                    <div className="project-plate-spotlight" aria-hidden="true" />
 
                     {/* Seletor mobile touch em pílula translúcida para Decode e Nudemo */}
                     {project.screens.length > 1 && (

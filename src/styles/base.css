@@ -204,8 +204,6 @@ main:focus {
 .editorial-chapter {
   padding-block: 88px;
   border-bottom: 1px solid var(--line-hairline);
-  content-visibility: auto;
-  contain-intrinsic-size: auto 800px;
   contain: layout style;
 }
 

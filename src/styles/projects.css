@@ -88,42 +88,12 @@
   flex-direction: column;
   gap: 24px;
   box-shadow: var(--shadow-md);
-  transform-style: preserve-3d;
   transition:
     opacity 0.45s var(--ease-out-expo),
     border-color 0.28s ease,
     box-shadow 0.28s ease,
     transform 0.45s var(--ease-out-expo);
   scroll-margin-top: calc(var(--header-height) + 24px);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .project-editorial-feature:hover {
-    will-change: transform;
-  }
-}
-
-/* Borda iluminada de proximidade (Spotlight Border Glow) */
-.project-editorial-feature::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: radial-gradient(
-    520px circle at var(--mouse-x, 50%) var(--mouse-y, 0%),
-    rgba(73, 180, 255, 0.52),
-    rgba(22, 119, 255, 0.16) 40%,
-    transparent 70%
-  );
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: var(--spot-opacity, 0);
-  transition: opacity 0.35s ease;
-  pointer-events: none;
 }
 
 .project-editorial-feature::before {
@@ -154,6 +124,7 @@
   .project-editorial-feature:hover {
     border-color: var(--line-accent);
     box-shadow: var(--shadow-lg), 0 0 28px -12px var(--accent-electric-glow);
+    transform: translate3d(0, -4px, 0);
   }
 
   .project-editorial-feature:hover::before {
@@ -256,7 +227,7 @@
 }
 
 /* ==========================================================================
-   REVELAÇÃO DUPLA DE TELAS EM LÂMINA (BLADE CROSSFADE)
+   CROSSFADE ÓTICO 100% GPU ENTRE TELAS DE PROJETOS (ZERO PAINT COST)
    ========================================================================== */
 
 .project-capture-link.project-blade-stage {
@@ -264,19 +235,14 @@
   display: block;
   overflow: hidden;
   background: var(--surface-inverse);
+  border-radius: var(--radius-lg);
 }
 
-/* Camada 1 (Primária): Entra com máscara clip-path inset + zoom-out scale(1.1 -> 1) */
+/* Camada 1 (.project-blade-layer--primary): Recua sutilmente no hover */
 .project-blade-layer--primary {
   position: relative;
   z-index: 1;
-  clip-path: inset(0% 0% 0% 0% round 12px);
-  transition: clip-path 1.2s var(--ease-out-expo);
-  /* PERF: Removido will-change: clip-path permanente para evitar compositing layers ociosas no scroll */
-}
-
-html.motion-ready [data-reveal]:not(.is-visible) .project-blade-layer--primary {
-  clip-path: inset(10% 5% 10% 5% round 16px);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
 }
 
 .project-capture-img {
@@ -284,110 +250,49 @@ html.motion-ready [data-reveal]:not(.is-visible) .project-blade-layer--primary {
   height: auto;
   aspect-ratio: 16 / 10;
   object-fit: cover;
-  transform: scale(1);
-  transition: transform 1.2s var(--ease-out-expo);
-  /* PERF: Removido will-change: transform permanente */
+  display: block;
 }
 
-html.motion-ready [data-reveal]:not(.is-visible) .project-blade-layer--primary .project-capture-img {
-  transform: scale(1.1);
-}
-
-/* Camada 2 (Secundária - Preview Interno): Oculta por padrão em corte de lâmina */
+/* Camada 2 (.project-blade-layer--secondary): Revela com zoom suave */
 .project-blade-layer--secondary {
   position: absolute;
   inset: 0;
   z-index: 2;
-  clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
-  transition: clip-path 0.82s var(--ease-curtain);
-  /* PERF: Removido will-change: clip-path permanente */
+  opacity: 0;
+  transform: scale3d(1.04, 1.04, 1);
+  transition:
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
 }
 
 .project-capture-img--secondary {
-  transform: scale(1.04);
-  transition: transform 0.82s var(--ease-curtain);
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  display: block;
 }
 
-.project-blade-layer--secondary.is-verso-editorial-zoom .project-capture-img--secondary {
-  transform: scale(1.1) translate3d(-1.5%, -1.5%, 0);
-}
-
-/* Linha de brilho especular que acompanha a borda do corte em lâmina */
-.blade-specular-seam {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-  transform: translate3d(-2%, 0, 0);
-  opacity: 0;
-  transition:
-    transform 0.82s var(--ease-curtain),
-    opacity 0.25s ease;
-  /* PERF: Removido will-change permanente */
-}
-
-.blade-specular-seam::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 2px;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    var(--accent-cyan) 22%,
-    #ffffff 50%,
-    var(--accent-electric) 78%,
-    transparent 100%
-  );
-  box-shadow:
-    0 0 16px 2px var(--accent-cyan),
-    0 0 32px 4px var(--accent-electric-glow);
-}
-
-/* Ativação da Lâmina via switcher ou touch selector */
-.project-capture-frame.is-blade-active .project-blade-layer--secondary {
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-}
-
-.project-capture-frame.is-blade-active .project-capture-img--secondary {
-  transform: scale(1);
-}
-
+/* No :hover (PC) ou estado ativo (Mobile) */
 @media (hover: hover) and (pointer: fine) {
   .project-editorial-feature:hover .project-blade-layer--secondary {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-  }
-
-  .project-editorial-feature:hover .project-capture-img--secondary {
-    transform: scale(1);
-  }
-
-  .project-editorial-feature:hover .project-blade-layer--secondary.is-verso-editorial-zoom .project-capture-img--secondary {
-    transform: scale(1.06) translate3d(0, 0, 0);
-  }
-
-  .project-editorial-feature:hover .blade-specular-seam {
-    transform: translate3d(100%, 0, 0);
     opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+
+  .project-editorial-feature:hover .project-blade-layer--primary {
+    transform: scale3d(0.98, 0.98, 1);
   }
 }
 
-.project-plate-spotlight {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  pointer-events: none;
-  opacity: var(--spot-opacity, 0);
-  background: radial-gradient(
-    420px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(73, 180, 255, 0.16),
-    rgba(22, 119, 255, 0.06) 42%,
-    transparent 68%
-  );
-  transition: opacity 0.3s ease;
+.project-capture-frame.is-blade-active .project-blade-layer--secondary {
+  opacity: 1;
+  transform: scale3d(1, 1, 1);
+}
+
+.project-capture-frame.is-blade-active .project-blade-layer--primary {
+  transform: scale3d(0.98, 0.98, 1);
 }
 
 /* Seletor Mobile Touch em Pílula Translúcida [ 01 CAPA | 02 SISTEMA ] */

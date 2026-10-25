@@ -47,7 +47,6 @@
   transition:
     transform 0.24s var(--ease-out-quart),
     color 0.24s ease;
-  will-change: transform;
 }
 
 /* Seta Diagonal que Desliza em Loop de 45deg no Hover */
@@ -95,7 +94,6 @@
 .diagonal-arrow-glyph {
   display: block;
   line-height: 1;
-  will-change: transform;
 }
 
 .diagonal-arrow-glyph--clone {

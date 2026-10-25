@@ -12,12 +12,6 @@
 
 .footer-uncover-stage {
   padding-block: 56px 40px;
-  transform: translate3d(0, var(--footer-uncover-y, 0px), 0);
-  opacity: var(--footer-uncover-opacity, 1);
-  transition:
-    transform 0.18s var(--ease-out-expo),
-    opacity 0.22s ease;
-  /* PERF: Sem will-change estático e sem content-visibility para preservar a altura total estável da página */
 }
 
 .footer-content-grid {
@@ -206,9 +200,6 @@
   letter-spacing: -0.04em;
   color: rgba(244, 247, 251, 0.08);
   user-select: none;
-  transform: translate3d(0, var(--footer-sig-y, 0px), 0);
-  transition: transform 0.24s var(--ease-out-expo);
-  will-change: transform;
 }
 
 .footer-monumental-dot {
