@@ -26,7 +26,19 @@ export function ContactChapter() {
     }
   };
 
-  // Resposta cinética das letras grandes do CTA principal à aproximação do cursor
+  const cachedCharCenters = useRef<number[]>([]);
+  const cachedHeadingLeft = useRef<number>(0);
+
+  const handleHeadingPointerEnter = () => {
+    const headingEl = headingRef.current;
+    if (!headingEl) return;
+    const hRect = headingEl.getBoundingClientRect();
+    cachedHeadingLeft.current = hRect.left;
+    const chars = headingEl.querySelectorAll<HTMLElement>(".contact-kinetic-char");
+    cachedCharCenters.current = Array.from(chars).map((c) => c.offsetLeft + c.offsetWidth / 2);
+  };
+
+  // Resposta cinética das letras grandes do CTA principal à aproximação do cursor (zero getBoundingClientRect no move)
   const handleHeadingPointerMove = (e: React.PointerEvent<HTMLHeadingElement>) => {
     if (typeof window === "undefined") return;
     if (
@@ -37,13 +49,13 @@ export function ContactChapter() {
     }
 
     const headingEl = headingRef.current;
-    if (!headingEl) return;
+    if (!headingEl || cachedCharCenters.current.length === 0) return;
 
+    const mouseRelX = e.clientX - cachedHeadingLeft.current;
     const chars = headingEl.querySelectorAll<HTMLElement>(".contact-kinetic-char");
-    chars.forEach((charEl) => {
-      const rect = charEl.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const dist = Math.abs(e.clientX - centerX);
+    chars.forEach((charEl, idx) => {
+      const center = cachedCharCenters.current[idx] ?? 0;
+      const dist = Math.abs(mouseRelX - center);
       const proximity = Math.max(0, 1 - dist / 180);
       charEl.style.setProperty("--char-prox", proximity.toFixed(3));
     });
@@ -68,9 +80,9 @@ export function ContactChapter() {
       data-chapter-section
     >
       <div className="container">
-        <div className="contact-editorial-layout" data-reveal>
+        <div className="contact-editorial-layout">
           {/* Marcador de Seção */}
-          <div className="section-marker">
+          <div className="section-marker" data-reveal>
             <span className="marker-num mono" data-scramble={contactData.spineNumber}>
               {contactData.spineNumber}
             </span>
@@ -85,6 +97,8 @@ export function ContactChapter() {
             id="contact-heading"
             className="contact-serif-heading"
             aria-label={contactData.headline}
+            data-reveal
+            onPointerEnter={handleHeadingPointerEnter}
             onPointerMove={handleHeadingPointerMove}
             onPointerLeave={handleHeadingPointerLeave}
           >

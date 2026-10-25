@@ -36,10 +36,10 @@
 /* 1. Revelação de blocos e capítulos no scroll */
 html.motion-ready [data-reveal] {
   opacity: 0;
-  transform: translate3d(0, 18px, 0);
+  transform: translate3d(0, 14px, 0);
   transition:
-    opacity 0.85s var(--ease-out-expo) var(--reveal-delay, 0ms),
-    transform 0.85s var(--ease-out-expo) var(--reveal-delay, 0ms);
+    opacity 0.42s var(--ease-out-expo) var(--reveal-delay, 0ms),
+    transform 0.42s var(--ease-out-expo) var(--reveal-delay, 0ms);
 }
 
 html.motion-ready [data-reveal].is-visible {
@@ -64,8 +64,8 @@ html.motion-ready [data-reveal] .line-inner {
   opacity: 0;
   transform-origin: 0% 100%;
   transition:
-    transform 0.92s var(--ease-out-expo) var(--line-delay, 0ms),
-    opacity 0.72s var(--ease-out-expo) var(--line-delay, 0ms);
+    transform 0.65s var(--ease-out-expo) var(--line-delay, 0ms),
+    opacity 0.48s var(--ease-out-expo) var(--line-delay, 0ms);
 }
 
 html.motion-ready [data-reveal].is-visible .line-inner {
@@ -76,10 +76,10 @@ html.motion-ready [data-reveal].is-visible .line-inner {
 /* 3. Cascata de elementos do Hero (.hero-stagger-fade) */
 html.motion-ready [data-reveal] .hero-stagger-fade {
   opacity: 0;
-  transform: translate3d(0, 14px, 0);
+  transform: translate3d(0, 12px, 0);
   transition:
-    opacity 0.76s var(--ease-out-expo) var(--fade-delay, 0ms),
-    transform 0.76s var(--ease-out-expo) var(--fade-delay, 0ms);
+    opacity 0.45s var(--ease-out-expo) var(--fade-delay, 0ms),
+    transform 0.45s var(--ease-out-expo) var(--fade-delay, 0ms);
 }
 
 html.motion-ready [data-reveal].is-visible .hero-stagger-fade {
@@ -551,5 +551,31 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
 @media (max-width: 768px), (pointer: coarse) {
   .editorial-cursor {
     display: none !important;
+  }
+
+  /* Blindagem Mobile: garante que nenhum bloco fique com opacity 0 durante scroll ou toque */
+  html.motion-ready [data-reveal],
+  html.motion-ready [data-reveal] .line-inner,
+  html.motion-ready [data-reveal] .hero-stagger-fade,
+  html.motion-ready [data-reveal] .project-stack-pill,
+  html.motion-ready [data-reveal] .tech-symbol-card,
+  html.motion-ready [data-reveal] .hero-emergence-item,
+  html.motion-ready [data-reveal] .line-inner.hero-line-3d {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+@media print {
+  html.motion-ready [data-reveal],
+  html.motion-ready [data-reveal] .line-inner,
+  html.motion-ready [data-reveal] .hero-stagger-fade,
+  html.motion-ready [data-reveal] .project-stack-pill,
+  html.motion-ready [data-reveal] .tech-symbol-card,
+  html.motion-ready [data-reveal] .hero-emergence-item,
+  html.motion-ready [data-reveal] .line-inner.hero-line-3d {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

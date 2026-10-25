@@ -43,9 +43,9 @@ export function AboutChapter() {
       data-chapter-section
     >
       <div className="container">
-        <div className="about-editorial-grid" data-reveal>
+        <div className="about-editorial-grid">
           {/* Left Visual Zone: Marker + Dual-Depth Photos Montage */}
-          <div className="about-visual-zone">
+          <div className="about-visual-zone" data-reveal>
             <div className="section-marker">
               <span className="marker-num mono" data-scramble={aboutData.spineNumber}>
                 {aboutData.spineNumber}
@@ -140,7 +140,7 @@ export function AboutChapter() {
           </div>
 
           {/* Right Narrative & Vertical Timeline */}
-          <div className="about-narrative-zone">
+          <div className="about-narrative-zone" data-reveal>
             <h2 id="about-heading" className="section-serif-heading">
               <span className="line-mask">
                 <span className="line-inner" style={{ "--line-delay": "60ms" } as React.CSSProperties}>

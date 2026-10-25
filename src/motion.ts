@@ -238,12 +238,28 @@ export function initPortfolioMotion(): () => void {
     }
   }
 
-  // 3. Revelações no scroll: IntersectionObserver Fire-Once absoluto (0 CPU após ativação)
+  // 3. Revelações no scroll: IntersectionObserver Fire-Once com margem antecipada (zero flash preto)
   const revealElements = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
   const chapterSections = Array.from(document.querySelectorAll<HTMLElement>("[data-chapter-section]"));
 
   if ("IntersectionObserver" in window) {
     root.classList.add("motion-ready");
+
+    // Revela imediatamente tudo o que estiver na primeira viewport e na dobra seguinte (zero espera)
+    const windowHeight = typeof window !== "undefined" ? window.innerHeight : 900;
+    const initialCutoff = windowHeight * 1.5;
+    for (const el of revealElements) {
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= initialCutoff) {
+        el.classList.add("is-visible");
+      }
+    }
+    for (const sec of chapterSections) {
+      const rect = sec.getBoundingClientRect();
+      if (rect.top <= initialCutoff) {
+        sec.classList.add("is-chapter-drawn");
+      }
+    }
 
     const revealObserver = new IntersectionObserver(
       (entries) => {
@@ -261,15 +277,32 @@ export function initPortfolioMotion(): () => void {
         }
       },
       {
-        rootMargin: "0px 0px 48px 0px",
+        rootMargin: "450px 0px 450px 0px",
         threshold: 0.01,
       }
     );
 
-    revealElements.forEach((el) => revealObserver.observe(el));
-    chapterSections.forEach((sec) => revealObserver.observe(sec));
+    revealElements.forEach((el) => {
+      if (!el.classList.contains("is-visible")) {
+        revealObserver.observe(el);
+      }
+    });
+    chapterSections.forEach((sec) => {
+      if (!sec.classList.contains("is-chapter-drawn")) {
+        revealObserver.observe(sec);
+      }
+    });
 
-    cleanups.push(() => revealObserver.disconnect());
+    // Fallback de segurança absoluto: após 2s, revela qualquer elemento residual
+    const safetyTimer = window.setTimeout(() => {
+      revealElements.forEach((el) => el.classList.add("is-visible"));
+      chapterSections.forEach((sec) => sec.classList.add("is-chapter-drawn"));
+    }, 2000);
+
+    cleanups.push(() => {
+      revealObserver.disconnect();
+      window.clearTimeout(safetyTimer);
+    });
   } else {
     revealElements.forEach((el) => el.classList.add("is-visible"));
     chapterSections.forEach((sec) => sec.classList.add("is-chapter-drawn"));

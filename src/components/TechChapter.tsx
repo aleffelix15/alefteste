@@ -113,9 +113,9 @@ export function TechChapter() {
     >
       <div className="tech-ambient-glow" aria-hidden="true" />
 
-      <div className="container" data-reveal>
+      <div className="container">
         {/* Top Header Row */}
-        <div className="tech-showcase-top">
+        <div className="tech-showcase-top" data-reveal>
           <div className="tech-top-left">
             <div className="tech-kicker-row mono">
               <span className="tech-bracket-icon" aria-hidden="true">∏</span>
