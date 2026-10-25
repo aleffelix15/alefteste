@@ -4,6 +4,7 @@
 
 .tech-showcase-section {
   position: relative;
+  contain: layout style;
   background:
     radial-gradient(60% 50% at 50% 42%, rgba(22, 119, 255, 0.08), transparent 72%),
     linear-gradient(180deg, var(--bg-obsidian) 0%, var(--bg-subtle) 50%, var(--bg-obsidian) 100%);
@@ -381,7 +382,7 @@
     transform 0.28s var(--ease-out-expo);
 }
 
-/* Borda iluminada de proximidade (Mouse-Tracked Proximity Glow em 420px circle) */
+/* Borda iluminada de proximidade (Mouse-Tracked Proximity Glow em 380px circle) */
 .tech-symbol-card::after {
   content: "";
   position: absolute;
@@ -389,7 +390,7 @@
   border-radius: inherit;
   padding: 1.5px;
   background: radial-gradient(
-    420px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
+    380px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
     var(--brand-color, var(--accent-cyan)) 0%,
     rgba(73, 180, 255, 0.55) 28%,
     rgba(22, 119, 255, 0.18) 52%,
@@ -437,7 +438,6 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   height: 62px;
   margin-bottom: 10px;
   transition: transform 0.42s var(--ease-out-expo);
-  will-change: transform;
 }
 
 .tech-emblem-svg {
@@ -452,14 +452,14 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
     box-shadow: var(--shadow-md), 0 0 22px -8px var(--accent-electric-glow);
   }
 
+  .tech-symbol-card:hover .tech-symbol-emblem-wrap {
+    will-change: transform;
+    transform: scale(1.12) rotate(-4deg);
+  }
+
   .tech-symbol-card:hover .tech-symbol-halo {
     opacity: 0.42;
     transform: scale(1.25);
-  }
-
-  /* Micro-salto elástico no ícone no hover direto: scale(1.12) rotate(-4deg) */
-  .tech-symbol-card:hover .tech-symbol-emblem-wrap {
-    transform: scale(1.12) rotate(-4deg);
   }
 
   .tech-symbol-card:hover .emblem-spin-hover {
@@ -470,6 +470,27 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
     color: var(--accent-cyan);
   }
 }
+
+/* Zona de Foco Central no Mobile para Tecnologias */
+@media (pointer: coarse), (max-width: 768px) {
+  .tech-symbol-card.is-mobile-focused {
+    border-color: rgba(73, 180, 255, 0.48);
+    background: var(--bg-elevated);
+    box-shadow: 0 0 20px -6px rgba(22, 119, 255, 0.45);
+    transform: scale(1.02);
+  }
+
+  .tech-symbol-card.is-mobile-focused .tech-symbol-halo {
+    opacity: 0.35;
+    transform: scale(1.2);
+  }
+
+  .tech-symbol-card.is-mobile-focused .tech-symbol-emblem-wrap {
+    transform: scale(1.1) rotate(-4deg);
+    transition: transform 0.35s var(--ease-out-expo);
+  }
+}
+
 .tech-symbol-card:active {
   transform: scale(0.97);
 }

@@ -62,7 +62,6 @@
   transition:
     color 0.28s ease,
     transform 0.22s var(--ease-out-quart);
-  will-change: transform;
 }
 
 .ticker-dot {

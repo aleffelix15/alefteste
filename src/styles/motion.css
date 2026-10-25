@@ -177,7 +177,16 @@ html.motion-ready [data-reveal].is-visible .project-stack-pill {
   display: inline-block;
   transition: transform 0.55s var(--ease-out-expo);
   transition-delay: calc(var(--char-index, 0) * 15ms);
-  will-change: transform;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a:hover .roll-char,
+  button:hover .roll-char,
+  a:focus-visible .roll-char,
+  button:focus-visible .roll-char,
+  .is-animating .roll-char {
+    will-change: transform;
+  }
 }
 
 .roll-char--top {

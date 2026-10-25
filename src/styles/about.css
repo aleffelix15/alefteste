@@ -2,6 +2,10 @@
    CAPÍTULO 02 (SEÇÃO 03) — SOBRE MIM (DUPLA PROFUNDIDADE & SCROLL HIGHLIGHT)
    ========================================================================== */
 
+.about-section {
+  contain: layout style;
+}
+
 .about-editorial-grid {
   display: grid;
   grid-template-columns: 0.95fr 1.05fr;
@@ -69,10 +73,7 @@
   object-fit: cover;
   filter: grayscale(100%) contrast(1.08);
   transform: scale(1.08) translate3d(0, var(--about-studio-y, 0%), 0);
-  transition:
-    transform 0.45s var(--ease-out-quart),
-    filter 0.55s var(--ease-out-expo);
-  will-change: transform, filter;
+  transition: transform 0.45s var(--ease-out-quart);
 }
 
 /* Camada de profundidade 2: alef-portrait-bw.avif (-3% a 3% no scroll) */
@@ -83,21 +84,16 @@
   object-fit: cover;
   filter: grayscale(100%) contrast(1.06);
   transform: scale(1.06) translate3d(0, var(--about-portrait-y, 0%), 0);
-  transition:
-    transform 0.45s var(--ease-out-quart),
-    filter 0.55s var(--ease-out-expo);
-  will-change: transform, filter;
+  transition: transform 0.45s var(--ease-out-quart);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .about-photo-card:hover .about-studio-img {
     transform: scale(1.11) translate3d(0, var(--about-studio-y, 0%), 0);
-    filter: grayscale(30%) contrast(1.18);
   }
 
   .about-photo-card:hover .about-portrait-img {
     transform: scale(1.09) translate3d(0, var(--about-portrait-y, 0%), 0);
-    filter: grayscale(20%) contrast(1.16);
   }
 }
 

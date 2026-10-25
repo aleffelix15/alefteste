@@ -113,6 +113,17 @@ export function ProjectsChapter() {
               project.screens.length > 1 && selectedScreenId === secondaryScreen.id;
             const isExpanded = expandedCaseStudy[project.id];
 
+            const handleImageStageClick = (e: React.MouseEvent) => {
+              if (project.screens.length > 1 && typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
+                // No touch mobile, toque no frame alterna a captura sem acionar o link acidentalmente
+                e.preventDefault();
+                setActiveScreenByProject((prev) => ({
+                  ...prev,
+                  [project.id]: isSecondaryManuallyActive ? primaryScreen.id : secondaryScreen.id,
+                }));
+              }
+            };
+
             return (
               <article
                 key={project.id}
@@ -177,19 +188,28 @@ export function ProjectsChapter() {
                     className="project-capture-link project-blade-stage"
                     aria-label={`Visitar projeto ${project.name} publicado (abre em nova aba)`}
                     data-cursor-label="[ EXPLORAR CASO ↗ ]"
+                    onClick={handleImageStageClick}
                   >
-                    {/* Camada 1 (Primária): Revelação de máscara clip-path inset + zoom-out scale(1.12 -> 1) */}
+                    {/* Camada 1 (Primária): Revelação de máscara clip-path inset + zoom-out scale(1.1 -> 1) */}
                     <div className="project-blade-layer project-blade-layer--primary">
                       <picture className="screen-fade-picture">
                         <source
+                          media="(max-width: 767px)"
                           type="image/avif"
-                          srcSet={`${primaryScreen.base}-640.avif 640w, ${primaryScreen.base}.avif 1200w`}
-                          sizes="(max-width: 820px) 100vw, 560px"
+                          srcSet={`${primaryScreen.base}-640.avif`}
+                        />
+                        <source
+                          media="(max-width: 767px)"
+                          type="image/webp"
+                          srcSet={`${primaryScreen.base}-640.webp`}
+                        />
+                        <source
+                          type="image/avif"
+                          srcSet={`${primaryScreen.base}.avif`}
                         />
                         <source
                           type="image/webp"
-                          srcSet={`${primaryScreen.base}-640.webp 640w, ${primaryScreen.base}.webp 1200w`}
-                          sizes="(max-width: 820px) 100vw, 560px"
+                          srcSet={`${primaryScreen.base}.webp`}
                         />
                         <img
                           src={`${primaryScreen.base}.webp`}
@@ -211,23 +231,27 @@ export function ProjectsChapter() {
                       aria-hidden="true"
                     >
                       <picture>
+                        {secondaryScreen.id !== "decode-dashboard" && (
+                          <>
+                            <source
+                              media="(max-width: 767px)"
+                              type="image/avif"
+                              srcSet={`${secondaryScreen.base}-640.avif`}
+                            />
+                            <source
+                              media="(max-width: 767px)"
+                              type="image/webp"
+                              srcSet={`${secondaryScreen.base}-640.webp`}
+                            />
+                          </>
+                        )}
                         <source
                           type="image/avif"
-                          srcSet={
-                            secondaryScreen.id === "decode-dashboard"
-                              ? `${secondaryScreen.base}.avif`
-                              : `${secondaryScreen.base}-640.avif 640w, ${secondaryScreen.base}.avif 1200w`
-                          }
-                          sizes="(max-width: 820px) 100vw, 560px"
+                          srcSet={`${secondaryScreen.base}.avif`}
                         />
                         <source
                           type="image/webp"
-                          srcSet={
-                            secondaryScreen.id === "decode-dashboard"
-                              ? `${secondaryScreen.base}.webp`
-                              : `${secondaryScreen.base}-640.webp 640w, ${secondaryScreen.base}.webp 1200w`
-                          }
-                          sizes="(max-width: 820px) 100vw, 560px"
+                          srcSet={`${secondaryScreen.base}.webp`}
                         />
                         <img
                           src={`${secondaryScreen.base}.webp`}
@@ -246,13 +270,59 @@ export function ProjectsChapter() {
 
                     {/* Spotlight radial de proximidade e feixe de luz */}
                     <div className="project-plate-spotlight" aria-hidden="true" />
+
+                    {/* Seletor mobile touch em pílula translúcida para Decode e Nudemo */}
+                    {project.screens.length > 1 && (
+                      <div
+                        className="project-mobile-screen-pill mono"
+                        role="group"
+                        aria-label={`Alternar tela de ${project.name}`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <button
+                          type="button"
+                          className={`mobile-pill-btn ${
+                            selectedScreenId === primaryScreen.id ? "is-active" : ""
+                          }`}
+                          aria-pressed={selectedScreenId === primaryScreen.id}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setActiveScreenByProject((prev) => ({
+                              ...prev,
+                              [project.id]: primaryScreen.id,
+                            }));
+                          }}
+                        >
+                          01 CAPA
+                        </button>
+                        <span className="mobile-pill-divider" aria-hidden="true">|</span>
+                        <button
+                          type="button"
+                          className={`mobile-pill-btn ${
+                            selectedScreenId === secondaryScreen.id ? "is-active" : ""
+                          }`}
+                          aria-pressed={selectedScreenId === secondaryScreen.id}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setActiveScreenByProject((prev) => ({
+                              ...prev,
+                              [project.id]: secondaryScreen.id,
+                            }));
+                          }}
+                        >
+                          02 SISTEMA
+                        </button>
+                      </div>
+                    )}
                   </a>
 
                   <figcaption className="capture-caption mono">
                     <span>{currentScreen.caption}</span>
                     <span>
                       {project.screens.length > 1
-                        ? "PASSE O MOUSE P/ PREVIEW EM LÂMINA"
+                        ? "TOQUE OU PASSE O MOUSE P/ PREVIEW EM LÂMINA"
                         : "CAPTURA REAL · ZOOM EDITORIAL"}
                     </span>
                   </figcaption>

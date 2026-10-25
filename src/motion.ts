@@ -1,17 +1,24 @@
 /**
- * Coreografia de Movimento Editorial v3 (Awwwards SOTD Edition) — Álef Felix Teixeira
- * - Motor de física de scroll (initScrollVelocityTracker) com inércia lerp (0.14) e skew dinâmico
- * - Efeito magnético com paralaxe interna de camada dupla (attachMagneticEffect)
- * - Tilt 3D em perspectiva (1200px) + Proximity Spotlight radial (attach3DTiltAndSpotlight)
- * - Cursor Editorial Contextual em 3 estados (Ponto 8x8, Anel Magnético 36px difference, Pílula Editorial blur 10px)
- * - Revelação em máscara 3D (.line-mask > .line-inner), capítulos e parallax diferencial no Hero e Sobre Mim
- * - Destaque progressivo de leitura (Editorial Scroll Highlight) no manifesto biográfico
- * - Decodificação monoespaçada (cipher scramble) em índices e no hover de tecnologias (280ms)
- * - Acordeão técnico suave via Web Animations API (details[data-animated-details])
- * - Respeito estrito a @media (prefers-reduced-motion: reduce) e @media (hover: hover) and (pointer: fine)
+ * Coreografia de Movimento e Performance Engine v4 (Awwwards SOTD / FWA Standard)
+ * - Física independente de taxa de atualização (60Hz, 120Hz, 144Hz, 240Hz) via damp(current, target, lambda, dt)
+ * - Proibição total de Layout Thrashing: getBoundingClientRect() somente em mouseenter/scroll/resize
+ * - Trava de conflito Scroll + Rato (isScrolling com debounce 120ms) para 60fps constantes na rolagem
+ * - Zero poluição no :root: variáveis CSS dinâmicas escritas exclusivamente no style dos elementos consumidores
+ * - IntersectionObserver para pausar requestAnimationFrame quando seções saem da viewport
+ * - Cursor Editorial Contextual em 3 estados (Ponto 8x8, Anel 36px difference, Pílula Editorial blur 10px)
+ * - Suporte mobile nativo com detecção de zona de foco central no scroll (threshold 0.6)
+ * - Respeito rigoroso a prefers-reduced-motion: reduce
  */
 
 const CIPHER_GLYPHS = "0123456789/—·#XYZ";
+
+/**
+ * Função de amortecimento exponencial independente de taxa de atualização (frame rate independent).
+ * Garante física idêntica em telas de 60Hz, 120Hz, 144Hz e 240Hz.
+ */
+export function damp(current: number, target: number, lambda: number, dt: number): number {
+  return current + (target - current) * (1 - Math.exp(-lambda * dt));
+}
 
 export interface MagneticOptions {
   strength?: number;
@@ -19,12 +26,32 @@ export interface MagneticOptions {
   innerStrength?: number;
 }
 
+// Trava global leve de conflito Scroll + Rato no Desktop
+let isUserScrolling = false;
+let scrollDebounceTimer = 0;
+
+if (typeof window !== "undefined") {
+  window.addEventListener(
+    "scroll",
+    () => {
+      isUserScrolling = true;
+      if (scrollDebounceTimer) {
+        window.clearTimeout(scrollDebounceTimer);
+      }
+      scrollDebounceTimer = window.setTimeout(() => {
+        isUserScrolling = false;
+      }, 120);
+    },
+    { passive: true }
+  );
+}
+
 /**
- * Decodificação rápida de caracteres (Text Scramble) em elementos monoespaçados.
+ * Decodificação rápida de caracteres (Text Scramble de ~240ms) em elementos monoespaçados.
  */
 const activeElementScrambles = new WeakMap<HTMLElement, number>();
 
-export function scrambleElementText(el: HTMLElement, durationMs = 280): () => void {
+export function scrambleElementText(el: HTMLElement, durationMs = 240): () => void {
   if (typeof window === "undefined") return () => {};
   if (
     window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
@@ -47,7 +74,7 @@ export function scrambleElementText(el: HTMLElement, durationMs = 280): () => vo
     window.clearInterval(prevTimer);
   }
 
-  const stepInterval = 28;
+  const stepInterval = 24;
   const totalSteps = Math.max(4, Math.round(durationMs / stepInterval));
   let step = 0;
 
@@ -83,46 +110,71 @@ export function scrambleElementText(el: HTMLElement, durationMs = 280): () => vo
 }
 
 /**
- * 1. Rastreamento de velocidade de scroll com interpolação linear (lerp 0.14)
- *    Injeta --scroll-velocity e --scroll-skew no document.documentElement.style.
- *    O loop rAF só executa enquanto a velocidade amortecida for > 0.05.
+ * 1. Rastreamento de velocidade de scroll com física independente de frame rate (damp)
+ *    Isolamento total: injeta --scroll-velocity e --scroll-skew EXCLUSIVAMENTE
+ *    no elemento da faixa editorial (sem poluir o documentElement :root).
+ *    Usa IntersectionObserver para pausar o loop quando a faixa estiver fora da viewport.
  */
 export function initScrollVelocityTracker(): () => void {
   if (typeof window === "undefined" || typeof document === "undefined") {
     return () => {};
   }
 
-  const root = document.documentElement;
+  const tickerEl = document.querySelector<HTMLElement>(".editorial-ticker-band");
+  if (!tickerEl) return () => {};
+
   const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
+  let isTickerInViewport = true;
   let lastScrollY = window.scrollY || window.pageYOffset;
-  let newScrollY = lastScrollY;
-  let velocity = 0;
+  let currentVelocity = 0;
+  let targetVelocity = 0;
+  let currentSkew = 0;
+  let lastTime = performance.now();
   let rafId = 0;
 
+  const tickerObserver = new IntersectionObserver(
+    (entries) => {
+      isTickerInViewport = entries[0].isIntersecting;
+      if (!isTickerInViewport && rafId) {
+        window.cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+    },
+    { threshold: 0 }
+  );
+
+  tickerObserver.observe(tickerEl);
+
   const resetVariables = () => {
-    velocity = 0;
-    root.style.setProperty("--scroll-velocity", "0");
-    root.style.setProperty("--scroll-skew", "0deg");
+    currentVelocity = 0;
+    targetVelocity = 0;
+    currentSkew = 0;
+    tickerEl.style.setProperty("--scroll-velocity", "0");
+    tickerEl.style.setProperty("--scroll-skew", "0deg");
   };
 
-  const tick = () => {
+  const tick = (now: number) => {
     rafId = 0;
-    if (reducedMotionQuery.matches) {
+    if (reducedMotionQuery.matches || !isTickerInViewport) {
       resetVariables();
       return;
     }
 
-    newScrollY = window.scrollY || window.pageYOffset;
-    const delta = newScrollY - lastScrollY;
-    lastScrollY = newScrollY;
+    const dt = Math.min((now - lastTime) / 1000, 0.1);
+    lastTime = now;
 
-    velocity += (delta - velocity) * 0.14;
+    currentVelocity = damp(currentVelocity, targetVelocity, 12, dt);
+    const targetSkew = Math.max(-5, Math.min(5, currentVelocity * 0.11));
+    currentSkew = damp(currentSkew, targetSkew, 12, dt);
 
-    if (Math.abs(velocity) > 0.05) {
-      const skew = Math.max(-5, Math.min(5, velocity * 0.11));
-      root.style.setProperty("--scroll-velocity", velocity.toFixed(3));
-      root.style.setProperty("--scroll-skew", `${skew.toFixed(2)}deg`);
+    tickerEl.style.setProperty("--scroll-velocity", currentVelocity.toFixed(2));
+    tickerEl.style.setProperty("--scroll-skew", `${currentSkew.toFixed(2)}deg`);
+
+    // Amortece o targetVelocity gradualmente em direção a 0
+    targetVelocity = damp(targetVelocity, 0, 8, dt);
+
+    if (Math.abs(currentVelocity) > 0.01 || Math.abs(targetVelocity) > 0.01) {
       rafId = window.requestAnimationFrame(tick);
     } else {
       resetVariables();
@@ -130,8 +182,16 @@ export function initScrollVelocityTracker(): () => void {
   };
 
   const onScroll = () => {
-    if (reducedMotionQuery.matches) return;
+    if (reducedMotionQuery.matches || !isTickerInViewport) return;
+
+    const newScrollY = window.scrollY || window.pageYOffset;
+    const delta = newScrollY - lastScrollY;
+    lastScrollY = newScrollY;
+
+    targetVelocity = delta;
+
     if (!rafId) {
+      lastTime = performance.now();
       rafId = window.requestAnimationFrame(tick);
     }
   };
@@ -140,6 +200,7 @@ export function initScrollVelocityTracker(): () => void {
 
   return () => {
     window.removeEventListener("scroll", onScroll);
+    tickerObserver.disconnect();
     if (rafId) {
       window.cancelAnimationFrame(rafId);
     }
@@ -148,8 +209,11 @@ export function initScrollVelocityTracker(): () => void {
 }
 
 /**
- * 2. Efeito Magnético com Paralaxe de Profundidade em Dois Níveis
- *    strength = 0.28 no elemento pai e innerStrength = 0.42 no elemento interno opcional.
+ * 2. Efeito Magnético de Dupla Camada com Zero Layout Thrashing
+ *    - getBoundingClientRect() armazenado exclusivamente em mouseenter/scroll/resize.
+ *    - Coordenadas clientX/Y apenas armazenadas em mousemove.
+ *    - Física damp() com parada em < 0.01 para 0% de uso de CPU quando inativo.
+ *    - Pausado enquanto isUserScrolling for true.
  */
 export function attachMagneticEffect(
   element: HTMLElement,
@@ -168,13 +232,14 @@ export function attachMagneticEffect(
   const innerStrength = options?.innerStrength ?? 0.42;
   const innerSelector =
     options?.innerSelector ??
-    ".hover-roll-text, .monogram-svg, .btn-label, .btn-cv-content-inner";
+    ".hover-roll-text, .monogram-svg, .btn-label, .btn-cv-content-inner, .monogram-dot";
   const innerEl = element.querySelector<HTMLElement>(innerSelector);
 
   if (!element.hasAttribute("data-cursor")) {
     element.setAttribute("data-cursor", "magnetic");
   }
 
+  let cachedRect: DOMRect | null = null;
   let targetX = 0;
   let targetY = 0;
   let currentX = 0;
@@ -183,17 +248,34 @@ export function attachMagneticEffect(
   let innerTargetY = 0;
   let innerCurrentX = 0;
   let innerCurrentY = 0;
+  let lastTime = performance.now();
   let rafId = 0;
   let isHovered = false;
 
-  const animate = () => {
-    rafId = 0;
-    const lerpFactor = isHovered ? 0.22 : 0.16;
+  const updateCachedRect = () => {
+    if (isHovered) {
+      cachedRect = element.getBoundingClientRect();
+    }
+  };
 
-    currentX += (targetX - currentX) * lerpFactor;
-    currentY += (targetY - currentY) * lerpFactor;
-    innerCurrentX += (innerTargetX - innerCurrentX) * lerpFactor;
-    innerCurrentY += (innerTargetY - innerCurrentY) * lerpFactor;
+  window.addEventListener("scroll", updateCachedRect, { passive: true });
+  window.addEventListener("resize", updateCachedRect, { passive: true });
+
+  const animate = (now: number) => {
+    rafId = 0;
+
+    if (reducedMotionQuery.matches || isUserScrolling) {
+      return;
+    }
+
+    const dt = Math.min((now - lastTime) / 1000, 0.1);
+    lastTime = now;
+
+    const lambda = isHovered ? 16 : 10;
+    currentX = damp(currentX, targetX, lambda, dt);
+    currentY = damp(currentY, targetY, lambda, dt);
+    innerCurrentX = damp(innerCurrentX, innerTargetX, lambda, dt);
+    innerCurrentY = damp(innerCurrentY, innerTargetY, lambda, dt);
 
     element.style.setProperty("--mag-x", `${currentX.toFixed(2)}px`);
     element.style.setProperty("--mag-y", `${currentY.toFixed(2)}px`);
@@ -203,13 +285,13 @@ export function attachMagneticEffect(
       innerEl.style.transform = `translate3d(${innerCurrentX.toFixed(2)}px, ${innerCurrentY.toFixed(2)}px, 0)`;
     }
 
-    const stillMoving =
-      Math.abs(targetX - currentX) > 0.08 ||
-      Math.abs(targetY - currentY) > 0.08 ||
-      Math.abs(innerTargetX - innerCurrentX) > 0.08 ||
-      Math.abs(innerTargetY - innerCurrentY) > 0.08;
+    const moving =
+      Math.abs(targetX - currentX) > 0.01 ||
+      Math.abs(targetY - currentY) > 0.01 ||
+      Math.abs(innerTargetX - innerCurrentX) > 0.01 ||
+      Math.abs(innerTargetY - innerCurrentY) > 0.01;
 
-    if (stillMoving) {
+    if (moving) {
       rafId = window.requestAnimationFrame(animate);
     } else if (!isHovered) {
       element.style.setProperty("--mag-x", "0px");
@@ -221,14 +303,28 @@ export function attachMagneticEffect(
     }
   };
 
-  const onMouseMove = (e: MouseEvent) => {
+  const onMouseEnter = (e: MouseEvent) => {
     if (reducedMotionQuery.matches || !finePointerQuery.matches) return;
-    const rect = element.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) return;
+    cachedRect = element.getBoundingClientRect();
+    isHovered = true;
+    lastTime = performance.now();
+
+    const localX = e.clientX - cachedRect.left;
+    const localY = e.clientY - cachedRect.top;
+    element.style.setProperty("--mouse-x", `${localX.toFixed(1)}px`);
+    element.style.setProperty("--mouse-y", `${localY.toFixed(1)}px`);
+  };
+
+  const onMouseMove = (e: MouseEvent) => {
+    if (reducedMotionQuery.matches || !finePointerQuery.matches || isUserScrolling) return;
+    if (!cachedRect) {
+      cachedRect = element.getBoundingClientRect();
+    }
+    if (cachedRect.width === 0 || cachedRect.height === 0) return;
 
     isHovered = true;
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
+    const centerX = cachedRect.left + cachedRect.width / 2;
+    const centerY = cachedRect.top + cachedRect.height / 2;
     const distX = e.clientX - centerX;
     const distY = e.clientY - centerY;
 
@@ -238,24 +334,15 @@ export function attachMagneticEffect(
     innerTargetX = Math.max(-10, Math.min(10, distX * (innerStrength - strength)));
     innerTargetY = Math.max(-8, Math.min(8, distY * (innerStrength - strength)));
 
-    // Atualiza coordenadas locais para preenchimento direcional (ex.: CvButton)
-    const localX = e.clientX - rect.left;
-    const localY = e.clientY - rect.top;
+    const localX = e.clientX - cachedRect.left;
+    const localY = e.clientY - cachedRect.top;
     element.style.setProperty("--mouse-x", `${localX.toFixed(1)}px`);
     element.style.setProperty("--mouse-y", `${localY.toFixed(1)}px`);
 
     if (!rafId) {
+      lastTime = performance.now();
       rafId = window.requestAnimationFrame(animate);
     }
-  };
-
-  const onMouseEnter = (e: MouseEvent) => {
-    if (reducedMotionQuery.matches || !finePointerQuery.matches) return;
-    const rect = element.getBoundingClientRect();
-    const localX = e.clientX - rect.left;
-    const localY = e.clientY - rect.top;
-    element.style.setProperty("--mouse-x", `${localX.toFixed(1)}px`);
-    element.style.setProperty("--mouse-y", `${localY.toFixed(1)}px`);
   };
 
   const onMouseLeave = (e: MouseEvent) => {
@@ -265,13 +352,15 @@ export function attachMagneticEffect(
     innerTargetX = 0;
     innerTargetY = 0;
 
-    const rect = element.getBoundingClientRect();
-    const localX = e.clientX - rect.left;
-    const localY = e.clientY - rect.top;
-    element.style.setProperty("--mouse-x", `${localX.toFixed(1)}px`);
-    element.style.setProperty("--mouse-y", `${localY.toFixed(1)}px`);
+    if (cachedRect) {
+      const localX = e.clientX - cachedRect.left;
+      const localY = e.clientY - cachedRect.top;
+      element.style.setProperty("--mouse-x", `${localX.toFixed(1)}px`);
+      element.style.setProperty("--mouse-y", `${localY.toFixed(1)}px`);
+    }
 
     if (!rafId) {
+      lastTime = performance.now();
       rafId = window.requestAnimationFrame(animate);
     }
   };
@@ -282,6 +371,8 @@ export function attachMagneticEffect(
 
   return () => {
     if (rafId) window.cancelAnimationFrame(rafId);
+    window.removeEventListener("scroll", updateCachedRect);
+    window.removeEventListener("resize", updateCachedRect);
     element.removeEventListener("mouseenter", onMouseEnter);
     element.removeEventListener("mousemove", onMouseMove);
     element.removeEventListener("mouseleave", onMouseLeave);
@@ -293,11 +384,15 @@ export function attachMagneticEffect(
 }
 
 /**
- * 3. Tilt 3D com Perspectiva 1200px & Spotlight Radial de Proximidade
+ * 3. Tilt 3D com Perspectiva 1200px & Spotlight Radial de Proximidade (Zero Layout Thrashing)
+ *    - getBoundingClientRect() armazenado apenas em mouseenter/scroll/resize.
+ *    - Pausa automática durante a rolagem no Desktop (isUserScrolling).
+ *    - damp() independente de frame rate com parada em < 0.01 deg.
+ *    - Variáveis --mouse-x, --mouse-y, --spot-x, --spot-y escritas exclusivamente no card.
  */
 export function attach3DTiltAndSpotlight(
   card: HTMLElement,
-  maxTilt = 4.5
+  maxTilt = 4
 ): () => void {
   if (typeof window === "undefined") return () => {};
 
@@ -308,69 +403,265 @@ export function attach3DTiltAndSpotlight(
     return () => {};
   }
 
+  let cachedRect: DOMRect | null = null;
+  let isHovered = false;
+  let targetRotX = 0;
+  let targetRotY = 0;
+  let currentRotX = 0;
+  let currentRotY = 0;
+  let lastClientX = 0;
+  let lastClientY = 0;
+  let lastTime = performance.now();
   let rafId = 0;
 
-  const onMouseMove = (e: MouseEvent) => {
-    if (reducedMotionQuery.matches || !finePointerQuery.matches) return;
-    const clientX = e.clientX;
-    const clientY = e.clientY;
+  const updateCachedRect = () => {
+    if (isHovered) {
+      cachedRect = card.getBoundingClientRect();
+    }
+  };
 
-    if (rafId) window.cancelAnimationFrame(rafId);
+  window.addEventListener("scroll", updateCachedRect, { passive: true });
+  window.addEventListener("resize", updateCachedRect, { passive: true });
 
-    rafId = window.requestAnimationFrame(() => {
-      rafId = 0;
-      const rect = card.getBoundingClientRect();
-      if (rect.width === 0 || rect.height === 0) return;
+  const renderLoop = (now: number) => {
+    rafId = 0;
 
-      const x = clientX - rect.left;
-      const y = clientY - rect.top;
+    if (reducedMotionQuery.matches || isUserScrolling) {
+      return;
+    }
 
-      const px = Math.min(1, Math.max(0, x / rect.width));
-      const py = Math.min(1, Math.max(0, y / rect.height));
-      const cx = px - 0.5;
-      const cy = py - 0.5;
+    const dt = Math.min((now - lastTime) / 1000, 0.1);
+    lastTime = now;
 
-      const rotateX = (-cy * maxTilt).toFixed(2);
-      const rotateY = (cx * maxTilt).toFixed(2);
+    const lambda = isHovered ? 14 : 9;
+    currentRotX = damp(currentRotX, targetRotX, lambda, dt);
+    currentRotY = damp(currentRotY, targetRotY, lambda, dt);
+
+    card.style.transform = `perspective(1200px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) scale3d(1.005, 1.005, 1)`;
+
+    if (cachedRect && cachedRect.width > 0 && cachedRect.height > 0) {
+      const x = lastClientX - cachedRect.left;
+      const y = lastClientY - cachedRect.top;
+      const px = Math.min(1, Math.max(0, x / cachedRect.width));
+      const py = Math.min(1, Math.max(0, y / cachedRect.height));
 
       card.style.setProperty("--mouse-x", `${x.toFixed(1)}px`);
       card.style.setProperty("--mouse-y", `${y.toFixed(1)}px`);
       card.style.setProperty("--spot-x", `${(px * 100).toFixed(1)}%`);
       card.style.setProperty("--spot-y", `${(py * 100).toFixed(1)}%`);
-      card.style.setProperty("--spot-opacity", "1");
+    }
 
-      card.style.transition = "transform 0.14s ease-out";
-      card.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.005, 1.005, 1)`;
-    });
+    const moving =
+      Math.abs(targetRotX - currentRotX) > 0.01 ||
+      Math.abs(targetRotY - currentRotY) > 0.01;
+
+    if (moving) {
+      rafId = window.requestAnimationFrame(renderLoop);
+    } else if (!isHovered) {
+      card.style.transform = "perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+    }
+  };
+
+  const onMouseEnter = (e: MouseEvent) => {
+    if (reducedMotionQuery.matches || !finePointerQuery.matches) return;
+    cachedRect = card.getBoundingClientRect();
+    isHovered = true;
+    card.style.setProperty("--spot-opacity", "1");
+    lastClientX = e.clientX;
+    lastClientY = e.clientY;
+    lastTime = performance.now();
+  };
+
+  const onMouseMove = (e: MouseEvent) => {
+    if (reducedMotionQuery.matches || !finePointerQuery.matches || isUserScrolling) return;
+    if (!cachedRect) {
+      cachedRect = card.getBoundingClientRect();
+    }
+    if (cachedRect.width === 0 || cachedRect.height === 0) return;
+
+    lastClientX = e.clientX;
+    lastClientY = e.clientY;
+
+    const x = e.clientX - cachedRect.left;
+    const y = e.clientY - cachedRect.top;
+    const px = Math.min(1, Math.max(0, x / cachedRect.width));
+    const py = Math.min(1, Math.max(0, y / cachedRect.height));
+    const cx = px - 0.5;
+    const cy = py - 0.5;
+
+    targetRotX = -cy * maxTilt;
+    targetRotY = cx * maxTilt;
+
+    if (!rafId) {
+      lastTime = performance.now();
+      rafId = window.requestAnimationFrame(renderLoop);
+    }
   };
 
   const onMouseLeave = () => {
-    if (rafId) {
-      window.cancelAnimationFrame(rafId);
-      rafId = 0;
-    }
+    isHovered = false;
+    targetRotX = 0;
+    targetRotY = 0;
     card.style.setProperty("--spot-opacity", "0");
-    card.style.transition = "transform 0.65s var(--ease-out-expo)";
-    card.style.transform = "perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+
+    if (!rafId) {
+      lastTime = performance.now();
+      rafId = window.requestAnimationFrame(renderLoop);
+    }
   };
 
+  card.addEventListener("mouseenter", onMouseEnter, { passive: true });
   card.addEventListener("mousemove", onMouseMove, { passive: true });
   card.addEventListener("mouseleave", onMouseLeave, { passive: true });
 
   return () => {
     if (rafId) window.cancelAnimationFrame(rafId);
+    window.removeEventListener("scroll", updateCachedRect);
+    window.removeEventListener("resize", updateCachedRect);
+    card.removeEventListener("mouseenter", onMouseEnter);
     card.removeEventListener("mousemove", onMouseMove);
     card.removeEventListener("mouseleave", onMouseLeave);
     card.style.transform = "";
-    card.style.transition = "";
   };
 }
 
 /**
- * 4. Controlador do Cursor Editorial Contextual
- *    - Estado Padrão: Ponto minimalista 8px x 8px
- *    - Estado Hover em Links/Botões ([data-cursor="magnetic"]): Anel 36px com mix-blend-mode: difference
- *    - Estado Hover em Mídia/Projetos ([data-cursor-label]): Pílula editorial com backdrop-filter: blur(10px) e DM Mono
+ * 4. Micro-Parallax de Estúdio no Hero (PC)
+ *    Mover o mouse na OpeningSection desloca suavemente os metadados editoriais (-4px)
+ *    e elementos de fundo (+8px) em planos opostos, amortecidos com damp().
+ */
+export function initHeroMicroParallax(heroSection: HTMLElement): () => void {
+  if (typeof window === "undefined") return () => {};
+
+  const finePointerQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (!finePointerQuery.matches || !window.matchMedia("(pointer: fine)").matches) {
+    return () => {};
+  }
+
+  let cachedRect: DOMRect | null = null;
+  let targetMetaX = 0;
+  let targetMetaY = 0;
+  let targetBackX = 0;
+  let targetBackY = 0;
+  let currentMetaX = 0;
+  let currentMetaY = 0;
+  let currentBackX = 0;
+  let currentBackY = 0;
+  let lastTime = performance.now();
+  let rafId = 0;
+  let isHovered = false;
+
+  const metaEls = Array.from(heroSection.querySelectorAll<HTMLElement>(".hero-parallax-meta"));
+  const backEl = heroSection.querySelector<HTMLElement>(".hero-backdrop-img");
+
+  const updateCachedRect = () => {
+    if (isHovered) {
+      cachedRect = heroSection.getBoundingClientRect();
+    }
+  };
+
+  window.addEventListener("scroll", updateCachedRect, { passive: true });
+  window.addEventListener("resize", updateCachedRect, { passive: true });
+
+  const render = (now: number) => {
+    rafId = 0;
+
+    if (reducedMotionQuery.matches || isUserScrolling) return;
+
+    const dt = Math.min((now - lastTime) / 1000, 0.1);
+    lastTime = now;
+
+    currentMetaX = damp(currentMetaX, targetMetaX, 10, dt);
+    currentMetaY = damp(currentMetaY, targetMetaY, 10, dt);
+    currentBackX = damp(currentBackX, targetBackX, 10, dt);
+    currentBackY = damp(currentBackY, targetBackY, 10, dt);
+
+    for (const el of metaEls) {
+      el.style.transform = `translate3d(${currentMetaX.toFixed(2)}px, ${currentMetaY.toFixed(2)}px, 0)`;
+    }
+
+    if (backEl) {
+      backEl.style.transform = `scale(1.015) translate3d(${currentBackX.toFixed(2)}px, calc(var(--hero-parallax-y, 0px) + ${currentBackY.toFixed(2)}px), 0)`;
+    }
+
+    const moving =
+      Math.abs(targetMetaX - currentMetaX) > 0.01 ||
+      Math.abs(targetMetaY - currentMetaY) > 0.01 ||
+      Math.abs(targetBackX - currentBackX) > 0.01 ||
+      Math.abs(targetBackY - currentBackY) > 0.01;
+
+    if (moving) {
+      rafId = window.requestAnimationFrame(render);
+    }
+  };
+
+  const onMouseEnter = () => {
+    cachedRect = heroSection.getBoundingClientRect();
+    isHovered = true;
+    lastTime = performance.now();
+  };
+
+  const onMouseMove = (e: MouseEvent) => {
+    if (reducedMotionQuery.matches || !finePointerQuery.matches || isUserScrolling) return;
+    if (!cachedRect) {
+      cachedRect = heroSection.getBoundingClientRect();
+    }
+    if (cachedRect.width === 0 || cachedRect.height === 0) return;
+
+    const nx = (e.clientX - (cachedRect.left + cachedRect.width / 2)) / (cachedRect.width / 2);
+    const ny = (e.clientY - (cachedRect.top + cachedRect.height / 2)) / (cachedRect.height / 2);
+
+    const localX = e.clientX - cachedRect.left;
+    const localY = e.clientY - cachedRect.top;
+    heroSection.style.setProperty("--hero-mouse-x", `${((localX / cachedRect.width) * 100).toFixed(1)}%`);
+    heroSection.style.setProperty("--hero-mouse-y", `${((localY / cachedRect.height) * 100).toFixed(1)}%`);
+
+    targetMetaX = -nx * 4;
+    targetMetaY = -ny * 4;
+    targetBackX = nx * 8;
+    targetBackY = ny * 8;
+
+    if (!rafId) {
+      lastTime = performance.now();
+      rafId = window.requestAnimationFrame(render);
+    }
+  };
+
+  const onMouseLeave = () => {
+    isHovered = false;
+    targetMetaX = 0;
+    targetMetaY = 0;
+    targetBackX = 0;
+    targetBackY = 0;
+
+    if (!rafId) {
+      lastTime = performance.now();
+      rafId = window.requestAnimationFrame(render);
+    }
+  };
+
+  heroSection.addEventListener("mouseenter", onMouseEnter, { passive: true });
+  heroSection.addEventListener("mousemove", onMouseMove, { passive: true });
+  heroSection.addEventListener("mouseleave", onMouseLeave, { passive: true });
+
+  return () => {
+    if (rafId) window.cancelAnimationFrame(rafId);
+    window.removeEventListener("scroll", updateCachedRect);
+    window.removeEventListener("resize", updateCachedRect);
+    heroSection.removeEventListener("mouseenter", onMouseEnter);
+    heroSection.removeEventListener("mousemove", onMouseMove);
+    heroSection.removeEventListener("mouseleave", onMouseLeave);
+  };
+}
+
+/**
+ * 5. Controlador do Cursor Editorial Contextual
+ *    - Estado Padrão: Ponto 8px x 8px
+ *    - Estado Hover em Links/Botões: Anel 36px com mix-blend-mode: difference
+ *    - Estado Hover em Mídia de Projetos: Pílula translúcida blur 10px com DM Mono
+ *    - Amortecimento damp() com parada em < 0.01px para 0% de uso de CPU/GPU.
  */
 export function initCustomCursor(): () => void {
   if (typeof window === "undefined" || typeof document === "undefined") {
@@ -391,17 +682,27 @@ export function initCustomCursor(): () => void {
   let targetY = -100;
   let currentX = -100;
   let currentY = -100;
+  let lastTime = performance.now();
   let cursorRaf = 0;
   let cursorVisible = false;
 
-  const updateCursorPosition = () => {
+  const updateCursorPosition = (now: number) => {
     cursorRaf = 0;
-    currentX += (targetX - currentX) * 0.18;
-    currentY += (targetY - currentY) * 0.18;
+
+    if (reducedMotionQuery.matches) {
+      cursorEl.classList.remove("is-active", "has-label", "is-magnetic");
+      return;
+    }
+
+    const dt = Math.min((now - lastTime) / 1000, 0.1);
+    lastTime = now;
+
+    currentX = damp(currentX, targetX, 18, dt);
+    currentY = damp(currentY, targetY, 18, dt);
 
     cursorEl.style.transform = `translate3d(${currentX.toFixed(1)}px, ${currentY.toFixed(1)}px, 0)`;
 
-    if (Math.abs(targetX - currentX) > 0.12 || Math.abs(targetY - currentY) > 0.12) {
+    if (Math.abs(targetX - currentX) > 0.01 || Math.abs(targetY - currentY) > 0.01) {
       cursorRaf = window.requestAnimationFrame(updateCursorPosition);
     }
   };
@@ -443,6 +744,7 @@ export function initCustomCursor(): () => void {
     }
 
     if (!cursorRaf) {
+      lastTime = performance.now();
       cursorRaf = window.requestAnimationFrame(updateCursorPosition);
     }
   };
@@ -463,6 +765,46 @@ export function initCustomCursor(): () => void {
 }
 
 /**
+ * 6. Coreografia Touch no Mobile: Detecção Automática da Zona Central no Scroll (Threshold: 0.6)
+ *    Aciona destaque de borda luminosa e estabilização de escala (scale 1.03 -> 1)
+ *    quando o card cruza o centro da tela em dispositivos touch.
+ */
+export function initMobileCenterFocus(itemSelector: string, activeClass = "is-mobile-focused"): () => void {
+  if (typeof window === "undefined") return () => {};
+
+  const isTouch = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+  if (!isTouch || !("IntersectionObserver" in window)) return () => {};
+
+  const items = Array.from(document.querySelectorAll<HTMLElement>(itemSelector));
+  if (items.length === 0) return () => {};
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        const target = entry.target as HTMLElement;
+        if (entry.isIntersecting) {
+          target.classList.add(activeClass);
+        } else {
+          target.classList.remove(activeClass);
+        }
+      }
+    },
+    {
+      threshold: 0.6,
+      rootMargin: "-10% 0px -10% 0px",
+    }
+  );
+
+  for (const item of items) {
+    observer.observe(item);
+  }
+
+  return () => {
+    observer.disconnect();
+  };
+}
+
+/**
  * Inicializador Mestre da Coreografia do Portfólio
  */
 export function initPortfolioMotion(): () => void {
@@ -477,11 +819,15 @@ export function initPortfolioMotion(): () => void {
   const cleanups: Array<() => void> = [];
   let rafScrollId = 0;
 
-  // Inicializa o rastreador de velocidade e skew
+  // 1. Inicializa o rastreador de velocidade da faixa editorial (sem poluir o :root)
   cleanups.push(initScrollVelocityTracker());
 
-  // Inicializa o cursor editorial contextual
+  // 2. Inicializa o cursor editorial contextual no PC
   cleanups.push(initCustomCursor());
+
+  // 3. Inicializa a detecção de foco central no mobile para projetos e tecnologias
+  cleanups.push(initMobileCenterFocus(".project-editorial-feature"));
+  cleanups.push(initMobileCenterFocus(".tech-symbol-card"));
 
   const progressBar = document.querySelector<HTMLElement>("[data-scroll-progress]");
   const header = document.querySelector<HTMLElement>(".site-header");
@@ -494,7 +840,12 @@ export function initPortfolioMotion(): () => void {
     document.querySelectorAll<HTMLElement>("[data-scroll-highlight]")
   );
 
-  // Controle de scramble único para índices de seção ([data-scramble])
+  // Micro-Parallax de Estúdio no Hero no Desktop
+  if (heroStageEl && finePointerQuery.matches) {
+    cleanups.push(initHeroMicroParallax(heroStageEl));
+  }
+
+  // Controle de scramble para índices monoespaçados ([data-scramble])
   const scrambledDone = new WeakSet<HTMLElement>();
   const scrambleCleanups: Array<() => void> = [];
 
@@ -504,7 +855,7 @@ export function initPortfolioMotion(): () => void {
     for (const el of targets) {
       if (scrambledDone.has(el)) continue;
       scrambledDone.add(el);
-      scrambleCleanups.push(scrambleElementText(el, 320));
+      scrambleCleanups.push(scrambleElementText(el, 240));
     }
   };
 
@@ -540,7 +891,7 @@ export function initPortfolioMotion(): () => void {
 
   let prevScrollY = window.scrollY || window.pageYOffset;
 
-  // 1. Barra de leitura, reação inteligente de direção do Header, Parallax diferencial do Hero e Sobre Mim
+  // Atualização métrica de rolagem (Header inteligente + Scroll Highlight + Parallax vertical)
   const updateScrollMetrics = () => {
     rafScrollId = 0;
     const scrollY = window.scrollY || window.pageYOffset;
@@ -567,23 +918,12 @@ export function initPortfolioMotion(): () => void {
     }
     prevScrollY = scrollY;
 
-    // Parallax diferencial no Hero (título principal vs metadados editoriais + retrato de fundo)
+    // Parallax de saída no Hero (deslocamento vertical da imagem de fundo)
     if (!reducedMotionQuery.matches && scrollY < vh * 1.4) {
       const offset = Math.min(72, scrollY * 0.12);
-      const titleOffset = (scrollY * -0.08).toFixed(1);
-      const metaOffset = (scrollY * -0.18).toFixed(1);
-
-      if (heroParallaxEl) {
-        heroParallaxEl.style.setProperty("--hero-parallax-y", `${offset.toFixed(1)}px`);
-      }
-      if (heroStageEl) {
-        heroStageEl.style.setProperty("--hero-title-parallax", `${titleOffset}px`);
-        heroStageEl.style.setProperty("--hero-meta-parallax", `${metaOffset}px`);
-      }
+      heroParallaxEl?.style.setProperty("--hero-parallax-y", `${offset.toFixed(1)}px`);
     } else {
       heroParallaxEl?.style.setProperty("--hero-parallax-y", "0px");
-      heroStageEl?.style.setProperty("--hero-title-parallax", "0px");
-      heroStageEl?.style.setProperty("--hero-meta-parallax", "0px");
     }
 
     // Parallax de dupla profundidade nas imagens de Sobre Mim (alef-portrait-bw: -3% a 3%, studio-desk: 6% a -6%)
@@ -591,11 +931,10 @@ export function initPortfolioMotion(): () => void {
       if (!reducedMotionQuery.matches) {
         const rect = aboutSectionEl.getBoundingClientRect();
         if (rect.top < vh && rect.bottom > 0) {
-          // Normaliza de -1 (entrando por baixo) a +1 (saindo por cima)
-          const centerProgress = ((vh / 2 - (rect.top + rect.height / 2)) / (vh * 0.85));
+          const centerProgress = (vh / 2 - (rect.top + rect.height / 2)) / (vh * 0.85);
           const clamped = Math.max(-1, Math.min(1, centerProgress));
-          const portraitY = (clamped * 3).toFixed(2); // -3% a 3%
-          const studioY = (-clamped * 6).toFixed(2);  // 6% a -6%
+          const portraitY = (clamped * 3).toFixed(2);
+          const studioY = (-clamped * 6).toFixed(2);
           aboutSectionEl.style.setProperty("--about-portrait-y", `${portraitY}%`);
           aboutSectionEl.style.setProperty("--about-studio-y", `${studioY}%`);
         }
@@ -605,7 +944,7 @@ export function initPortfolioMotion(): () => void {
       }
     }
 
-    // Destaque progressivo de leitura (Editorial Scroll Highlight) nos parágrafos de manifesto
+    // Destaque progressivo de leitura (Editorial Scroll Highlight: 0.3 a 1)
     if (highlightSentences.length > 0) {
       for (const item of highlightSentences) {
         if (reducedMotionQuery.matches) {
@@ -615,10 +954,9 @@ export function initPortfolioMotion(): () => void {
         }
         const rect = item.getBoundingClientRect();
         const itemCenter = rect.top + rect.height / 2;
-        // Atinge opacidade 1 quando cruza dos 78% da viewport até o topo
         const rawProgress = (vh * 0.82 - itemCenter) / (vh * 0.28);
         const clamped = Math.max(0, Math.min(1, rawProgress));
-        const opacity = (0.28 + clamped * 0.72).toFixed(3);
+        const opacity = (0.3 + clamped * 0.7).toFixed(3);
         item.style.setProperty("--reading-opacity", opacity);
         item.classList.toggle("is-lit", clamped > 0.65);
       }
@@ -644,7 +982,7 @@ export function initPortfolioMotion(): () => void {
     }
   });
 
-  // 2. Revelação gradual durante a rolagem (IntersectionObserver + fallback imediato)
+  // Revelação no scroll (IntersectionObserver)
   let observer: IntersectionObserver | null = null;
 
   const setupReveal = () => {
@@ -709,22 +1047,22 @@ export function initPortfolioMotion(): () => void {
     root.classList.remove("motion-ready");
   });
 
-  // 3. Conecta Tilt 3D e Spotlight nos cartões marcados com [data-tilt-card]
+  // Conecta Tilt 3D e Spotlight nos cartões [data-tilt-card] no Desktop
   if (finePointerQuery.matches) {
     const tiltCards = Array.from(document.querySelectorAll<HTMLElement>("[data-tilt-card]"));
     for (const card of tiltCards) {
-      const customMax = Number(card.getAttribute("data-tilt-max")) || 4.5;
+      const customMax = Number(card.getAttribute("data-tilt-max")) || 4;
       cleanups.push(attach3DTiltAndSpotlight(card, customMax));
     }
 
-    // 4. Conecta Efeito Magnético nos botões e links marcados com [data-magnetic]
+    // Conecta Efeito Magnético nos botões [data-magnetic] no Desktop
     const magneticElements = Array.from(document.querySelectorAll<HTMLElement>("[data-magnetic]"));
     for (const magEl of magneticElements) {
       cleanups.push(attachMagneticEffect(magEl));
     }
   }
 
-  // 5. Acordeão técnico com Web Animations API (details[data-animated-details])
+  // Acordeão técnico com Web Animations API (details[data-animated-details])
   const detailsElements = Array.from(
     document.querySelectorAll<HTMLDetailsElement>("details[data-animated-details]")
   );

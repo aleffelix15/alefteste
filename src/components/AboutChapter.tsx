@@ -76,14 +76,22 @@ export function AboutChapter() {
                 <div className="photo-curtain-wrap about-depth-viewport">
                   <picture>
                     <source
+                      media="(max-width: 767px)"
                       type="image/avif"
-                      srcSet={`${aboutData.studioDeskImage.base}-640.avif 640w, ${aboutData.studioDeskImage.base}.avif 1120w`}
-                      sizes="(max-width: 768px) 100vw, 38vw"
+                      srcSet={`${aboutData.studioDeskImage.base}-640.avif`}
+                    />
+                    <source
+                      media="(max-width: 767px)"
+                      type="image/webp"
+                      srcSet={`${aboutData.studioDeskImage.base}-640.webp`}
+                    />
+                    <source
+                      type="image/avif"
+                      srcSet={`${aboutData.studioDeskImage.base}.avif`}
                     />
                     <source
                       type="image/webp"
-                      srcSet={`${aboutData.studioDeskImage.base}-640.webp 640w, ${aboutData.studioDeskImage.base}.webp 1120w`}
-                      sizes="(max-width: 768px) 100vw, 38vw"
+                      srcSet={`${aboutData.studioDeskImage.base}.webp`}
                     />
                     <img
                       src={`${aboutData.studioDeskImage.base}.webp`}
@@ -112,14 +120,22 @@ export function AboutChapter() {
                 <div className="photo-curtain-wrap about-depth-viewport">
                   <picture>
                     <source
+                      media="(max-width: 767px)"
                       type="image/avif"
-                      srcSet={`${aboutData.realPortraitImage.base}-640.avif 640w, ${aboutData.realPortraitImage.base}.avif 720w`}
-                      sizes="(max-width: 768px) 100vw, 30vw"
+                      srcSet={`${aboutData.realPortraitImage.base}-640.avif`}
+                    />
+                    <source
+                      media="(max-width: 767px)"
+                      type="image/webp"
+                      srcSet={`${aboutData.realPortraitImage.base}-640.webp`}
+                    />
+                    <source
+                      type="image/avif"
+                      srcSet={`${aboutData.realPortraitImage.base}.avif`}
                     />
                     <source
                       type="image/webp"
-                      srcSet={`${aboutData.realPortraitImage.base}-640.webp 640w, ${aboutData.realPortraitImage.base}.webp 720w`}
-                      sizes="(max-width: 768px) 100vw, 30vw"
+                      srcSet={`${aboutData.realPortraitImage.base}.webp`}
                     />
                     <img
                       src={`${aboutData.realPortraitImage.base}.webp`}

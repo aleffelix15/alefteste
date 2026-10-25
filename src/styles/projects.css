@@ -2,6 +2,10 @@
    CAPÍTULO 01 (SEÇÃO 02) — PROJETOS ("Ideias que viram experiências.")
    ========================================================================== */
 
+.projects-section {
+  contain: layout style;
+}
+
 .projects-editorial-layout {
   display: grid;
   grid-template-columns: 332px 1fr;
@@ -87,12 +91,16 @@
   transform-style: preserve-3d;
   transition:
     opacity 0.45s var(--ease-out-expo),
-    filter 0.45s var(--ease-out-expo),
     border-color 0.28s ease,
     box-shadow 0.28s ease,
     transform 0.45s var(--ease-out-expo);
   scroll-margin-top: calc(var(--header-height) + 24px);
-  will-change: transform, opacity, filter;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project-editorial-feature:hover {
+    will-change: transform;
+  }
 }
 
 /* Borda iluminada de proximidade (Spotlight Border Glow) */
@@ -137,11 +145,10 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  /* Foco Seletivo: escurece sutilmente os cards irmãos quando um projeto está em foco */
+  /* Foco Seletivo: atenua suavemente os cards irmãos quando um projeto está em foco */
   .projects-showcase-grid:has(.project-editorial-feature:hover)
     .project-editorial-feature:not(:hover) {
-    opacity: 0.55;
-    filter: grayscale(35%);
+    opacity: 0.48;
   }
 
   .project-editorial-feature:hover {
@@ -155,6 +162,19 @@
 
   .project-editorial-feature:hover .project-capture-frame {
     border-color: rgba(73, 180, 255, 0.42);
+  }
+}
+
+/* Zona de Foco Central no Mobile (Scroll Threshold 0.6) */
+@media (pointer: coarse), (max-width: 768px) {
+  .project-editorial-feature.is-mobile-focused {
+    border-color: rgba(73, 180, 255, 0.48);
+    box-shadow: 0 0 26px -6px rgba(22, 119, 255, 0.42), var(--shadow-lg);
+    transform: scale(1.015);
+    transition:
+      border-color 0.4s ease,
+      box-shadow 0.4s ease,
+      transform 0.4s var(--ease-out-expo);
   }
 }
 
@@ -246,7 +266,7 @@
   background: var(--surface-inverse);
 }
 
-/* Camada 1 (Primária): Entra com máscara clip-path inset + zoom-out scale(1.12 -> 1) */
+/* Camada 1 (Primária): Entra com máscara clip-path inset + zoom-out scale(1.1 -> 1) */
 .project-blade-layer--primary {
   position: relative;
   z-index: 1;
@@ -256,7 +276,7 @@
 }
 
 html.motion-ready [data-reveal]:not(.is-visible) .project-blade-layer--primary {
-  clip-path: inset(12% 6% 12% 6% round 16px);
+  clip-path: inset(10% 5% 10% 5% round 16px);
 }
 
 .project-capture-img {
@@ -270,7 +290,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .project-blade-layer--primary {
 }
 
 html.motion-ready [data-reveal]:not(.is-visible) .project-blade-layer--primary .project-capture-img {
-  transform: scale(1.12);
+  transform: scale(1.1);
 }
 
 /* Camada 2 (Secundária - Preview Interno): Oculta por padrão em corte de lâmina */
@@ -279,19 +299,18 @@ html.motion-ready [data-reveal]:not(.is-visible) .project-blade-layer--primary .
   inset: 0;
   z-index: 2;
   clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
-  transition: clip-path 0.85s var(--ease-curtain);
+  transition: clip-path 0.82s var(--ease-curtain);
   will-change: clip-path;
   pointer-events: none;
 }
 
 .project-capture-img--secondary {
   transform: scale(1.04);
-  transition: transform 0.85s var(--ease-curtain), filter 0.85s var(--ease-curtain);
+  transition: transform 0.82s var(--ease-curtain);
 }
 
 .project-blade-layer--secondary.is-verso-editorial-zoom .project-capture-img--secondary {
   transform: scale(1.1) translate3d(-1.5%, -1.5%, 0);
-  filter: contrast(1.08) saturate(1.1);
 }
 
 /* Linha de brilho especular que acompanha a borda do corte em lâmina */
@@ -303,7 +322,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .project-blade-layer--primary .
   transform: translate3d(-2%, 0, 0);
   opacity: 0;
   transition:
-    transform 0.85s var(--ease-curtain),
+    transform 0.82s var(--ease-curtain),
     opacity 0.25s ease;
   will-change: transform, opacity;
 }
@@ -328,7 +347,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .project-blade-layer--primary .
     0 0 32px 4px var(--accent-electric-glow);
 }
 
-/* Ativação da Lâmina via botão do switcher ou via hover no card */
+/* Ativação da Lâmina via switcher ou touch selector */
 .project-capture-frame.is-blade-active .project-blade-layer--secondary {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 }
@@ -369,6 +388,50 @@ html.motion-ready [data-reveal]:not(.is-visible) .project-blade-layer--primary .
     transparent 68%
   );
   transition: opacity 0.3s ease;
+}
+
+/* Seletor Mobile Touch em Pílula Translúcida [ 01 CAPA | 02 SISTEMA ] */
+.project-mobile-screen-pill {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  background: rgba(7, 10, 16, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(73, 180, 255, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+@media (pointer: coarse), (max-width: 768px) {
+  .project-mobile-screen-pill {
+    display: inline-flex;
+  }
+}
+
+.mobile-pill-btn {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  padding: 4px 6px;
+  transition: color 0.2s ease;
+}
+
+.mobile-pill-btn.is-active {
+  color: var(--accent-cyan);
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(73, 180, 255, 0.5);
+}
+
+.mobile-pill-divider {
+  color: var(--line-strong);
+  font-size: 0.72rem;
 }
 
 .capture-caption {
