@@ -9,6 +9,7 @@ import {
   type AuditedRepoName,
 } from "../data";
 import { getColorTechEmblem } from "../icons";
+import { scrambleElementText } from "../motion";
 
 export function TechChapter() {
   const [selectedTier, setSelectedTier] = useState<"ALL" | TechTier>("daily");
@@ -18,6 +19,7 @@ export function TechChapter() {
   const cardsContainerRef = useRef<HTMLDivElement>(null);
   const prevPositions = useRef<Map<string, DOMRect>>(new Map());
   const isFirstRender = useRef(true);
+  const gridRafRef = useRef<number>(0);
 
   // FLIP Animation: First - Last - Invert - Play
   useLayoutEffect(() => {
@@ -71,7 +73,6 @@ export function TechChapter() {
   });
 
   const handleTierChange = (tier: "ALL" | TechTier) => {
-    // Grava posições antes da mudança de estado (First)
     if (cardsContainerRef.current) {
       const cards = cardsContainerRef.current.querySelectorAll<HTMLElement>("[data-flip-card]");
       const positions = new Map<string, DOMRect>();
@@ -82,6 +83,65 @@ export function TechChapter() {
       prevPositions.current = positions;
     }
     setSelectedTier(tier);
+  };
+
+  // Mouse-Tracked Proximity Glow na grade inteira
+  const handleGridPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (typeof window === "undefined") return;
+    if (
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      !window.matchMedia("(pointer: fine)").matches
+    ) {
+      return;
+    }
+
+    const container = cardsContainerRef.current;
+    if (!container) return;
+
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+
+    if (gridRafRef.current) {
+      window.cancelAnimationFrame(gridRafRef.current);
+    }
+
+    gridRafRef.current = window.requestAnimationFrame(() => {
+      gridRafRef.current = 0;
+      const containerRect = container.getBoundingClientRect();
+      container.style.setProperty("--grid-mouse-x", `${(clientX - containerRect.left).toFixed(1)}px`);
+      container.style.setProperty("--grid-mouse-y", `${(clientY - containerRect.top).toFixed(1)}px`);
+      container.style.setProperty("--grid-glow-opacity", "1");
+
+      const cards = container.querySelectorAll<HTMLElement>(".tech-symbol-card");
+      cards.forEach((card) => {
+        const rect = card.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+        card.style.setProperty("--mouse-x", `${x.toFixed(1)}px`);
+        card.style.setProperty("--mouse-y", `${y.toFixed(1)}px`);
+      });
+    });
+  };
+
+  const handleGridPointerLeave = () => {
+    if (gridRafRef.current) {
+      window.cancelAnimationFrame(gridRafRef.current);
+      gridRafRef.current = 0;
+    }
+    const container = cardsContainerRef.current;
+    if (container) {
+      container.style.setProperty("--grid-glow-opacity", "0");
+    }
+  };
+
+  const handleCardMouseEnter = (e: React.MouseEvent<HTMLLIElement>) => {
+    if (typeof window === "undefined") return;
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+    const cardEl = e.currentTarget;
+    const monoMeta = cardEl.querySelector<HTMLElement>("[data-tech-scramble]");
+    if (monoMeta) {
+      scrambleElementText(monoMeta, 280);
+    }
   };
 
   const repoFilters: { id: "ALL" | AuditedRepoName; label: string }[] = [
@@ -171,7 +231,7 @@ export function TechChapter() {
                 aria-selected={isActive}
                 className={`tech-tier-btn mono ${isActive ? "is-active" : ""}`}
                 onClick={() => handleTierChange(tier.id)}
-                data-cursor-label="NÍVEL"
+                data-cursor="magnetic"
               >
                 <span className="tier-bullet" aria-hidden="true">■</span>
                 <span className="tier-title">{tier.label}</span>
@@ -241,8 +301,13 @@ export function TechChapter() {
           </div>
         </div>
 
-        {/* 3. GRADE DE SÍMBOLOS AGRUPADOS COM ANIMAÇÃO FLIP */}
-        <div ref={cardsContainerRef} className="tech-categories-stack">
+        {/* 3. GRADE DE SÍMBOLOS AGRUPADOS COM PROXIMITY GLOW & FLIP */}
+        <div
+          ref={cardsContainerRef}
+          className="tech-categories-stack"
+          onPointerMove={handleGridPointerMove}
+          onPointerLeave={handleGridPointerLeave}
+        >
           {activeCategories.map((cat) => {
             const itemsInCat = filteredTechs.filter((t) => t.category === cat.id);
             if (itemsInCat.length === 0) return null;
@@ -268,7 +333,9 @@ export function TechChapter() {
                       data-flip-key={item.name}
                       className="tech-symbol-card"
                       data-tilt-card
-                      data-cursor-label={item.projects.slice(0, 2).join(" · ") || item.name}
+                      data-tilt-max="4"
+                      data-cursor-label={`[ ${item.projects.slice(0, 2).join(" · ") || item.name} ]`}
+                      onMouseEnter={handleCardMouseEnter}
                       style={
                         {
                           "--stagger-index": idx,
@@ -310,7 +377,13 @@ export function TechChapter() {
                         )}
                       </div>
 
-                      <span className="tech-symbol-provenance mono">{item.provenanceNote}</span>
+                      <span
+                        className="tech-symbol-provenance mono"
+                        data-tech-scramble
+                        data-original-text={item.provenanceNote}
+                      >
+                        {item.provenanceNote}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -321,7 +394,7 @@ export function TechChapter() {
 
         {/* 4. DOSSIÊ DE TRANSPARÊNCIA E AUDITORIA */}
         <details className="tech-audit-dossier" data-animated-details>
-          <summary className="audit-summary mono" data-cursor-label="ORIGEM">
+          <summary className="audit-summary mono" data-cursor="magnetic">
             <span>ORIGEM AUDITADA NOS REPOSITÓRIOS GITHUB &amp; NOTA DE TRANSPARÊNCIA</span>
             <span className="audit-plus" aria-hidden="true">+</span>
           </summary>

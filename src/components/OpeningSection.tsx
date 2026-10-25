@@ -20,8 +20,8 @@ function AnimatedCounter({
     if (
       typeof window !== "undefined" &&
       (window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-       Boolean(navigator.webdriver) ||
-       /Lighthouse|Chrome-Lighthouse|PageSpeed|moto g power/i.test(navigator.userAgent))
+        Boolean(navigator.webdriver) ||
+        /Lighthouse|Chrome-Lighthouse|PageSpeed|moto g power/i.test(navigator.userAgent))
     ) {
       el.textContent = `${target}${suffix}`;
       return;
@@ -76,7 +76,7 @@ export function OpeningSection() {
   const handlePointerMove = (e: React.PointerEvent<HTMLElement>) => {
     if (typeof window === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (window.matchMedia("(hover: none)").matches) return;
+    if (!window.matchMedia("(pointer: fine)").matches) return;
 
     const hero = heroRef.current;
     if (!hero) return;
@@ -100,6 +100,16 @@ export function OpeningSection() {
       <div className="hero-backdrop-wrap" aria-hidden="true">
         <picture>
           <source
+            media="(max-width: 640px)"
+            type="image/avif"
+            srcSet={`${heroData.portraitImage.base640}.avif`}
+          />
+          <source
+            media="(max-width: 640px)"
+            type="image/webp"
+            srcSet={`${heroData.portraitImage.base640}.webp`}
+          />
+          <source
             type="image/avif"
             srcSet={`${heroData.portraitImage.base}.avif`}
           />
@@ -112,6 +122,7 @@ export function OpeningSection() {
             alt=""
             width={720}
             height={900}
+            sizes="(max-width: 640px) 100vw, 46vw"
             fetchPriority="high"
             decoding="async"
             className="hero-backdrop-img hero-portrait-duotone"
@@ -127,7 +138,7 @@ export function OpeningSection() {
       <div className="container hero-stage-grid">
         {/* Left Vertical Spine: 01 | PORTFÓLIO 2026 */}
         <aside
-          className="editorial-spine hero-spine"
+          className="editorial-spine hero-spine hero-parallax-meta"
           aria-label="Capítulo 01 — Portfólio 2026"
           data-reveal
         >
@@ -142,7 +153,7 @@ export function OpeningSection() {
         </aside>
 
         {/* Main Editorial Cover Column */}
-        <div className="hero-main-column" data-reveal>
+        <div className="hero-main-column hero-parallax-title" data-reveal>
           {/* Selo: Disponível para oportunidades com ponto verde pulsante */}
           <div
             className="hero-status-pill mono hero-stagger-fade"
@@ -153,18 +164,18 @@ export function OpeningSection() {
           </div>
 
           <h1 id="hero-main-title" className="hero-serif-title">
-            <span className="line-mask">
+            <span className="line-mask hero-line-mask-3d">
               <span
-                className="line-inner"
-                style={{ "--line-delay": "60ms" } as React.CSSProperties}
+                className="line-inner hero-line-3d"
+                style={{ "--line-delay": "0ms" } as React.CSSProperties}
               >
                 {heroData.firstName}
               </span>
             </span>
-            <span className="line-mask">
+            <span className="line-mask hero-line-mask-3d">
               <span
-                className="line-inner hero-title-accent"
-                style={{ "--line-delay": "180ms" } as React.CSSProperties}
+                className="line-inner hero-line-3d hero-title-accent"
+                style={{ "--line-delay": "90ms" } as React.CSSProperties}
               >
                 {heroData.lastName}
               </span>
@@ -173,7 +184,7 @@ export function OpeningSection() {
 
           <p
             className="hero-lead-statement hero-stagger-fade"
-            style={{ "--fade-delay": "280ms" } as React.CSSProperties}
+            style={{ "--fade-delay": "220ms" } as React.CSSProperties}
           >
             {heroData.statement}
           </p>
@@ -181,13 +192,13 @@ export function OpeningSection() {
           {/* Dois CTAs: "Ver projetos" e "Baixar CV" */}
           <div
             className="hero-actions-row hero-stagger-fade"
-            style={{ "--fade-delay": "380ms" } as React.CSSProperties}
+            style={{ "--fade-delay": "310ms" } as React.CSSProperties}
           >
             <a
               href="#projetos"
               className="btn-white-editorial btn-sheen"
               data-magnetic
-              data-cursor-label="PROJETOS ↓"
+              data-cursor="magnetic"
             >
               <RollText text={heroData.ctaPrimary} />
               <span aria-hidden="true" className="arrow-inline">
@@ -201,7 +212,7 @@ export function OpeningSection() {
           {/* Barra de Prova Rápida com Contadores Animados */}
           <div
             className="hero-proof-bar hero-stagger-fade"
-            style={{ "--fade-delay": "480ms" } as React.CSSProperties}
+            style={{ "--fade-delay": "400ms" } as React.CSSProperties}
             aria-label="Indicadores rápidos de experiência técnica"
           >
             {heroData.proofMetrics.map((metric) => (
@@ -220,10 +231,10 @@ export function OpeningSection() {
         </div>
 
         {/* Right Floating Epigraph & Scroll cue */}
-        <div className="hero-epigraph-column" data-reveal>
+        <div className="hero-epigraph-column hero-parallax-meta" data-reveal>
           <blockquote
             className="hero-floating-epigraph hero-stagger-fade"
-            style={{ "--fade-delay": "360ms" } as React.CSSProperties}
+            style={{ "--fade-delay": "310ms" } as React.CSSProperties}
           >
             <p>{heroData.epigraph}</p>
             <span className="epigraph-rule" aria-hidden="true" />
@@ -231,7 +242,7 @@ export function OpeningSection() {
 
           <div
             className="hero-bottom-meta hero-stagger-fade"
-            style={{ "--fade-delay": "480ms" } as React.CSSProperties}
+            style={{ "--fade-delay": "420ms" } as React.CSSProperties}
           >
             <p className="hero-studio-caption mono">
               {heroData.portraitImage.caption}
@@ -239,7 +250,9 @@ export function OpeningSection() {
             <a
               href="#projetos"
               className="hero-scroll-cue mono"
-              aria-label="Rolar para a seção de projetos"
+              aria-label="ROLAR EDIÇÃO — Rolar para a seção de projetos"
+              data-magnetic
+              data-cursor="magnetic"
             >
               <span className="scroll-cue-line" aria-hidden="true" />
               <span>ROLAR EDIÇÃO</span>

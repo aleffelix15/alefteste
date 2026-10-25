@@ -1,18 +1,470 @@
 /**
- * Coreografia de Movimento Editorial v2 — Álef Felix Teixeira
- * - Revelação em máscara tipográfica (.line-mask > .line-inner) e capítulos via IntersectionObserver + fallback no scroll
- * - Cortina de revelação fotográfica de câmara escura (.photo-curtain-wrap)
- * - Decodificação monoespaçada (cipher scramble) nos índices de capítulo ([data-scramble])
- * - Cursor editorial contextual ([data-editorial-cursor] + [data-cursor-label]) com interpolação suave
- * - Paralaxe suave de profundidade no cenário fotográfico do estúdio (Hero)
- * - Botões e links magnéticos ([data-magnetic]) + texto em rolagem dupla (.hover-roll-text)
- * - Luz direcional sutil de estúdio ([data-tilt-card]) em dispositivos com ponteiro fino (sem tilt 3D exagerado)
+ * Coreografia de Movimento Editorial v3 (Awwwards SOTD Edition) — Álef Felix Teixeira
+ * - Motor de física de scroll (initScrollVelocityTracker) com inércia lerp (0.14) e skew dinâmico
+ * - Efeito magnético com paralaxe interna de camada dupla (attachMagneticEffect)
+ * - Tilt 3D em perspectiva (1200px) + Proximity Spotlight radial (attach3DTiltAndSpotlight)
+ * - Cursor Editorial Contextual em 3 estados (Ponto 8x8, Anel Magnético 36px difference, Pílula Editorial blur 10px)
+ * - Revelação em máscara 3D (.line-mask > .line-inner), capítulos e parallax diferencial no Hero e Sobre Mim
+ * - Destaque progressivo de leitura (Editorial Scroll Highlight) no manifesto biográfico
+ * - Decodificação monoespaçada (cipher scramble) em índices e no hover de tecnologias (280ms)
  * - Acordeão técnico suave via Web Animations API (details[data-animated-details])
- * - Respeito estrito a prefers-reduced-motion: reduce
+ * - Respeito estrito a @media (prefers-reduced-motion: reduce) e @media (hover: hover) and (pointer: fine)
  */
 
-const CIPHER_GLYPHS = "0123456789/—·#";
+const CIPHER_GLYPHS = "0123456789/—·#XYZ";
 
+export interface MagneticOptions {
+  strength?: number;
+  innerSelector?: string;
+  innerStrength?: number;
+}
+
+/**
+ * Decodificação rápida de caracteres (Text Scramble) em elementos monoespaçados.
+ */
+const activeElementScrambles = new WeakMap<HTMLElement, number>();
+
+export function scrambleElementText(el: HTMLElement, durationMs = 280): () => void {
+  if (typeof window === "undefined") return () => {};
+  if (
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+    Boolean(navigator.webdriver) ||
+    /Lighthouse|Chrome-Lighthouse|PageSpeed|moto g power/i.test(navigator.userAgent)
+  ) {
+    return () => {};
+  }
+
+  const finalStr = el.getAttribute("data-scramble") || el.getAttribute("data-original-text") || el.textContent || "";
+  if (!finalStr) return () => {};
+
+  if (!el.hasAttribute("data-original-text")) {
+    el.setAttribute("data-original-text", finalStr);
+  }
+  el.setAttribute("aria-label", finalStr);
+
+  const prevTimer = activeElementScrambles.get(el);
+  if (prevTimer) {
+    window.clearInterval(prevTimer);
+  }
+
+  const stepInterval = 28;
+  const totalSteps = Math.max(4, Math.round(durationMs / stepInterval));
+  let step = 0;
+
+  const intervalId = window.setInterval(() => {
+    step += 1;
+    if (step >= totalSteps) {
+      el.textContent = finalStr;
+      window.clearInterval(intervalId);
+      activeElementScrambles.delete(el);
+      return;
+    }
+
+    const lockCount = Math.floor((step / totalSteps) * finalStr.length);
+    let nextText = "";
+    for (let i = 0; i < finalStr.length; i++) {
+      const ch = finalStr[i];
+      if (ch === " " || i < lockCount) {
+        nextText += ch;
+      } else {
+        nextText += CIPHER_GLYPHS[(i + step * 3) % CIPHER_GLYPHS.length];
+      }
+    }
+    el.textContent = nextText;
+  }, stepInterval);
+
+  activeElementScrambles.set(el, intervalId);
+
+  return () => {
+    window.clearInterval(intervalId);
+    el.textContent = finalStr;
+    activeElementScrambles.delete(el);
+  };
+}
+
+/**
+ * 1. Rastreamento de velocidade de scroll com interpolação linear (lerp 0.14)
+ *    Injeta --scroll-velocity e --scroll-skew no document.documentElement.style.
+ *    O loop rAF só executa enquanto a velocidade amortecida for > 0.05.
+ */
+export function initScrollVelocityTracker(): () => void {
+  if (typeof window === "undefined" || typeof document === "undefined") {
+    return () => {};
+  }
+
+  const root = document.documentElement;
+  const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  let lastScrollY = window.scrollY || window.pageYOffset;
+  let newScrollY = lastScrollY;
+  let velocity = 0;
+  let rafId = 0;
+
+  const resetVariables = () => {
+    velocity = 0;
+    root.style.setProperty("--scroll-velocity", "0");
+    root.style.setProperty("--scroll-skew", "0deg");
+  };
+
+  const tick = () => {
+    rafId = 0;
+    if (reducedMotionQuery.matches) {
+      resetVariables();
+      return;
+    }
+
+    newScrollY = window.scrollY || window.pageYOffset;
+    const delta = newScrollY - lastScrollY;
+    lastScrollY = newScrollY;
+
+    velocity += (delta - velocity) * 0.14;
+
+    if (Math.abs(velocity) > 0.05) {
+      const skew = Math.max(-5, Math.min(5, velocity * 0.11));
+      root.style.setProperty("--scroll-velocity", velocity.toFixed(3));
+      root.style.setProperty("--scroll-skew", `${skew.toFixed(2)}deg`);
+      rafId = window.requestAnimationFrame(tick);
+    } else {
+      resetVariables();
+    }
+  };
+
+  const onScroll = () => {
+    if (reducedMotionQuery.matches) return;
+    if (!rafId) {
+      rafId = window.requestAnimationFrame(tick);
+    }
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  return () => {
+    window.removeEventListener("scroll", onScroll);
+    if (rafId) {
+      window.cancelAnimationFrame(rafId);
+    }
+    resetVariables();
+  };
+}
+
+/**
+ * 2. Efeito Magnético com Paralaxe de Profundidade em Dois Níveis
+ *    strength = 0.28 no elemento pai e innerStrength = 0.42 no elemento interno opcional.
+ */
+export function attachMagneticEffect(
+  element: HTMLElement,
+  options?: MagneticOptions
+): () => void {
+  if (typeof window === "undefined") return () => {};
+
+  const finePointerQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (!finePointerQuery.matches || !window.matchMedia("(pointer: fine)").matches) {
+    return () => {};
+  }
+
+  const strength = options?.strength ?? 0.28;
+  const innerStrength = options?.innerStrength ?? 0.42;
+  const innerSelector =
+    options?.innerSelector ??
+    ".hover-roll-text, .monogram-svg, .btn-label, .btn-cv-content-inner";
+  const innerEl = element.querySelector<HTMLElement>(innerSelector);
+
+  if (!element.hasAttribute("data-cursor")) {
+    element.setAttribute("data-cursor", "magnetic");
+  }
+
+  let targetX = 0;
+  let targetY = 0;
+  let currentX = 0;
+  let currentY = 0;
+  let innerTargetX = 0;
+  let innerTargetY = 0;
+  let innerCurrentX = 0;
+  let innerCurrentY = 0;
+  let rafId = 0;
+  let isHovered = false;
+
+  const animate = () => {
+    rafId = 0;
+    const lerpFactor = isHovered ? 0.22 : 0.16;
+
+    currentX += (targetX - currentX) * lerpFactor;
+    currentY += (targetY - currentY) * lerpFactor;
+    innerCurrentX += (innerTargetX - innerCurrentX) * lerpFactor;
+    innerCurrentY += (innerTargetY - innerCurrentY) * lerpFactor;
+
+    element.style.setProperty("--mag-x", `${currentX.toFixed(2)}px`);
+    element.style.setProperty("--mag-y", `${currentY.toFixed(2)}px`);
+    element.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`;
+
+    if (innerEl) {
+      innerEl.style.transform = `translate3d(${innerCurrentX.toFixed(2)}px, ${innerCurrentY.toFixed(2)}px, 0)`;
+    }
+
+    const stillMoving =
+      Math.abs(targetX - currentX) > 0.08 ||
+      Math.abs(targetY - currentY) > 0.08 ||
+      Math.abs(innerTargetX - innerCurrentX) > 0.08 ||
+      Math.abs(innerTargetY - innerCurrentY) > 0.08;
+
+    if (stillMoving) {
+      rafId = window.requestAnimationFrame(animate);
+    } else if (!isHovered) {
+      element.style.setProperty("--mag-x", "0px");
+      element.style.setProperty("--mag-y", "0px");
+      element.style.transform = "translate3d(0, 0, 0)";
+      if (innerEl) {
+        innerEl.style.transform = "translate3d(0, 0, 0)";
+      }
+    }
+  };
+
+  const onMouseMove = (e: MouseEvent) => {
+    if (reducedMotionQuery.matches || !finePointerQuery.matches) return;
+    const rect = element.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+
+    isHovered = true;
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const distX = e.clientX - centerX;
+    const distY = e.clientY - centerY;
+
+    targetX = Math.max(-14, Math.min(14, distX * strength));
+    targetY = Math.max(-10, Math.min(10, distY * strength));
+
+    innerTargetX = Math.max(-10, Math.min(10, distX * (innerStrength - strength)));
+    innerTargetY = Math.max(-8, Math.min(8, distY * (innerStrength - strength)));
+
+    // Atualiza coordenadas locais para preenchimento direcional (ex.: CvButton)
+    const localX = e.clientX - rect.left;
+    const localY = e.clientY - rect.top;
+    element.style.setProperty("--mouse-x", `${localX.toFixed(1)}px`);
+    element.style.setProperty("--mouse-y", `${localY.toFixed(1)}px`);
+
+    if (!rafId) {
+      rafId = window.requestAnimationFrame(animate);
+    }
+  };
+
+  const onMouseEnter = (e: MouseEvent) => {
+    if (reducedMotionQuery.matches || !finePointerQuery.matches) return;
+    const rect = element.getBoundingClientRect();
+    const localX = e.clientX - rect.left;
+    const localY = e.clientY - rect.top;
+    element.style.setProperty("--mouse-x", `${localX.toFixed(1)}px`);
+    element.style.setProperty("--mouse-y", `${localY.toFixed(1)}px`);
+  };
+
+  const onMouseLeave = (e: MouseEvent) => {
+    isHovered = false;
+    targetX = 0;
+    targetY = 0;
+    innerTargetX = 0;
+    innerTargetY = 0;
+
+    const rect = element.getBoundingClientRect();
+    const localX = e.clientX - rect.left;
+    const localY = e.clientY - rect.top;
+    element.style.setProperty("--mouse-x", `${localX.toFixed(1)}px`);
+    element.style.setProperty("--mouse-y", `${localY.toFixed(1)}px`);
+
+    if (!rafId) {
+      rafId = window.requestAnimationFrame(animate);
+    }
+  };
+
+  element.addEventListener("mouseenter", onMouseEnter, { passive: true });
+  element.addEventListener("mousemove", onMouseMove, { passive: true });
+  element.addEventListener("mouseleave", onMouseLeave, { passive: true });
+
+  return () => {
+    if (rafId) window.cancelAnimationFrame(rafId);
+    element.removeEventListener("mouseenter", onMouseEnter);
+    element.removeEventListener("mousemove", onMouseMove);
+    element.removeEventListener("mouseleave", onMouseLeave);
+    element.style.transform = "";
+    if (innerEl) {
+      innerEl.style.transform = "";
+    }
+  };
+}
+
+/**
+ * 3. Tilt 3D com Perspectiva 1200px & Spotlight Radial de Proximidade
+ */
+export function attach3DTiltAndSpotlight(
+  card: HTMLElement,
+  maxTilt = 4.5
+): () => void {
+  if (typeof window === "undefined") return () => {};
+
+  const finePointerQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (!finePointerQuery.matches || !window.matchMedia("(pointer: fine)").matches) {
+    return () => {};
+  }
+
+  let rafId = 0;
+
+  const onMouseMove = (e: MouseEvent) => {
+    if (reducedMotionQuery.matches || !finePointerQuery.matches) return;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+
+    if (rafId) window.cancelAnimationFrame(rafId);
+
+    rafId = window.requestAnimationFrame(() => {
+      rafId = 0;
+      const rect = card.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+
+      const px = Math.min(1, Math.max(0, x / rect.width));
+      const py = Math.min(1, Math.max(0, y / rect.height));
+      const cx = px - 0.5;
+      const cy = py - 0.5;
+
+      const rotateX = (-cy * maxTilt).toFixed(2);
+      const rotateY = (cx * maxTilt).toFixed(2);
+
+      card.style.setProperty("--mouse-x", `${x.toFixed(1)}px`);
+      card.style.setProperty("--mouse-y", `${y.toFixed(1)}px`);
+      card.style.setProperty("--spot-x", `${(px * 100).toFixed(1)}%`);
+      card.style.setProperty("--spot-y", `${(py * 100).toFixed(1)}%`);
+      card.style.setProperty("--spot-opacity", "1");
+
+      card.style.transition = "transform 0.14s ease-out";
+      card.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.005, 1.005, 1)`;
+    });
+  };
+
+  const onMouseLeave = () => {
+    if (rafId) {
+      window.cancelAnimationFrame(rafId);
+      rafId = 0;
+    }
+    card.style.setProperty("--spot-opacity", "0");
+    card.style.transition = "transform 0.65s var(--ease-out-expo)";
+    card.style.transform = "perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+  };
+
+  card.addEventListener("mousemove", onMouseMove, { passive: true });
+  card.addEventListener("mouseleave", onMouseLeave, { passive: true });
+
+  return () => {
+    if (rafId) window.cancelAnimationFrame(rafId);
+    card.removeEventListener("mousemove", onMouseMove);
+    card.removeEventListener("mouseleave", onMouseLeave);
+    card.style.transform = "";
+    card.style.transition = "";
+  };
+}
+
+/**
+ * 4. Controlador do Cursor Editorial Contextual
+ *    - Estado Padrão: Ponto minimalista 8px x 8px
+ *    - Estado Hover em Links/Botões ([data-cursor="magnetic"]): Anel 36px com mix-blend-mode: difference
+ *    - Estado Hover em Mídia/Projetos ([data-cursor-label]): Pílula editorial com backdrop-filter: blur(10px) e DM Mono
+ */
+export function initCustomCursor(): () => void {
+  if (typeof window === "undefined" || typeof document === "undefined") {
+    return () => {};
+  }
+
+  const finePointerQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  const cursorEl = document.querySelector<HTMLElement>("[data-editorial-cursor]");
+  const cursorTextEl = document.querySelector<HTMLElement>("[data-editorial-cursor-text]");
+
+  if (!cursorEl || !cursorTextEl || !finePointerQuery.matches || !window.matchMedia("(pointer: fine)").matches) {
+    return () => {};
+  }
+
+  let targetX = -100;
+  let targetY = -100;
+  let currentX = -100;
+  let currentY = -100;
+  let cursorRaf = 0;
+  let cursorVisible = false;
+
+  const updateCursorPosition = () => {
+    cursorRaf = 0;
+    currentX += (targetX - currentX) * 0.18;
+    currentY += (targetY - currentY) * 0.18;
+
+    cursorEl.style.transform = `translate3d(${currentX.toFixed(1)}px, ${currentY.toFixed(1)}px, 0)`;
+
+    if (Math.abs(targetX - currentX) > 0.12 || Math.abs(targetY - currentY) > 0.12) {
+      cursorRaf = window.requestAnimationFrame(updateCursorPosition);
+    }
+  };
+
+  const onWindowPointerMove = (e: PointerEvent) => {
+    if (reducedMotionQuery.matches || !finePointerQuery.matches) {
+      cursorEl.classList.remove("is-active", "has-label", "is-magnetic");
+      return;
+    }
+
+    targetX = e.clientX;
+    targetY = e.clientY;
+
+    if (!cursorVisible) {
+      currentX = targetX;
+      currentY = targetY;
+      cursorVisible = true;
+      cursorEl.classList.add("is-active");
+    }
+
+    const targetNode = e.target as HTMLElement | null;
+    const labeledAncestor = targetNode?.closest<HTMLElement>("[data-cursor-label]");
+    const magneticAncestor = targetNode?.closest<HTMLElement>(
+      '[data-cursor="magnetic"], [data-magnetic], a, button'
+    );
+
+    if (labeledAncestor) {
+      const label = labeledAncestor.getAttribute("data-cursor-label") || "";
+      if (cursorTextEl.textContent !== label) {
+        cursorTextEl.textContent = label;
+      }
+      cursorEl.classList.add("has-label");
+      cursorEl.classList.remove("is-magnetic");
+    } else if (magneticAncestor) {
+      cursorEl.classList.add("is-magnetic");
+      cursorEl.classList.remove("has-label");
+    } else {
+      cursorEl.classList.remove("has-label", "is-magnetic");
+    }
+
+    if (!cursorRaf) {
+      cursorRaf = window.requestAnimationFrame(updateCursorPosition);
+    }
+  };
+
+  const onWindowPointerLeave = () => {
+    cursorVisible = false;
+    cursorEl.classList.remove("is-active", "has-label", "is-magnetic");
+  };
+
+  window.addEventListener("pointermove", onWindowPointerMove, { passive: true });
+  document.addEventListener("mouseleave", onWindowPointerLeave, { passive: true });
+
+  return () => {
+    if (cursorRaf) window.cancelAnimationFrame(cursorRaf);
+    window.removeEventListener("pointermove", onWindowPointerMove);
+    document.removeEventListener("mouseleave", onWindowPointerLeave);
+  };
+}
+
+/**
+ * Inicializador Mestre da Coreografia do Portfólio
+ */
 export function initPortfolioMotion(): () => void {
   if (typeof window === "undefined" || typeof document === "undefined") {
     return () => {};
@@ -25,67 +477,39 @@ export function initPortfolioMotion(): () => void {
   const cleanups: Array<() => void> = [];
   let rafScrollId = 0;
 
+  // Inicializa o rastreador de velocidade e skew
+  cleanups.push(initScrollVelocityTracker());
+
+  // Inicializa o cursor editorial contextual
+  cleanups.push(initCustomCursor());
+
   const progressBar = document.querySelector<HTMLElement>("[data-scroll-progress]");
   const header = document.querySelector<HTMLElement>(".site-header");
   const heroParallaxEl = document.querySelector<HTMLElement>("[data-hero-parallax]");
+  const heroStageEl = document.querySelector<HTMLElement>("[data-hero-stage]");
+  const aboutSectionEl = document.querySelector<HTMLElement>("#sobre");
   const revealElements = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
   const chapterSections = Array.from(document.querySelectorAll<HTMLElement>("[data-chapter-section]"));
+  const highlightSentences = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-scroll-highlight]")
+  );
 
-  // Controle de scramble para índices monoespaçados ([data-scramble])
+  // Controle de scramble único para índices de seção ([data-scramble])
   const scrambledDone = new WeakSet<HTMLElement>();
-  const activeScrambleTimers = new Set<number>();
+  const scrambleCleanups: Array<() => void> = [];
 
   const triggerScrambleInside = (container: HTMLElement) => {
-    if (
-      reducedMotionQuery.matches ||
-      Boolean(navigator.webdriver) ||
-      /Lighthouse|Chrome-Lighthouse|PageSpeed|moto g power/i.test(navigator.userAgent)
-    ) {
-      return;
-    }
+    if (reducedMotionQuery.matches) return;
     const targets = Array.from(container.querySelectorAll<HTMLElement>("[data-scramble]"));
     for (const el of targets) {
       if (scrambledDone.has(el)) continue;
       scrambledDone.add(el);
-
-      const finalStr = el.getAttribute("data-scramble") || el.textContent || "";
-      if (!finalStr) continue;
-
-      el.setAttribute("aria-label", finalStr);
-      const totalSteps = 10;
-      let step = 0;
-
-      const intervalId = window.setInterval(() => {
-        step += 1;
-        if (step >= totalSteps || reducedMotionQuery.matches) {
-          el.textContent = finalStr;
-          window.clearInterval(intervalId);
-          activeScrambleTimers.delete(intervalId);
-          return;
-        }
-
-        const lockCount = Math.floor((step / totalSteps) * finalStr.length);
-        let nextText = "";
-        for (let i = 0; i < finalStr.length; i++) {
-          const ch = finalStr[i];
-          if (ch === " " || i < lockCount) {
-            nextText += ch;
-          } else {
-            nextText += CIPHER_GLYPHS[(i + step * 3) % CIPHER_GLYPHS.length];
-          }
-        }
-        el.textContent = nextText;
-      }, 32);
-
-      activeScrambleTimers.add(intervalId);
+      scrambleCleanups.push(scrambleElementText(el, 320));
     }
   };
 
   cleanups.push(() => {
-    for (const timerId of activeScrambleTimers) {
-      window.clearInterval(timerId);
-    }
-    activeScrambleTimers.clear();
+    for (const fn of scrambleCleanups) fn();
   });
 
   const markElementVisible = (el: HTMLElement) => {
@@ -114,11 +538,14 @@ export function initPortfolioMotion(): () => void {
     }
   };
 
-  // 1. Barra de leitura de capítulo, cabeçalho compacto & paralaxe suave do estúdio
+  let prevScrollY = window.scrollY || window.pageYOffset;
+
+  // 1. Barra de leitura, reação inteligente de direção do Header, Parallax diferencial do Hero e Sobre Mim
   const updateScrollMetrics = () => {
     rafScrollId = 0;
     const scrollY = window.scrollY || window.pageYOffset;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const vh = window.innerHeight || 1;
+    const docHeight = document.documentElement.scrollHeight - vh;
     const progress = docHeight > 0 ? Math.min(1, Math.max(0, scrollY / docHeight)) : 0;
 
     if (progressBar) {
@@ -126,15 +553,74 @@ export function initPortfolioMotion(): () => void {
     }
 
     if (header) {
+      const isScrollingDown = scrollY > prevScrollY + 2;
+      const isScrollingUp = scrollY < prevScrollY - 2;
       header.classList.toggle("is-compact", scrollY > 32);
+
+      if (scrollY <= 120) {
+        header.classList.remove("is-collapsed");
+      } else if (isScrollingDown) {
+        header.classList.add("is-collapsed");
+      } else if (isScrollingUp) {
+        header.classList.remove("is-collapsed");
+      }
+    }
+    prevScrollY = scrollY;
+
+    // Parallax diferencial no Hero (título principal vs metadados editoriais + retrato de fundo)
+    if (!reducedMotionQuery.matches && scrollY < vh * 1.4) {
+      const offset = Math.min(72, scrollY * 0.12);
+      const titleOffset = (scrollY * -0.08).toFixed(1);
+      const metaOffset = (scrollY * -0.18).toFixed(1);
+
+      if (heroParallaxEl) {
+        heroParallaxEl.style.setProperty("--hero-parallax-y", `${offset.toFixed(1)}px`);
+      }
+      if (heroStageEl) {
+        heroStageEl.style.setProperty("--hero-title-parallax", `${titleOffset}px`);
+        heroStageEl.style.setProperty("--hero-meta-parallax", `${metaOffset}px`);
+      }
+    } else {
+      heroParallaxEl?.style.setProperty("--hero-parallax-y", "0px");
+      heroStageEl?.style.setProperty("--hero-title-parallax", "0px");
+      heroStageEl?.style.setProperty("--hero-meta-parallax", "0px");
     }
 
-    if (heroParallaxEl) {
-      if (!reducedMotionQuery.matches && scrollY < window.innerHeight * 1.4) {
-        const offset = Math.min(72, scrollY * 0.12);
-        heroParallaxEl.style.setProperty("--hero-parallax-y", `${offset.toFixed(1)}px`);
+    // Parallax de dupla profundidade nas imagens de Sobre Mim (alef-portrait-bw: -3% a 3%, studio-desk: 6% a -6%)
+    if (aboutSectionEl) {
+      if (!reducedMotionQuery.matches) {
+        const rect = aboutSectionEl.getBoundingClientRect();
+        if (rect.top < vh && rect.bottom > 0) {
+          // Normaliza de -1 (entrando por baixo) a +1 (saindo por cima)
+          const centerProgress = ((vh / 2 - (rect.top + rect.height / 2)) / (vh * 0.85));
+          const clamped = Math.max(-1, Math.min(1, centerProgress));
+          const portraitY = (clamped * 3).toFixed(2); // -3% a 3%
+          const studioY = (-clamped * 6).toFixed(2);  // 6% a -6%
+          aboutSectionEl.style.setProperty("--about-portrait-y", `${portraitY}%`);
+          aboutSectionEl.style.setProperty("--about-studio-y", `${studioY}%`);
+        }
       } else {
-        heroParallaxEl.style.setProperty("--hero-parallax-y", "0px");
+        aboutSectionEl.style.setProperty("--about-portrait-y", "0%");
+        aboutSectionEl.style.setProperty("--about-studio-y", "0%");
+      }
+    }
+
+    // Destaque progressivo de leitura (Editorial Scroll Highlight) nos parágrafos de manifesto
+    if (highlightSentences.length > 0) {
+      for (const item of highlightSentences) {
+        if (reducedMotionQuery.matches) {
+          item.style.setProperty("--reading-opacity", "1");
+          item.classList.add("is-lit");
+          continue;
+        }
+        const rect = item.getBoundingClientRect();
+        const itemCenter = rect.top + rect.height / 2;
+        // Atinge opacidade 1 quando cruza dos 78% da viewport até o topo
+        const rawProgress = (vh * 0.82 - itemCenter) / (vh * 0.28);
+        const clamped = Math.max(0, Math.min(1, rawProgress));
+        const opacity = (0.28 + clamped * 0.72).toFixed(3);
+        item.style.setProperty("--reading-opacity", opacity);
+        item.classList.toggle("is-lit", clamped > 0.65);
       }
     }
 
@@ -223,97 +709,19 @@ export function initPortfolioMotion(): () => void {
     root.classList.remove("motion-ready");
   });
 
-  // 3. Luz direcional sutil nas pranchas e cartões ([data-tilt-card])
-  const plateElements = Array.from(document.querySelectorAll<HTMLElement>("[data-tilt-card]"));
+  // 3. Conecta Tilt 3D e Spotlight nos cartões marcados com [data-tilt-card]
+  if (finePointerQuery.matches) {
+    const tiltCards = Array.from(document.querySelectorAll<HTMLElement>("[data-tilt-card]"));
+    for (const card of tiltCards) {
+      const customMax = Number(card.getAttribute("data-tilt-max")) || 4.5;
+      cleanups.push(attach3DTiltAndSpotlight(card, customMax));
+    }
 
-  for (const plateEl of plateElements) {
-    let spotRaf = 0;
-
-    const handlePointerMove = (e: PointerEvent) => {
-      if (reducedMotionQuery.matches || !finePointerQuery.matches) return;
-      const clientX = e.clientX;
-      const clientY = e.clientY;
-
-      if (spotRaf) window.cancelAnimationFrame(spotRaf);
-
-      spotRaf = window.requestAnimationFrame(() => {
-        spotRaf = 0;
-        const rect = plateEl.getBoundingClientRect();
-        if (rect.width === 0 || rect.height === 0) return;
-
-        const relX = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
-        const relY = Math.min(1, Math.max(0, (clientY - rect.top) / rect.height));
-
-        plateEl.style.setProperty("--spot-x", `${(relX * 100).toFixed(1)}%`);
-        plateEl.style.setProperty("--spot-y", `${(relY * 100).toFixed(1)}%`);
-        plateEl.style.setProperty("--spot-opacity", "1");
-      });
-    };
-
-    const handlePointerLeave = () => {
-      if (spotRaf) {
-        window.cancelAnimationFrame(spotRaf);
-        spotRaf = 0;
-      }
-      plateEl.style.setProperty("--spot-opacity", "0");
-    };
-
-    plateEl.addEventListener("pointermove", handlePointerMove, { passive: true });
-    plateEl.addEventListener("pointerleave", handlePointerLeave, { passive: true });
-
-    cleanups.push(() => {
-      if (spotRaf) window.cancelAnimationFrame(spotRaf);
-      plateEl.removeEventListener("pointermove", handlePointerMove);
-      plateEl.removeEventListener("pointerleave", handlePointerLeave);
-    });
-  }
-
-  // 4. Botões e links magnéticos ([data-magnetic])
-  const magneticElements = Array.from(document.querySelectorAll<HTMLElement>("[data-magnetic]"));
-
-  for (const magEl of magneticElements) {
-    let magRaf = 0;
-
-    const onMagMove = (e: PointerEvent) => {
-      if (reducedMotionQuery.matches || !finePointerQuery.matches) return;
-      const clientX = e.clientX;
-      const clientY = e.clientY;
-
-      if (magRaf) window.cancelAnimationFrame(magRaf);
-
-      magRaf = window.requestAnimationFrame(() => {
-        magRaf = 0;
-        const rect = magEl.getBoundingClientRect();
-        if (rect.width === 0 || rect.height === 0) return;
-
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-
-        const deltaX = Math.max(-8, Math.min(8, (clientX - centerX) * 0.18));
-        const deltaY = Math.max(-6, Math.min(6, (clientY - centerY) * 0.18));
-
-        magEl.style.setProperty("--mag-x", `${deltaX.toFixed(2)}px`);
-        magEl.style.setProperty("--mag-y", `${deltaY.toFixed(2)}px`);
-      });
-    };
-
-    const onMagLeave = () => {
-      if (magRaf) {
-        window.cancelAnimationFrame(magRaf);
-        magRaf = 0;
-      }
-      magEl.style.setProperty("--mag-x", "0px");
-      magEl.style.setProperty("--mag-y", "0px");
-    };
-
-    magEl.addEventListener("pointermove", onMagMove, { passive: true });
-    magEl.addEventListener("pointerleave", onMagLeave, { passive: true });
-
-    cleanups.push(() => {
-      if (magRaf) window.cancelAnimationFrame(magRaf);
-      magEl.removeEventListener("pointermove", onMagMove);
-      magEl.removeEventListener("pointerleave", onMagLeave);
-    });
+    // 4. Conecta Efeito Magnético nos botões e links marcados com [data-magnetic]
+    const magneticElements = Array.from(document.querySelectorAll<HTMLElement>("[data-magnetic]"));
+    for (const magEl of magneticElements) {
+      cleanups.push(attachMagneticEffect(magEl));
+    }
   }
 
   // 5. Acordeão técnico com Web Animations API (details[data-animated-details])
@@ -386,79 +794,6 @@ export function initPortfolioMotion(): () => void {
     cleanups.push(() => {
       summaryEl.removeEventListener("click", onSummaryClick);
       currentAnimation?.cancel();
-    });
-  }
-
-  // 6. Cursor Editorial Contextual ([data-editorial-cursor])
-  const cursorEl = document.querySelector<HTMLElement>("[data-editorial-cursor]");
-  const cursorTextEl = document.querySelector<HTMLElement>("[data-editorial-cursor-text]");
-
-  if (cursorEl && cursorTextEl) {
-    let targetX = -100;
-    let targetY = -100;
-    let currentX = -100;
-    let currentY = -100;
-    let cursorRaf = 0;
-    let cursorVisible = false;
-
-    const updateCursorPosition = () => {
-      cursorRaf = 0;
-      currentX += (targetX - currentX) * 0.18;
-      currentY += (targetY - currentY) * 0.18;
-
-      cursorEl.style.transform = `translate3d(${currentX.toFixed(1)}px, ${currentY.toFixed(1)}px, 0)`;
-
-      if (Math.abs(targetX - currentX) > 0.15 || Math.abs(targetY - currentY) > 0.15) {
-        cursorRaf = window.requestAnimationFrame(updateCursorPosition);
-      }
-    };
-
-    const onWindowPointerMove = (e: PointerEvent) => {
-      if (reducedMotionQuery.matches || !finePointerQuery.matches) {
-        cursorEl.classList.remove("is-active", "has-label");
-        return;
-      }
-
-      targetX = e.clientX;
-      targetY = e.clientY;
-
-      if (!cursorVisible) {
-        currentX = targetX;
-        currentY = targetY;
-        cursorVisible = true;
-        cursorEl.classList.add("is-active");
-      }
-
-      const targetNode = e.target as HTMLElement | null;
-      const labeledAncestor = targetNode?.closest<HTMLElement>("[data-cursor-label]");
-
-      if (labeledAncestor) {
-        const label = labeledAncestor.getAttribute("data-cursor-label") || "";
-        if (cursorTextEl.textContent !== label) {
-          cursorTextEl.textContent = label;
-        }
-        cursorEl.classList.add("has-label");
-      } else {
-        cursorEl.classList.remove("has-label");
-      }
-
-      if (!cursorRaf) {
-        cursorRaf = window.requestAnimationFrame(updateCursorPosition);
-      }
-    };
-
-    const onWindowPointerLeave = () => {
-      cursorVisible = false;
-      cursorEl.classList.remove("is-active", "has-label");
-    };
-
-    window.addEventListener("pointermove", onWindowPointerMove, { passive: true });
-    document.addEventListener("mouseleave", onWindowPointerLeave, { passive: true });
-
-    cleanups.push(() => {
-      if (cursorRaf) window.cancelAnimationFrame(cursorRaf);
-      window.removeEventListener("pointermove", onWindowPointerMove);
-      document.removeEventListener("mouseleave", onWindowPointerLeave);
     });
   }
 

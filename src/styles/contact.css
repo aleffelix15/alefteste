@@ -1,10 +1,13 @@
 /* ==========================================================================
    CAPÍTULO 05 — CONTATO ("Vamos conversar?")
-   Direção de Arte: Editorial Técnica & Foco nos Canais Oficiais
+   Direção de Arte: Tipografia Cinética & Fechamento sobre Gaveta
    ========================================================================== */
 
 .contact-section {
   position: relative;
+  z-index: 2;
+  background-color: var(--bg-obsidian);
+  box-shadow: 0 24px 54px -12px rgba(0, 0, 0, 0.85);
 }
 
 .contact-editorial-layout {
@@ -18,9 +21,100 @@
   font-family: var(--font-serif);
   font-size: var(--text-4xl);
   font-weight: 700;
-  line-height: 1.04;
+  line-height: 1.08;
   color: var(--text-white);
   margin-bottom: 18px;
+  cursor: default;
+}
+
+.contact-kinetic-line {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.contact-kinetic-char {
+  display: inline-block;
+  transform: translate3d(0, calc(var(--char-prox, 0) * -6px), 0)
+    skewX(calc(var(--char-prox, 0) * -9deg))
+    scale(calc(1 + var(--char-prox, 0) * 0.05));
+  color: color-mix(
+    in srgb,
+    var(--text-white) calc((1 - var(--char-prox, 0)) * 100%),
+    var(--accent-cyan) calc(var(--char-prox, 0) * 100%)
+  );
+  transition:
+    transform 0.24s var(--ease-out-quart),
+    color 0.24s ease;
+  will-change: transform;
+}
+
+/* Seta Diagonal que Desliza em Loop de 45deg no Hover */
+@keyframes diagonalArrowLoop45 {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(100%, -100%, 0);
+  }
+}
+
+.contact-heading-arrow-loop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.9em;
+  height: 0.9em;
+  margin-left: 0.28em;
+  border-radius: 50%;
+  border: 1px solid rgba(73, 180, 255, 0.36);
+  background: var(--accent-electric-soft);
+  color: var(--accent-cyan);
+  font-family: var(--font-sans);
+  font-size: 0.52em;
+  overflow: hidden;
+  vertical-align: middle;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    transform 0.35s var(--ease-out-expo);
+}
+
+.diagonal-arrow-track,
+.diagonal-arrow-inline-box {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15em;
+  height: 1.15em;
+  overflow: hidden;
+}
+
+.diagonal-arrow-glyph {
+  display: block;
+  line-height: 1;
+  will-change: transform;
+}
+
+.diagonal-arrow-glyph--clone {
+  position: absolute;
+  top: 100%;
+  left: -100%;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .contact-serif-heading:hover .contact-heading-arrow-loop {
+    border-color: var(--accent-cyan);
+    background: var(--accent-electric);
+    color: var(--text-white);
+    transform: scale(1.08);
+  }
+
+  .contact-serif-heading:hover .diagonal-arrow-glyph,
+  .btn-mailto-direct:hover .diagonal-arrow-glyph {
+    animation: diagonalArrowLoop45 0.58s var(--ease-out-expo) infinite;
+  }
 }
 
 .contact-lead-text {
@@ -36,6 +130,7 @@
    ========================================================================== */
 
 .contact-email-copy-box {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -46,6 +141,7 @@
   margin-bottom: 24px;
   box-shadow: var(--shadow-md);
   width: 100%;
+  transition: border-color 0.28s ease, box-shadow 0.28s ease;
 }
 
 .email-copy-header {
@@ -54,7 +150,7 @@
   justify-content: space-between;
   gap: 12px;
   color: var(--text-muted);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   letter-spacing: 0.08em;
 }
 
@@ -89,14 +185,24 @@
     background-color 0.2s ease,
     box-shadow 0.2s ease,
     color 0.2s ease,
-    transform 0.2s var(--ease-editorial);
+    transform 0.2s var(--ease-out-expo);
 }
 
-.btn-email-copy:hover {
-  border-color: var(--accent-electric);
-  background: var(--bg-elevated);
-  box-shadow: 0 4px 18px -6px var(--accent-electric-glow);
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .btn-email-copy:hover {
+    border-color: var(--accent-electric);
+    background: var(--bg-elevated);
+    box-shadow: 0 4px 18px -6px var(--accent-electric-glow);
+    transform: translateY(-1px);
+  }
+}
+
+.btn-email-copy:active {
+  transform: scale(0.98);
+}
+.btn-email-copy:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
 }
 
 .btn-email-copy.is-copied {
@@ -138,14 +244,24 @@
     color 0.2s ease,
     border-color 0.2s ease,
     background-color 0.2s ease,
-    transform 0.2s var(--ease-editorial);
+    transform 0.2s var(--ease-out-expo);
 }
 
-.btn-mailto-direct:hover {
-  color: var(--accent-cyan);
-  border-color: var(--accent-electric);
-  background: var(--bg-elevated);
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .btn-mailto-direct:hover {
+    color: var(--accent-cyan);
+    border-color: var(--accent-electric);
+    background: var(--bg-elevated);
+    transform: translateY(-1px);
+  }
+}
+
+.btn-mailto-direct:active {
+  transform: scale(0.98);
+}
+.btn-mailto-direct:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
 }
 
 /* ==========================================================================
@@ -182,15 +298,27 @@
     background-color 0.22s ease,
     color 0.22s ease,
     box-shadow 0.22s ease,
-    transform 0.22s var(--ease-editorial);
+    transform 0.22s var(--ease-out-expo);
 }
 
-.contact-action-btn:hover {
-  border-color: var(--accent-electric);
-  background: var(--bg-elevated);
-  color: var(--accent-cyan);
-  box-shadow: var(--shadow-md), 0 4px 14px -6px var(--accent-electric-glow);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .contact-action-btn:hover {
+    border-color: var(--accent-electric);
+    background: var(--bg-elevated);
+    color: var(--accent-cyan);
+    box-shadow: var(--shadow-md), 0 4px 14px -6px var(--accent-electric-glow);
+    transform: translateY(-2px);
+  }
+
+  .contact-action-btn:hover .btn-arrow {
+    transform: translateX(3px);
+    color: var(--accent-cyan);
+  }
+
+  .btn-cv-contact:hover .btn-arrow {
+    transform: translateY(2.5px);
+    color: var(--text-ink);
+  }
 }
 
 .contact-action-btn .btn-arrow {
@@ -199,14 +327,12 @@
   transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.contact-action-btn:hover .btn-arrow {
-  transform: translateX(3px);
-  color: var(--accent-cyan);
+.contact-action-btn:active {
+  transform: scale(0.98);
 }
-
-.btn-cv-contact:hover .btn-arrow {
-  transform: translateY(2.5px);
-  color: var(--accent-cyan);
+.contact-action-btn:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
 }
 
 /* Bloco do Currículo com Metadados Alinhados */
@@ -222,7 +348,7 @@
   justify-content: center;
   gap: 6px;
   padding-top: 8px;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   letter-spacing: 0.04em;
   text-align: center;
@@ -237,25 +363,31 @@
   transition: color 0.2s ease, text-decoration 0.2s ease;
   text-decoration: underline;
   text-underline-offset: 3px;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
 }
 
-.contact-cv-view-link:hover {
-  color: var(--text-white);
+@media (hover: hover) and (pointer: fine) {
+  .contact-cv-view-link:hover {
+    color: var(--text-white);
+  }
+}
+.contact-cv-view-link:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }
 
 /* ==========================================================================
    RESPONSIVIDADE (DESKTOP -> TABLET -> MOBILE)
    ========================================================================== */
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .contact-secondary-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .contact-email-copy-box {
     padding: 20px 16px;
   }
@@ -272,12 +404,21 @@
   }
 }
 
-@media (max-width: 440px) {
+@media (max-width: 480px) {
   .contact-secondary-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .contact-action-btn {
+    min-height: 48px;
+    padding: 12px 18px;
+    width: 100%;
+    justify-content: space-between;
   }
 
   .contact-cv-submeta {
     flex-wrap: wrap;
+    gap: 8px;
   }
 }

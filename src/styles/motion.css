@@ -1,5 +1,5 @@
 /* ==========================================================================
-   COREOGRAFIA DE ANIMAÇÕES EDITORIAIS E PREFERS-REDUCED-MOTION
+   COREOGRAFIA DE ANIMAÇÕES CINEMATOGRÁFICAS E PREFERS-REDUCED-MOTION
    ========================================================================== */
 
 /* Barra de progresso de scroll global */
@@ -24,8 +24,8 @@ html.motion-ready [data-reveal] {
   transform: translate3d(0, 18px, 0);
   will-change: opacity, transform;
   transition:
-    opacity 0.85s var(--ease-editorial) var(--reveal-delay, 0ms),
-    transform 0.85s var(--ease-editorial) var(--reveal-delay, 0ms);
+    opacity 0.85s var(--ease-out-expo) var(--reveal-delay, 0ms),
+    transform 0.85s var(--ease-out-expo) var(--reveal-delay, 0ms);
 }
 
 html.motion-ready [data-reveal].is-visible {
@@ -51,8 +51,8 @@ html.motion-ready [data-reveal] .line-inner {
   opacity: 0;
   transform-origin: 0% 100%;
   transition:
-    transform 0.92s var(--ease-editorial) var(--line-delay, 0ms),
-    opacity 0.72s var(--ease-editorial) var(--line-delay, 0ms);
+    transform 0.92s var(--ease-out-expo) var(--line-delay, 0ms),
+    opacity 0.72s var(--ease-out-expo) var(--line-delay, 0ms);
 }
 
 html.motion-ready [data-reveal].is-visible .line-inner {
@@ -66,8 +66,8 @@ html.motion-ready [data-reveal] .hero-stagger-fade {
   transform: translate3d(0, 14px, 0);
   will-change: opacity, transform;
   transition:
-    opacity 0.76s var(--ease-editorial) var(--fade-delay, 0ms),
-    transform 0.76s var(--ease-editorial) var(--fade-delay, 0ms);
+    opacity 0.76s var(--ease-out-expo) var(--fade-delay, 0ms),
+    transform 0.76s var(--ease-out-expo) var(--fade-delay, 0ms);
 }
 
 html.motion-ready [data-reveal].is-visible .hero-stagger-fade {
@@ -90,8 +90,8 @@ html.motion-ready [data-reveal].is-visible .hero-stagger-fade {
 .hero-backdrop-img {
   will-change: transform;
   transform: scale(1.015) translate3d(0, var(--hero-parallax-y, 0px), 0);
-  transition: transform 0.22s var(--ease-editorial);
-  animation: heroStudioReveal 1.35s var(--ease-editorial) both;
+  transition: transform 0.22s var(--ease-out-expo);
+  animation: heroStudioReveal 1.35s var(--ease-out-expo) both;
 }
 
 /* 5. Linhas arquitetônicas verticais (.spine-rule & .marker-line) */
@@ -133,7 +133,7 @@ html.motion-ready [data-reveal].is-visible .marker-line {
 
 .screen-fade-picture {
   display: block;
-  animation: screenSwitchFade 0.42s var(--ease-editorial) both;
+  animation: screenSwitchFade 0.42s var(--ease-out-expo) both;
 }
 
 /* 8. Stagger nas pílulas de stack dos projetos */
@@ -141,8 +141,8 @@ html.motion-ready [data-reveal] .project-stack-pill {
   opacity: 0;
   transform: translate3d(0, 10px, 0);
   transition:
-    opacity 0.52s var(--ease-editorial) calc(var(--stagger-index, 0) * 45ms + 120ms),
-    transform 0.52s var(--ease-editorial) calc(var(--stagger-index, 0) * 45ms + 120ms),
+    opacity 0.52s var(--ease-out-expo) calc(var(--stagger-index, 0) * 45ms + 120ms),
+    transform 0.52s var(--ease-out-expo) calc(var(--stagger-index, 0) * 45ms + 120ms),
     border-color 0.2s ease,
     background-color 0.2s ease,
     color 0.2s ease;
@@ -153,41 +153,65 @@ html.motion-ready [data-reveal].is-visible .project-stack-pill {
   transform: translate3d(0, 0, 0);
 }
 
-/* 9. Texto em Rolagem Dupla no Hover (.hover-roll-text) */
+/* ==========================================================================
+   9. MICROINTERAÇÃO TIPOGRÁFICA EM ONDA + ALTERNÂNCIA SERIF (.hover-roll-text)
+   ========================================================================== */
+
 .hover-roll-text {
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  align-items: baseline;
   overflow: hidden;
-  vertical-align: bottom;
   line-height: 1.25;
 }
 
-.hover-roll-primary,
-.hover-roll-clone {
-  display: block;
-  transition: transform 0.38s var(--ease-editorial);
+.roll-char-cell {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.roll-char {
+  display: inline-block;
+  transition: transform 0.55s var(--ease-out-expo);
+  transition-delay: calc(var(--char-index, 0) * 15ms);
   will-change: transform;
 }
 
-.hover-roll-clone {
+.roll-char--top {
+  transform: translate3d(0, 0%, 0);
+}
+
+.roll-char--bottom {
   position: absolute;
-  top: 0;
+  top: 100%;
   left: 0;
   width: 100%;
-  transform: translate3d(0, 112%, 0);
+  transform: translate3d(0, 0%, 0);
+}
+
+.hover-roll-text.has-serif-accent .roll-char--bottom {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent-cyan);
 }
 
 @media (hover: hover) and (pointer: fine) {
-  a:hover .hover-roll-primary,
-  button:hover .hover-roll-primary,
-  a:focus-visible .hover-roll-primary {
-    transform: translate3d(0, -112%, 0);
+  a:hover .roll-char--top,
+  button:hover .roll-char--top,
+  a:focus-visible .roll-char--top,
+  button:focus-visible .roll-char--top {
+    transform: translate3d(0, -100%, 0);
   }
 
-  a:hover .hover-roll-clone,
-  button:hover .hover-roll-clone,
-  a:focus-visible .hover-roll-clone {
-    transform: translate3d(0, 0, 0);
+  a:hover .roll-char--bottom,
+  button:hover .roll-char--bottom,
+  a:focus-visible .roll-char--bottom,
+  button:focus-visible .roll-char--bottom {
+    transform: translate3d(0, -100%, 0);
   }
 }
 
@@ -207,16 +231,18 @@ html.motion-ready [data-reveal].is-visible .project-stack-pill {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.22),
+    rgba(255, 255, 255, 0.24),
     transparent
   );
   transform: rotate(24deg) translate3d(-140%, 0, 0);
-  transition: transform 0.65s var(--ease-editorial);
+  transition: transform 0.65s var(--ease-out-expo);
   pointer-events: none;
 }
 
-.btn-sheen:hover::after {
-  transform: rotate(24deg) translate3d(380%, 0, 0);
+@media (hover: hover) and (pointer: fine) {
+  .btn-sheen:hover::after {
+    transform: rotate(24deg) translate3d(380%, 0, 0);
+  }
 }
 
 /* 11. Indicador Animado de Leitura no Hero (.hero-scroll-cue) */
@@ -237,14 +263,21 @@ html.motion-ready [data-reveal].is-visible .project-stack-pill {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
+  min-height: 44px;
   color: var(--text-body);
   padding-block: 4px;
   transition: color 0.2s ease;
 }
 
-.hero-scroll-cue:hover {
-  color: var(--accent-cyan);
+@media (hover: hover) and (pointer: fine) {
+  .hero-scroll-cue:hover {
+    color: var(--accent-cyan);
+  }
+}
+.hero-scroll-cue:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }
 
 @keyframes scrollBeamDrop {
@@ -283,7 +316,7 @@ html.motion-ready [data-reveal].is-visible .project-stack-pill {
   position: absolute;
   inset: 0;
   background: var(--accent-electric);
-  animation: scrollBeamDrop 2.2s var(--ease-editorial) infinite;
+  animation: scrollBeamDrop 2.2s var(--ease-out-expo) infinite;
 }
 
 /* 12. Cortina de Revelação Fotográfica (.photo-curtain-wrap) */
@@ -315,7 +348,7 @@ html.motion-ready [data-reveal].is-visible .photo-curtain-wrap::after {
 
 html.motion-ready [data-reveal] .photo-curtain-wrap img {
   transform: scale(1.05);
-  transition: transform 1.15s var(--ease-editorial) 100ms;
+  transition: transform 1.15s var(--ease-out-expo) 100ms;
 }
 
 html.motion-ready [data-reveal].is-visible .photo-curtain-wrap img {
@@ -352,7 +385,13 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
   transform: scaleX(1);
 }
 
-/* 14. Cursor Editorial Contextual (.editorial-cursor) */
+/* ==========================================================================
+   14. CURSOR EDITORIAL CONTEXTUAL (.editorial-cursor)
+   - Estado Padrão: Ponto 8x8px
+   - Estado Hover Links/Botões ([data-cursor="magnetic"]): Anel 36px difference
+   - Estado Hover Mídia/Projetos ([data-cursor-label]): Pílula editorial blur 10px
+   ========================================================================== */
+
 .editorial-cursor {
   display: none;
 }
@@ -362,26 +401,25 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 120;
+    z-index: 9999;
+    pointer-events: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    min-width: 16px;
-    min-height: 16px;
-    margin-left: -8px;
-    margin-top: -8px;
+    width: 8px;
+    height: 8px;
+    margin-left: -4px;
+    margin-top: -4px;
     border-radius: var(--radius-full);
-    border: 1px solid rgba(73, 180, 255, 0.42);
-    background: var(--glass-bg);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    pointer-events: none;
+    background: var(--accent-cyan);
     opacity: 0;
     transition:
-      opacity 0.28s ease,
-      padding 0.32s var(--ease-editorial),
-      margin 0.32s var(--ease-editorial),
+      opacity 0.24s ease,
+      width 0.32s var(--ease-out-expo),
+      height 0.32s var(--ease-out-expo),
+      margin 0.32s var(--ease-out-expo),
+      padding 0.32s var(--ease-out-expo),
+      border-radius 0.32s var(--ease-out-expo),
       border-color 0.25s ease,
       background-color 0.25s ease,
       box-shadow 0.3s ease;
@@ -393,41 +431,63 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
   }
 
   .editorial-cursor-dot {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: var(--accent-electric);
-    flex-shrink: 0;
+    display: none;
   }
 
   .editorial-cursor-label {
-    font-size: 0.58rem;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
     color: var(--text-white);
     max-width: 0;
     opacity: 0;
     overflow: hidden;
     white-space: nowrap;
     transition:
-      max-width 0.32s var(--ease-editorial),
+      max-width 0.32s var(--ease-out-expo),
       opacity 0.22s ease;
   }
 
+  /* Estado 2: Hover em Links/Botões Magnéticos -> Anel de 36px com mix-blend-mode: difference */
+  .editorial-cursor.is-magnetic {
+    width: 36px;
+    height: 36px;
+    margin-left: -18px;
+    margin-top: -18px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    mix-blend-mode: difference;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+  }
+
+  /* Estado 3: Hover em Mídia de Projetos -> Pílula editorial com blur 10px */
   .editorial-cursor.has-label {
-    padding: 5px 11px;
-    margin-left: 14px;
-    margin-top: 14px;
-    border-color: var(--accent-electric);
-    background: var(--glass-bg-strong);
-    box-shadow: 0 6px 18px -6px var(--accent-electric-glow);
+    width: auto;
+    height: auto;
+    min-height: 32px;
+    padding: 6px 14px;
+    margin-left: -16px;
+    margin-top: -16px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--accent-electric);
+    background: rgba(13, 20, 32, 0.88);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 24px -6px var(--accent-electric-glow);
+    mix-blend-mode: normal;
   }
 
   .editorial-cursor.has-label .editorial-cursor-label {
-    max-width: 110px;
+    max-width: 220px;
     opacity: 1;
   }
 }
 
-/* 15. Neutralização com prefers-reduced-motion: reduce */
+/* ==========================================================================
+   15. RESPEITO RIGOROSO A PREFERS-REDUCED-MOTION: REDUCE
+   ========================================================================== */
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -445,24 +505,47 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
   html.motion-ready [data-reveal] .tech-symbol-card,
   html.motion-ready [data-reveal] .spine-rule,
   html.motion-ready [data-reveal] .marker-line,
-  html.motion-ready [data-reveal] .photo-curtain-wrap img {
+  html.motion-ready [data-reveal] .photo-curtain-wrap img,
+  .roll-char,
+  .roll-char--top,
+  .roll-char--bottom,
+  .editorial-reading-phrase {
     opacity: 1 !important;
     transform: none !important;
     animation: none !important;
   }
 
-  html.motion-ready [data-reveal] .photo-curtain-wrap::after {
+  html.motion-ready [data-reveal] .photo-curtain-wrap::after,
+  .blade-specular-seam {
     display: none !important;
   }
 
   .hero-backdrop-img,
   .ticker-track,
+  .ticker-item,
+  .about-studio-img,
+  .about-portrait-img,
+  .footer-uncover-stage,
+  .footer-monumental-signature,
+  .project-capture-img,
+  .project-blade-layer--secondary,
+  .contact-kinetic-char,
   [data-magnetic],
   [data-tilt-card] {
     transform: none !important;
     animation: none !important;
   }
 
+  .project-blade-layer--secondary {
+    clip-path: none !important;
+  }
+
+  .editorial-cursor {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px), (pointer: coarse) {
   .editorial-cursor {
     display: none !important;
   }

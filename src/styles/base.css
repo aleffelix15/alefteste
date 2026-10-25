@@ -20,17 +20,48 @@ html {
   scroll-padding-top: var(--header-height);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
   background-color: var(--bg-obsidian);
   color: var(--text-body);
-  overflow-x: hidden;
+  overflow-x: clip;
   width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
   background-image: radial-gradient(rgba(73, 180, 255, 0.032) 1px, transparent 0);
   background-size: 28px 28px;
+}
+
+@supports not (overflow-x: clip) {
+  body {
+    overflow-x: hidden;
+  }
+}
+
+
+/* Otimização de Toque e Prevenção de Atraso 300ms */
+a,
+button,
+input,
+textarea,
+select,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+/* Text Wrapping Seguro em Mobile */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+li {
+  overflow-wrap: break-word;
 }
 
 /* Scrollbar com Suporte a Tema Escuro */
@@ -173,6 +204,8 @@ main:focus {
 .editorial-chapter {
   padding-block: 88px;
   border-bottom: 1px solid var(--line-hairline);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
 }
 
 @media (max-width: 768px) {
@@ -197,7 +230,7 @@ main:focus {
 
 .marker-label {
   color: var(--text-muted);
-  font-size: 0.72rem;
+  font-size: 0.75rem;
 }
 
 .marker-line {
@@ -222,4 +255,38 @@ main:focus {
   line-height: 1.68;
   color: var(--text-body);
   margin-bottom: 28px;
+}
+
+/* ==========================================================================
+   ALVOS DE TOQUE & ACESSIBILIDADE MOBILE (WCAG 2.5.5 / 2.5.8)
+   ========================================================================== */
+
+/* Controles compactos recebem área de toque expandida via pseudo-elemento */
+.screen-switch-btn,
+.projects-quick-pill,
+.tech-filter-pill,
+.tech-tier-btn,
+.btn-cv-header,
+.ticker-pause-btn {
+  position: relative;
+}
+
+@media (pointer: coarse), (max-width: 768px) {
+  .screen-switch-btn::after,
+  .projects-quick-pill::after,
+  .tech-filter-pill::after,
+  .tech-tier-btn::after,
+  .btn-cv-header::after,
+  .ticker-pause-btn::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 44px;
+    min-height: 44px;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
 }

@@ -18,24 +18,41 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navListRef = useRef<HTMLUListElement>(null);
+  const prevActiveSectionRef = useRef<string>("abertura");
   const [sliderStyle, setSliderStyle] = useState<React.CSSProperties>({});
+  const toggleBtnRef = useRef<HTMLButtonElement>(null);
+  const firstNavLinkRef = useRef<HTMLAnchorElement>(null);
 
-  // Atualiza posição do indicador deslizante ativo
+  // Atualiza posição do indicador magnético ativo exclusivamente via GPU (translate3d + scaleX + transform-origin dinâmico)
   useEffect(() => {
-    const list = navListRef.current;
-    if (!list) return;
+    const updateSlider = () => {
+      const list = navListRef.current;
+      if (!list) return;
 
-    const activeEl = list.querySelector<HTMLElement>(`[data-nav-id="${activeSection}"]`);
-    if (activeEl) {
-      const listRect = list.getBoundingClientRect();
-      const activeRect = activeEl.getBoundingClientRect();
+      const activeEl = list.querySelector<HTMLElement>(`[data-nav-id="${activeSection}"]`);
+      if (activeEl) {
+        const listRect = list.getBoundingClientRect();
+        const activeRect = activeEl.getBoundingClientRect();
 
-      setSliderStyle({
-        left: `${activeRect.left - listRect.left}px`,
-        width: `${activeRect.width}px`,
-        opacity: 1,
-      });
-    }
+        const prevIdx = navItems.findIndex((i) => i.id === prevActiveSectionRef.current);
+        const nextIdx = navItems.findIndex((i) => i.id === activeSection);
+        const origin = nextIdx >= prevIdx ? "left center" : "right center";
+        prevActiveSectionRef.current = activeSection;
+
+        const offsetX = activeRect.left - listRect.left;
+        const scaleRatio = Math.max(0.15, activeRect.width / 100);
+
+        setSliderStyle({
+          transform: `translate3d(${offsetX.toFixed(1)}px, 0, 0) scaleX(${scaleRatio.toFixed(4)})`,
+          transformOrigin: origin,
+          opacity: 1,
+        });
+      }
+    };
+
+    updateSlider();
+    window.addEventListener("resize", updateSlider);
+    return () => window.removeEventListener("resize", updateSlider);
   }, [activeSection]);
 
   useEffect(() => {
@@ -64,17 +81,44 @@ export function Header() {
     return () => observer.disconnect();
   }, []);
 
+  // Scroll lock robusto no iOS e mobile sem deslocamento de header
   useEffect(() => {
-    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
+    if (!mobileMenuOpen) return;
+
+    const preventTouchMove = (e: TouchEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target?.closest("#mobile-nav-drawer")) {
+        e.preventDefault();
+      }
+    };
+
+    document.body.style.overflow = "hidden";
+    document.addEventListener("touchmove", preventTouchMove, { passive: false });
+
+    requestAnimationFrame(() => {
+      firstNavLinkRef.current?.focus();
+    });
+
     return () => {
       document.body.style.overflow = "";
+      document.removeEventListener("touchmove", preventTouchMove);
     };
   }, [mobileMenuOpen]);
+
+  const closeMenu = () => {
+    setMobileMenuOpen(false);
+    toggleBtnRef.current?.focus();
+  };
+
+  const handleMobileNavClick = (id: string) => {
+    setActiveSection(id);
+    closeMenu();
+  };
 
   useEffect(() => {
     if (!mobileMenuOpen) return;
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMobileMenuOpen(false);
+      if (e.key === "Escape") closeMenu();
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
@@ -88,13 +132,14 @@ export function Header() {
           className="brand-link"
           aria-label="Álef Felix Teixeira — Início"
           data-magnetic
+          data-cursor="magnetic"
         >
           <MonogramLogo />
           <span className="brand-divider" aria-hidden="true" />
           <span className="brand-serif-name">Álef Felix</span>
         </a>
 
-        {/* Navegação Desktop com Indicador Deslizante Suave */}
+        {/* Navegação Desktop com Indicador Magnético Elástico GPU */}
         <nav className="desktop-nav" aria-label="Navegação principal">
           <ul ref={navListRef} className="nav-list">
             <span
@@ -111,8 +156,11 @@ export function Header() {
                     data-nav-id={item.id}
                     className={`nav-link ${isActive ? "is-active" : ""}`}
                     aria-current={isActive ? "location" : undefined}
+                    data-magnetic
+                    data-cursor="magnetic"
                     onClick={() => setActiveSection(item.id)}
                   >
+                    <span className="nav-active-dot" aria-hidden="true" />
                     <RollText text={item.label} />
                   </a>
                 </li>
@@ -129,7 +177,7 @@ export function Header() {
               rel="noopener noreferrer"
               className="header-social-link"
               data-magnetic
-              data-cursor-label="GITHUB"
+              data-cursor="magnetic"
             >
               <GithubIcon size={15} />
               <RollText text="GitHub" />
@@ -141,7 +189,7 @@ export function Header() {
               rel="noopener noreferrer"
               className="header-social-link"
               data-magnetic
-              data-cursor-label="LINKEDIN"
+              data-cursor="magnetic"
             >
               <LinkedinIcon size={15} />
               <RollText text="LinkedIn" />
@@ -153,6 +201,7 @@ export function Header() {
           <CvButton variant="header" label="CV" />
 
           <button
+            ref={toggleBtnRef}
             type="button"
             className="mobile-menu-toggle mono"
             aria-expanded={mobileMenuOpen}
@@ -181,13 +230,13 @@ export function Header() {
               return (
                 <li key={item.id}>
                   <a
+                    ref={idx === 0 ? firstNavLinkRef : undefined}
                     href={`#${item.id}`}
                     className={`mobile-nav-link ${isActive ? "is-active" : ""}`}
                     aria-current={isActive ? "location" : undefined}
                     tabIndex={mobileMenuOpen ? 0 : -1}
                     onClick={() => {
-                      setActiveSection(item.id);
-                      setMobileMenuOpen(false);
+                      handleMobileNavClick(item.id);
                     }}
                   >
                     <span className="mono mobile-nav-index">0{idx + 1}</span>
@@ -204,6 +253,7 @@ export function Header() {
               rel="noopener noreferrer"
               tabIndex={mobileMenuOpen ? 0 : -1}
               className="header-social-link"
+              onClick={closeMenu}
             >
               <GithubIcon size={16} />
               <span>GitHub ↗</span>
@@ -214,6 +264,7 @@ export function Header() {
               rel="noopener noreferrer"
               tabIndex={mobileMenuOpen ? 0 : -1}
               className="header-social-link"
+              onClick={closeMenu}
             >
               <LinkedinIcon size={16} />
               <span>LinkedIn ↗</span>

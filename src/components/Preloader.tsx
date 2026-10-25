@@ -20,34 +20,64 @@ export function Preloader() {
     return true;
   });
 
-  const [isFading, setIsFading] = useState(false);
+  const [count, setCount] = useState(0);
+  const [isLifting, setIsLifting] = useState(false);
 
   useEffect(() => {
     if (!mounted) return;
 
-    // Tempo total de desenho de ~880ms + fade out de 350ms = ~1230ms
-    const fadeTimer = window.setTimeout(() => {
-      setIsFading(true);
-    }, 880);
+    const root = document.documentElement;
+    root.classList.add("preloader-running");
+
+    let rafId = 0;
+    const duration = 760;
+    const startTime = performance.now();
+
+    const updateCounter = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(1, elapsed / duration);
+      // Ease out quart para contagem fluida
+      const eased = 1 - Math.pow(1 - progress, 4);
+      setCount(Math.round(eased * 100));
+
+      if (progress < 1) {
+        rafId = window.requestAnimationFrame(updateCounter);
+      }
+    };
+
+    rafId = window.requestAnimationFrame(updateCounter);
+
+    // Inicia subida da cortina curva em 820ms (duração 950ms com --ease-curtain)
+    const liftTimer = window.setTimeout(() => {
+      setCount(100);
+      setIsLifting(true);
+      root.classList.remove("preloader-running");
+      root.classList.add("preloader-lifting");
+    }, 820);
 
     const endTimer = window.setTimeout(() => {
       try {
         sessionStorage.setItem("alef_preloader_seen", "1");
       } catch {}
+      root.classList.remove("preloader-lifting");
       setMounted(false);
-    }, 1230);
+    }, 1780);
 
     return () => {
-      window.clearTimeout(fadeTimer);
+      if (rafId) window.cancelAnimationFrame(rafId);
+      window.clearTimeout(liftTimer);
       window.clearTimeout(endTimer);
+      root.classList.remove("preloader-running", "preloader-lifting");
     };
   }, [mounted]);
 
   if (!mounted) return null;
 
+  const formattedCount = String(count).padStart(3, "0");
+
   return (
     <div
-      className={`site-preloader ${isFading ? "is-fading-out" : ""}`}
+      className={`site-preloader ${isLifting ? "is-lifting-curtain" : ""}`}
       aria-hidden="true"
       role="presentation"
     >
@@ -82,9 +112,28 @@ export function Preloader() {
         <div className="preloader-meta mono">
           <span className="preloader-name">ÁLEF FELIX</span>
           <span className="preloader-bar" />
-          <span className="preloader-tag">2026</span>
+          <span className="preloader-tag">EDIÇÃO 2026</span>
+        </div>
+
+        {/* Contador numérico progressivo 000 -> 100 em DM Mono 500 */}
+        <div className="preloader-counter-wrap mono">
+          <span className="preloader-counter-digits">{formattedCount}</span>
+          <span className="preloader-counter-unit">%</span>
         </div>
       </div>
+
+      {/* Borda inferior curva da cortina que achata conforme sobe */}
+      <svg
+        className="preloader-curtain-arch"
+        viewBox="0 0 1440 140"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M0,0 L1440,0 L1440,20 Q720,140 0,20 Z"
+          fill="var(--bg-obsidian)"
+        />
+      </svg>
     </div>
   );
 }

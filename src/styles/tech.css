@@ -4,7 +4,6 @@
 
 .tech-showcase-section {
   position: relative;
-  overflow: hidden;
   background:
     radial-gradient(60% 50% at 50% 42%, rgba(22, 119, 255, 0.08), transparent 72%),
     linear-gradient(180deg, var(--bg-obsidian) 0%, var(--bg-subtle) 50%, var(--bg-obsidian) 100%);
@@ -151,11 +150,20 @@
     transform 0.2s ease;
 }
 
-.tech-tier-btn:hover {
-  color: var(--text-white);
-  border-color: var(--line-strong);
-  background: var(--bg-elevated);
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .tech-tier-btn:hover {
+    color: var(--text-white);
+    border-color: var(--line-strong);
+    background: var(--bg-elevated);
+    transform: translateY(-1px);
+  }
+}
+.tech-tier-btn:active {
+  transform: scale(0.97);
+}
+.tech-tier-btn:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }
 
 .tech-tier-btn.is-active {
@@ -181,7 +189,7 @@
   border: 1px solid var(--line-hairline);
   background: var(--bg-obsidian);
   color: var(--text-muted);
-  font-size: 0.62rem;
+  font-size: 0.75rem;
 }
 
 .tech-tier-btn.is-active .tier-badge {
@@ -212,7 +220,7 @@
 }
 
 .tech-filter-group-label {
-  font-size: 0.625rem;
+  font-size: 0.75rem;
   color: var(--accent-cyan);
   letter-spacing: 0.14em;
 }
@@ -224,13 +232,13 @@
 }
 
 .tech-filter-pill {
-  min-height: 36px;
+  min-height: 40px;
   padding: 5px 12px;
   border-radius: var(--radius-md);
   border: 1px solid var(--line-hairline);
   background: var(--bg-obsidian);
   color: var(--text-body);
-  font-size: 0.66rem;
+  font-size: 0.75rem;
   transition:
     border-color 0.2s ease,
     color 0.2s ease,
@@ -238,10 +246,19 @@
     transform 0.2s ease;
 }
 
-.tech-filter-pill:hover {
-  color: var(--text-white);
-  border-color: rgba(22, 119, 255, 0.55);
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .tech-filter-pill:hover {
+    color: var(--text-white);
+    border-color: rgba(22, 119, 255, 0.55);
+    transform: translateY(-1px);
+  }
+}
+.tech-filter-pill:active {
+  transform: scale(0.97);
+}
+.tech-filter-pill:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }
 
 .tech-filter-pill.is-primary-repo {
@@ -257,6 +274,7 @@
 
 /* Categorized Stack Blocks */
 .tech-categories-stack {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 44px;
@@ -305,7 +323,7 @@
   border: 1px solid rgba(73, 180, 255, 0.3);
   background: var(--accent-cyan-soft);
   color: var(--accent-cyan);
-  font-size: 0.6rem;
+  font-size: 0.75rem;
 }
 
 .tech-category-desc {
@@ -315,7 +333,7 @@
   margin: 0;
 }
 
-/* Colorful Symbols Grid */
+/* Colorful Symbols Grid & Mouse-Tracked Proximity Glow */
 @keyframes techSymbolEntrance {
   0% {
     opacity: 0;
@@ -354,13 +372,38 @@
   border: 1px solid var(--line-hairline);
   background: var(--bg-concrete);
   box-shadow: var(--shadow-sm);
-  animation: techSymbolEntrance 0.48s var(--ease-editorial) both;
+  animation: techSymbolEntrance 0.48s var(--ease-out-expo) both;
   animation-delay: calc(var(--stagger-index, 0) * 32ms);
   transition:
     border-color 0.25s ease,
     background-color 0.25s ease,
     box-shadow 0.28s ease,
-    transform 0.28s var(--ease-editorial);
+    transform 0.28s var(--ease-out-expo);
+}
+
+/* Borda iluminada de proximidade (Mouse-Tracked Proximity Glow em 420px circle) */
+.tech-symbol-card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: radial-gradient(
+    420px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
+    var(--brand-color, var(--accent-cyan)) 0%,
+    rgba(73, 180, 255, 0.55) 28%,
+    rgba(22, 119, 255, 0.18) 52%,
+    transparent 75%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: var(--grid-glow-opacity, 0);
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
 }
 
 html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
@@ -381,7 +424,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   filter: blur(24px);
   opacity: 0.12;
   pointer-events: none;
-  transition: opacity 0.35s ease, transform 0.35s var(--ease-editorial);
+  transition: opacity 0.35s ease, transform 0.35s var(--ease-out-expo);
 }
 
 .tech-symbol-emblem-wrap {
@@ -393,32 +436,46 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   width: 62px;
   height: 62px;
   margin-bottom: 10px;
-  transition: transform 0.36s var(--ease-editorial);
+  transition: transform 0.42s var(--ease-out-expo);
+  will-change: transform;
 }
 
 .tech-emblem-svg {
   filter: drop-shadow(0 4px 10px rgba(var(--shadow-color), 0.35));
-  transition: transform 0.36s var(--ease-editorial), filter 0.3s ease;
+  transition: transform 0.36s var(--ease-out-expo), filter 0.3s ease;
 }
 
-.tech-symbol-card:hover {
-  border-color: var(--line-accent);
-  background: var(--bg-elevated);
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md), 0 0 18px -8px var(--accent-electric-glow);
-}
+@media (hover: hover) and (pointer: fine) {
+  .tech-symbol-card:hover {
+    border-color: var(--line-accent);
+    background: var(--bg-elevated);
+    box-shadow: var(--shadow-md), 0 0 22px -8px var(--accent-electric-glow);
+  }
 
-.tech-symbol-card:hover .tech-symbol-halo {
-  opacity: 0.38;
-  transform: scale(1.2);
-}
+  .tech-symbol-card:hover .tech-symbol-halo {
+    opacity: 0.42;
+    transform: scale(1.25);
+  }
 
-.tech-symbol-card:hover .tech-symbol-emblem-wrap {
-  transform: translate3d(0, -4px, 0) scale(1.07);
-}
+  /* Micro-salto elástico no ícone no hover direto: scale(1.12) rotate(-4deg) */
+  .tech-symbol-card:hover .tech-symbol-emblem-wrap {
+    transform: scale(1.12) rotate(-4deg);
+  }
 
-.tech-symbol-card:hover .emblem-spin-hover {
-  animation: emblemOrbitSpin 8s linear infinite;
+  .tech-symbol-card:hover .emblem-spin-hover {
+    animation: emblemOrbitSpin 8s linear infinite;
+  }
+
+  .tech-symbol-card:hover .tech-symbol-provenance {
+    color: var(--accent-cyan);
+  }
+}
+.tech-symbol-card:active {
+  transform: scale(0.97);
+}
+.tech-symbol-card:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }
 
 .tech-symbol-name {
@@ -429,12 +486,15 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   font-weight: 600;
   color: var(--text-white);
   letter-spacing: -0.01em;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  text-align: center;
 }
 
 .tech-symbol-role {
   position: relative;
   z-index: 1;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   line-height: 1.35;
   color: var(--text-body);
   margin-top: 3px;
@@ -457,7 +517,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   border: 1px solid var(--line-hairline);
   background: var(--bg-obsidian);
   color: var(--text-muted);
-  font-size: 0.55rem;
+  font-size: 0.75rem;
 }
 
 .tech-symbol-badge.is-featured-badge {
@@ -473,14 +533,32 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   padding-top: 7px;
   border-top: 1px solid var(--line-hairline);
   width: 100%;
-  font-size: 0.55rem;
+  font-size: 0.75rem;
   line-height: 1.35;
   color: var(--text-muted);
   letter-spacing: 0.04em;
   text-transform: none;
+  transition: color 0.25s ease;
 }
 
 /* Audit Dossier Drawer */
+.audit-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  cursor: pointer;
+  color: var(--text-white);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  padding-block: 4px;
+}
+
+.audit-summary::-webkit-details-marker {
+  display: none;
+}
+
 .tech-audit-dossier {
   margin-bottom: 28px;
   padding: 12px 18px;
@@ -529,7 +607,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   color: var(--accent-cyan);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .tech-audit-drawer-grid {
     grid-template-columns: 1fr;
   }
@@ -545,7 +623,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   padding-top: 24px;
   border-top: 1px solid var(--line-hairline);
   color: var(--text-muted);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
 }
 
 .tech-footer-left {
@@ -585,14 +663,14 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   color: var(--line-strong);
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 1280px) {
   .tech-symbols-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     row-gap: 28px;
   }
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1024px) {
   .tech-showcase-top {
     flex-direction: column;
     gap: 24px;
@@ -619,7 +697,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .tech-symbols-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: 12px;
@@ -628,5 +706,73 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
 
   .tech-footer-rule {
     display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .tech-filter-toolbar {
+    padding: 14px 12px;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .tech-filter-pills {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 8px;
+    padding-bottom: 6px;
+    mask-image: linear-gradient(90deg, #000 0%, #000 88%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 88%, transparent 100%);
+  }
+
+  .tech-filter-pill {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    white-space: nowrap;
+    min-height: 40px;
+  }
+
+  .tech-tier-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tech-tier-btn {
+    flex: 1 1 calc(50% - 8px);
+    min-height: 44px;
+    justify-content: center;
+  }
+
+  .tech-symbols-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 10px;
+    row-gap: 16px;
+  }
+
+  .tech-symbol-card {
+    padding: 14px 8px 12px;
+  }
+
+  .tech-symbol-name {
+    font-size: 0.8125rem;
+  }
+
+  .tech-symbol-emblem-wrap {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 6px;
+  }
+
+  .tech-audit-dossier {
+    padding: 10px 12px;
+  }
+
+  .audit-summary {
+    font-size: 0.75rem;
+    line-height: 1.4;
   }
 }

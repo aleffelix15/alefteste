@@ -1,11 +1,23 @@
 /* ==========================================================================
-   RODAPÉ EDITORIAL COMPLETO
+   RODAPÉ EDITORIAL COMPLETO — UNCOVER PARALLAX & ASSINATURA MONUMENTAL
    ========================================================================== */
 
 .site-footer {
-  padding-block: 56px 40px;
+  position: relative;
+  z-index: 1;
   background: var(--bg-obsidian);
   border-top: 1px solid var(--line-hairline);
+  overflow: hidden;
+}
+
+.footer-uncover-stage {
+  padding-block: 56px 40px;
+  transform: translate3d(0, var(--footer-uncover-y, 0px), 0);
+  opacity: var(--footer-uncover-opacity, 1);
+  transition:
+    transform 0.18s var(--ease-out-expo),
+    opacity 0.22s ease;
+  will-change: transform, opacity;
 }
 
 .footer-content-grid {
@@ -32,7 +44,7 @@
 
 .footer-role-tag {
   color: var(--text-muted);
-  font-size: 0.72rem;
+  font-size: 0.75rem;
 }
 
 /* Relógio em Tempo Real (Brasília) */
@@ -46,7 +58,7 @@
   background: var(--bg-concrete);
   box-shadow: var(--shadow-sm);
   color: var(--accent-cyan);
-  font-size: 0.64rem;
+  font-size: 0.75rem;
   letter-spacing: 0.08em;
   margin-top: 4px;
 }
@@ -68,7 +80,7 @@
 /* Colunas de Título */
 .footer-col-title {
   display: block;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: var(--accent-cyan);
   letter-spacing: 0.12em;
   margin-bottom: 14px;
@@ -85,10 +97,22 @@
   font-size: 0.82rem;
   color: var(--text-body);
   transition: color 0.2s ease;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 }
 
-.footer-nav-link:hover {
-  color: var(--text-white);
+@media (hover: hover) and (pointer: fine) {
+  .footer-nav-link:hover {
+    color: var(--text-white);
+  }
+}
+.footer-nav-link:active {
+  color: var(--accent-cyan);
+}
+.footer-nav-link:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }
 
 /* Coluna 3: Redes & Canais */
@@ -105,10 +129,20 @@
   font-size: 0.82rem;
   color: var(--text-body);
   transition: color 0.2s ease;
+  min-height: 44px;
 }
 
-.footer-social-link:hover {
-  color: var(--accent-cyan);
+@media (hover: hover) and (pointer: fine) {
+  .footer-social-link:hover {
+    color: var(--accent-cyan);
+  }
+}
+.footer-social-link:active {
+  transform: scale(0.97);
+}
+.footer-social-link:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }
 
 /* Coluna 4: Voltar ao Topo */
@@ -121,29 +155,74 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-height: 42px;
+  min-height: 44px;
   padding: 8px 16px;
   border-radius: var(--radius-md);
   border: 1px solid var(--line-hairline);
   background: var(--bg-concrete);
   box-shadow: var(--shadow-sm);
   color: var(--text-white);
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   transition:
     border-color 0.2s ease,
     background-color 0.2s ease,
     box-shadow 0.2s ease,
-    transform 0.2s var(--ease-editorial);
+    transform 0.2s var(--ease-out-expo);
 }
 
-.footer-top-link:hover {
-  border-color: var(--accent-electric);
-  background: var(--bg-elevated);
-  box-shadow: var(--shadow-md), 0 4px 14px -6px var(--accent-electric-glow);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .footer-top-link:hover {
+    border-color: var(--accent-electric);
+    background: var(--bg-elevated);
+    box-shadow: var(--shadow-md), 0 4px 14px -6px var(--accent-electric-glow);
+    transform: translateY(-2px);
+  }
+}
+.footer-top-link:active {
+  transform: scale(0.96);
+}
+.footer-top-link:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
 }
 
-@media (max-width: 960px) {
+/* Assinatura Monumental Editorial de Fechamento */
+.footer-monumental-wrap {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line-hairline);
+  overflow: hidden;
+}
+
+.footer-monumental-signature {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 8.5vw, 7.8rem);
+  font-weight: 700;
+  line-height: 0.88;
+  letter-spacing: -0.04em;
+  color: rgba(244, 247, 251, 0.08);
+  user-select: none;
+  transform: translate3d(0, var(--footer-sig-y, 0px), 0);
+  transition: transform 0.24s var(--ease-out-expo);
+  will-change: transform;
+}
+
+.footer-monumental-dot {
+  color: var(--accent-electric);
+  opacity: 0.5;
+}
+
+.footer-monumental-year {
+  font-size: clamp(1rem, 2.5vw, 2.2rem);
+  letter-spacing: 0.12em;
+  color: rgba(73, 180, 255, 0.35);
+}
+
+@media (max-width: 1024px) {
   .footer-content-grid {
     grid-template-columns: 1fr 1fr;
     gap: 32px;
@@ -154,9 +233,19 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 480px) {
   .footer-content-grid {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 32px;
+  }
+
+  .footer-col-top {
+    justify-content: flex-start;
+  }
+
+  .footer-top-link {
+    width: 100%;
+    justify-content: center;
+    min-height: 48px;
   }
 }

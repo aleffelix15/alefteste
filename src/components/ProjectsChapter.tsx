@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { links, projectsIntro, projects, type ProjectStory } from "../data";
 import { GithubIcon } from "../icons";
 import { trackEvent } from "../analytics";
@@ -18,7 +18,6 @@ export function ProjectsChapter() {
   });
 
   const toggleCaseStudy = (projectId: string) => {
-    // Integração com View Transitions API se disponível
     if (typeof document !== "undefined" && "startViewTransition" in document) {
       (document as unknown as { startViewTransition: (cb: () => void) => void }).startViewTransition(() => {
         setExpandedCaseStudy((prev) => ({
@@ -72,7 +71,13 @@ export function ProjectsChapter() {
           {/* Quick jump nav entre projetos para scroll storytelling */}
           <nav className="projects-quick-nav mono" aria-label="Navegar entre projetos">
             {projects.map((p) => (
-              <a key={p.id} href={`#projeto-${p.id}`} className="projects-quick-pill" data-magnetic>
+              <a
+                key={p.id}
+                href={`#projeto-${p.id}`}
+                className="projects-quick-pill"
+                data-magnetic
+                data-cursor="magnetic"
+              >
                 <span>{p.number}</span>
                 <span>{p.name}</span>
               </a>
@@ -85,7 +90,7 @@ export function ProjectsChapter() {
             rel="noopener noreferrer"
             className="link-underlined-editorial"
             data-magnetic
-            data-cursor-label="GITHUB ↗"
+            data-cursor="magnetic"
           >
             <RollText text={projectsIntro.allProjectsLabel} />
             <span aria-hidden="true" className="arrow-inline">→</span>
@@ -96,12 +101,16 @@ export function ProjectsChapter() {
         {/* Coluna da Direita: Projetos 01 VERSO, 02 DECODE e 03 NUDEMO */}
         <div className="projects-showcase-grid">
           {projects.map((project: ProjectStory, projIdx: number) => {
+            const primaryScreen = project.screens[0];
+            const secondaryScreen = project.screens[1] ?? project.screens[0];
             const selectedScreenId =
-              activeScreenByProject[project.id] || project.screens[0].id;
+              activeScreenByProject[project.id] || primaryScreen.id;
             const currentScreen =
               project.screens.find((s) => s.id === selectedScreenId) ||
-              project.screens[0];
+              primaryScreen;
 
+            const isSecondaryManuallyActive =
+              project.screens.length > 1 && selectedScreenId === secondaryScreen.id;
             const isExpanded = expandedCaseStudy[project.id];
 
             return (
@@ -111,10 +120,16 @@ export function ProjectsChapter() {
                 className="project-editorial-feature"
                 aria-labelledby={`proj-title-${project.id}`}
                 data-reveal
+                data-tilt-card
+                data-tilt-max="4.5"
                 style={{ "--reveal-delay": `${projIdx * 100}ms` } as React.CSSProperties}
               >
-                {/* Mockup em moldura de navegador com Spotlight & Tilt sutil */}
-                <figure className="project-capture-frame" data-tilt-card>
+                {/* Mockup em moldura de navegador com Revelação Dupla em Lâmina (Blade Crossfade) */}
+                <figure
+                  className={`project-capture-frame ${
+                    isSecondaryManuallyActive ? "is-blade-active" : ""
+                  }`}
+                >
                   <div className="capture-window-bar mono">
                     <div className="window-bar-left">
                       <span className="window-glyph" aria-hidden="true">■</span>
@@ -137,7 +152,7 @@ export function ProjectsChapter() {
                                 isCurrent ? "is-active" : ""
                               }`}
                               aria-pressed={isCurrent}
-                              data-cursor-label="TELA"
+                              data-cursor="magnetic"
                               onClick={() =>
                                 setActiveScreenByProject((prev) => ({
                                   ...prev,
@@ -159,45 +174,87 @@ export function ProjectsChapter() {
                     href={project.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="project-capture-link photo-curtain-wrap"
+                    className="project-capture-link project-blade-stage"
                     aria-label={`Visitar projeto ${project.name} publicado (abre em nova aba)`}
-                    data-cursor-label="VISITAR ↗"
+                    data-cursor-label="[ EXPLORAR CASO ↗ ]"
                   >
-                    <picture key={currentScreen.id} className="screen-fade-picture">
-                      <source
-                        type="image/avif"
-                        srcSet={
-                          currentScreen.id === "decode-dashboard"
-                            ? `${currentScreen.base}.avif`
-                            : `${currentScreen.base}-640.avif 640w, ${currentScreen.base}.avif 1200w`
-                        }
-                        sizes="(max-width: 820px) 100vw, 560px"
-                      />
-                      <source
-                        type="image/webp"
-                        srcSet={
-                          currentScreen.id === "decode-dashboard"
-                            ? `${currentScreen.base}.webp`
-                            : `${currentScreen.base}-640.webp 640w, ${currentScreen.base}.webp 1200w`
-                        }
-                        sizes="(max-width: 820px) 100vw, 560px"
-                      />
-                      <img
-                        src={`${currentScreen.base}.webp`}
-                        alt={currentScreen.alt}
-                        width={1200}
-                        height={750}
-                        loading="lazy"
-                        decoding="async"
-                        className="project-capture-img"
-                      />
-                    </picture>
+                    {/* Camada 1 (Primária): Revelação de máscara clip-path inset + zoom-out scale(1.12 -> 1) */}
+                    <div className="project-blade-layer project-blade-layer--primary">
+                      <picture className="screen-fade-picture">
+                        <source
+                          type="image/avif"
+                          srcSet={`${primaryScreen.base}-640.avif 640w, ${primaryScreen.base}.avif 1200w`}
+                          sizes="(max-width: 820px) 100vw, 560px"
+                        />
+                        <source
+                          type="image/webp"
+                          srcSet={`${primaryScreen.base}-640.webp 640w, ${primaryScreen.base}.webp 1200w`}
+                          sizes="(max-width: 820px) 100vw, 560px"
+                        />
+                        <img
+                          src={`${primaryScreen.base}.webp`}
+                          alt={primaryScreen.alt}
+                          width={1200}
+                          height={750}
+                          loading="lazy"
+                          decoding="async"
+                          className="project-capture-img"
+                        />
+                      </picture>
+                    </div>
+
+                    {/* Camada 2 (Secundária - Preview Interno em Corte de Lâmina) */}
+                    <div
+                      className={`project-blade-layer project-blade-layer--secondary ${
+                        project.id === "verso" ? "is-verso-editorial-zoom" : ""
+                      }`}
+                      aria-hidden="true"
+                    >
+                      <picture>
+                        <source
+                          type="image/avif"
+                          srcSet={
+                            secondaryScreen.id === "decode-dashboard"
+                              ? `${secondaryScreen.base}.avif`
+                              : `${secondaryScreen.base}-640.avif 640w, ${secondaryScreen.base}.avif 1200w`
+                          }
+                          sizes="(max-width: 820px) 100vw, 560px"
+                        />
+                        <source
+                          type="image/webp"
+                          srcSet={
+                            secondaryScreen.id === "decode-dashboard"
+                              ? `${secondaryScreen.base}.webp`
+                              : `${secondaryScreen.base}-640.webp 640w, ${secondaryScreen.base}.webp 1200w`
+                          }
+                          sizes="(max-width: 820px) 100vw, 560px"
+                        />
+                        <img
+                          src={`${secondaryScreen.base}.webp`}
+                          alt=""
+                          width={1200}
+                          height={750}
+                          loading="lazy"
+                          decoding="async"
+                          className="project-capture-img project-capture-img--secondary"
+                        />
+                      </picture>
+                    </div>
+
+                    {/* Linha de brilho especular acompanhando a borda do corte */}
+                    <span className="blade-specular-seam" aria-hidden="true" />
+
+                    {/* Spotlight radial de proximidade e feixe de luz */}
                     <div className="project-plate-spotlight" aria-hidden="true" />
                   </a>
 
                   <figcaption className="capture-caption mono">
                     <span>{currentScreen.caption}</span>
-                    <span>CAPTURA REAL</span>
+                    <span>
+                      {project.screens.length > 1
+                        ? "PASSE O MOUSE P/ PREVIEW EM LÂMINA"
+                        : "CAPTURA REAL · ZOOM EDITORIAL"}
+                    </span>
                   </figcaption>
                 </figure>
 
@@ -239,7 +296,7 @@ export function ProjectsChapter() {
                       className="case-study-trigger-btn mono"
                       onClick={() => toggleCaseStudy(project.id)}
                       aria-expanded={isExpanded}
-                      data-cursor-label="ESTUDO"
+                      data-cursor="magnetic"
                     >
                       <span>
                         {isExpanded
@@ -299,9 +356,9 @@ export function ProjectsChapter() {
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="project-action-primary"
+                      className="project-action-primary btn-sheen"
                       data-magnetic
-                      data-cursor-label="VISITAR ↗"
+                      data-cursor="magnetic"
                       onClick={() =>
                         trackEvent("project_click", {
                           project: project.name,
@@ -321,7 +378,7 @@ export function ProjectsChapter() {
                       rel="noopener noreferrer"
                       className="project-action-secondary"
                       data-magnetic
-                      data-cursor-label="CÓDIGO ↗"
+                      data-cursor="magnetic"
                       onClick={() =>
                         trackEvent("project_click", {
                           project: project.name,

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   COMPONENTE DO CURRÍCULO (BOTÕES, FEEDBACK & METADADOS)
+   COMPONENTE DO CURRÍCULO (BOTÕES MAGNÉTICOS, LIQUID FILL & CASCATA VERTICAL)
    ========================================================================== */
 
 .cv-button-container {
@@ -15,6 +15,8 @@
 }
 
 .btn-cv-action {
+  position: relative;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -27,11 +29,48 @@
   text-decoration: none;
   cursor: pointer;
   transition:
-    background-color 0.22s ease,
-    border-color 0.22s ease,
-    color 0.22s ease,
-    box-shadow 0.22s ease,
-    transform 0.22s var(--ease-editorial);
+    background-color 0.28s ease,
+    border-color 0.28s ease,
+    color 0.32s var(--ease-out-expo),
+    box-shadow 0.28s ease,
+    transform 0.22s var(--ease-out-expo);
+}
+
+.btn-cv-liquid {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Preenchimento Líquido Direcional (Directional Spotlight Fill: scale(0) -> scale(2.8)) */
+.cv-liquid-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: var(--text-white);
+  pointer-events: none;
+  z-index: 0;
+  transform: translate3d(
+      calc(var(--mouse-x, 55px) - 55px),
+      calc(var(--mouse-y, 24px) - 55px),
+      0
+    )
+    scale(0);
+  transition: transform 0.62s var(--ease-out-expo);
+  will-change: transform;
+}
+
+.btn-cv-content-inner {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  will-change: transform;
 }
 
 /* Variante Secundária (Hero e Seções Principais) */
@@ -42,17 +81,9 @@
   box-shadow: var(--shadow-sm);
 }
 
-.btn-cv-secondary:hover {
-  border-color: var(--accent-electric);
-  background: var(--bg-elevated);
-  color: var(--accent-cyan);
-  box-shadow: var(--shadow-md), 0 4px 14px -6px var(--accent-electric-glow);
-  transform: translateY(-2px);
-}
-
 /* Variante Header (Discreta e Compacta) */
 .btn-cv-header {
-  min-height: 36px;
+  min-height: 44px;
   padding: 6px 12px;
   border-radius: var(--radius-md);
   border: 1px solid var(--line-hairline);
@@ -61,27 +92,73 @@
   color: var(--text-body);
 }
 
-.btn-cv-header:hover {
-  border-color: var(--accent-electric);
-  background: var(--bg-concrete);
-  color: var(--text-white);
-  box-shadow: 0 4px 14px -6px var(--accent-electric-glow);
-  transform: translateY(-1px);
+/* Animação do Ícone de Download em Cascata Vertical */
+@keyframes cvArrowCascade {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  48% {
+    transform: translate3d(0, 8px, 0);
+    opacity: 0;
+  }
+  52% {
+    transform: translate3d(0, -8px, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
 }
 
-/* Animação do Ícone de Download */
 .btn-cv-download-icon {
   color: var(--accent-cyan);
-  transition: transform 0.22s var(--ease-editorial);
+  transition:
+    color 0.32s var(--ease-out-expo),
+    transform 0.22s var(--ease-out-expo);
   flex-shrink: 0;
 }
 
-.btn-cv-download-icon .cv-icon-arrow {
-  transition: transform 0.24s var(--ease-editorial);
+.cv-icon-cascade {
+  will-change: transform, opacity;
 }
 
-.btn-cv-action:hover .btn-cv-download-icon .cv-icon-arrow {
-  transform: translateY(2.5px);
+@media (hover: hover) and (pointer: fine) {
+  .btn-cv-liquid:hover .cv-liquid-fill {
+    transform: translate3d(
+        calc(var(--mouse-x, 55px) - 55px),
+        calc(var(--mouse-y, 24px) - 55px),
+        0
+      )
+      scale(2.8);
+  }
+
+  .btn-cv-liquid:hover {
+    border-color: var(--text-white);
+    color: var(--text-ink) !important;
+    box-shadow: var(--shadow-md), 0 6px 20px -6px var(--accent-electric-glow);
+  }
+
+  .btn-cv-liquid:hover .btn-cv-download-icon,
+  .btn-cv-liquid:hover .btn-arrow {
+    color: var(--text-ink) !important;
+  }
+
+  .btn-cv-liquid:hover .cv-icon-cascade {
+    animation: cvArrowCascade 0.58s var(--ease-out-expo) both;
+  }
+}
+
+.btn-cv-secondary:active,
+.btn-cv-header:active {
+  transform: scale(0.97);
+}
+
+.btn-cv-secondary:focus-visible,
+.btn-cv-header:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
 }
 
 /* Feedback de Estados */
@@ -134,10 +211,19 @@
     background-color 0.2s ease;
 }
 
-.btn-cv-view-inline:hover {
-  border-color: var(--line-strong);
-  color: var(--accent-cyan);
-  background: var(--bg-elevated);
+@media (hover: hover) and (pointer: fine) {
+  .btn-cv-view-inline:hover {
+    border-color: var(--line-strong);
+    color: var(--accent-cyan);
+    background: var(--bg-elevated);
+  }
+}
+.btn-cv-view-inline:active {
+  transform: scale(0.96);
+}
+.btn-cv-view-inline:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }
 
 /* Metadados Técnicos do CV */
@@ -145,7 +231,7 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   letter-spacing: 0.04em;
 }
@@ -183,9 +269,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .btn-cv-download-icon .cv-icon-arrow,
+  .cv-icon-cascade,
+  .cv-liquid-fill,
   .cv-spinner-icon {
     animation: none !important;
     transform: none !important;
+    transition: none !important;
   }
 }
