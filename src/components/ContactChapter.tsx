@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { contactData, links } from "../data";
 import { GithubIcon, LinkedinIcon } from "../icons";
 import { trackEvent } from "../analytics";
@@ -7,6 +7,7 @@ import { CvButton } from "./CvButton";
 
 export function ContactChapter() {
   const [copied, setCopied] = useState(false);
+  const headingRef = useRef<HTMLHeadingElement>(null);
   const emailAddress = "aleffelix81@gmail.com";
   const whatsappUrl =
     "https://wa.me/5562985163672?text=Ol%C3%A1%20%C3%81lef%2C%20vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar!";
@@ -20,11 +21,44 @@ export function ContactChapter() {
         setTimeout(() => setCopied(false), 2800);
       }
     } catch {
-      // Fallback gracioso
       setCopied(true);
       setTimeout(() => setCopied(false), 2800);
     }
   };
+
+  // Resposta cinética das letras grandes do CTA principal à aproximação do cursor
+  const handleHeadingPointerMove = (e: React.PointerEvent<HTMLHeadingElement>) => {
+    if (typeof window === "undefined") return;
+    if (
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      !window.matchMedia("(pointer: fine)").matches
+    ) {
+      return;
+    }
+
+    const headingEl = headingRef.current;
+    if (!headingEl) return;
+
+    const chars = headingEl.querySelectorAll<HTMLElement>(".contact-kinetic-char");
+    chars.forEach((charEl) => {
+      const rect = charEl.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const dist = Math.abs(e.clientX - centerX);
+      const proximity = Math.max(0, 1 - dist / 180);
+      charEl.style.setProperty("--char-prox", proximity.toFixed(3));
+    });
+  };
+
+  const handleHeadingPointerLeave = () => {
+    const headingEl = headingRef.current;
+    if (!headingEl) return;
+    const chars = headingEl.querySelectorAll<HTMLElement>(".contact-kinetic-char");
+    chars.forEach((charEl) => {
+      charEl.style.setProperty("--char-prox", "0");
+    });
+  };
+
+  const headlineChars = contactData.headline.split("");
 
   return (
     <section
@@ -46,13 +80,35 @@ export function ContactChapter() {
             <span className="marker-line" aria-hidden="true" />
           </div>
 
-          <h2 id="contact-heading" className="contact-serif-heading">
+          <h2
+            ref={headingRef}
+            id="contact-heading"
+            className="contact-serif-heading"
+            aria-label={contactData.headline}
+            onPointerMove={handleHeadingPointerMove}
+            onPointerLeave={handleHeadingPointerLeave}
+          >
             <span className="line-mask">
               <span
-                className="line-inner"
+                className="line-inner contact-kinetic-line"
                 style={{ "--line-delay": "50ms" } as React.CSSProperties}
               >
-                {contactData.headline}
+                <span className="sr-only">{contactData.headline}</span>
+                {headlineChars.map((ch, idx) => (
+                  <span
+                    key={idx}
+                    className="contact-kinetic-char"
+                    aria-hidden="true"
+                  >
+                    {ch === " " ? "\u00A0" : ch}
+                  </span>
+                ))}
+                <span className="contact-heading-arrow-loop" aria-hidden="true">
+                  <span className="diagonal-arrow-track">
+                    <span className="diagonal-arrow-glyph">↗</span>
+                    <span className="diagonal-arrow-glyph diagonal-arrow-glyph--clone">↗</span>
+                  </span>
+                </span>
               </span>
             </span>
           </h2>
@@ -60,7 +116,7 @@ export function ContactChapter() {
           <p className="contact-lead-text">{contactData.text}</p>
 
           {/* Destaque Principal: Cartão de E-mail Profissional */}
-          <div className="contact-email-copy-box">
+          <div className="contact-email-copy-box" data-tilt-card data-tilt-max="3">
             <div className="email-copy-header mono">
               <span>CANAL DIRETO &amp; E-MAIL PROFISSIONAL</span>
               <span className="email-copy-badge">
@@ -77,7 +133,7 @@ export function ContactChapter() {
                 className={`btn-email-copy mono ${copied ? "is-copied" : ""}`}
                 onClick={handleCopyEmail}
                 aria-label="Copiar endereço de e-mail para a área de transferência"
-                data-cursor-label={copied ? "COPIADO!" : "COPIAR"}
+                data-cursor-label={copied ? "[ COPIADO! ✓ ]" : "[ COPIAR E-MAIL ❐ ]"}
               >
                 <span className="email-address-text">{emailAddress}</span>
                 <span className="email-copy-icon" aria-hidden="true">
@@ -89,10 +145,14 @@ export function ContactChapter() {
                 href={`mailto:${emailAddress}`}
                 className="btn-mailto-direct"
                 data-magnetic
-                data-cursor-label="ENVIAR ↗"
+                data-cursor="magnetic"
                 title="Abrir no seu cliente de e-mail padrão"
               >
-                <RollText text="Abrir no cliente ↗" />
+                <RollText text="Abrir no cliente" />
+                <span className="diagonal-arrow-inline-box" aria-hidden="true">
+                  <span className="diagonal-arrow-glyph">↗</span>
+                  <span className="diagonal-arrow-glyph diagonal-arrow-glyph--clone">↗</span>
+                </span>
               </a>
             </div>
           </div>
@@ -106,7 +166,7 @@ export function ContactChapter() {
               rel="noopener noreferrer"
               className="contact-action-btn"
               data-magnetic
-              data-cursor-label="WHATSAPP ↗"
+              data-cursor="magnetic"
             >
               <span className="btn-icon" aria-hidden="true">💬</span>
               <span className="btn-label">
@@ -130,7 +190,7 @@ export function ContactChapter() {
               rel="noopener noreferrer"
               className="contact-action-btn"
               data-magnetic
-              data-cursor-label="GITHUB ↗"
+              data-cursor="magnetic"
             >
               <GithubIcon size={16} />
               <span className="btn-label">
@@ -146,7 +206,7 @@ export function ContactChapter() {
               rel="noopener noreferrer"
               className="contact-action-btn"
               data-magnetic
-              data-cursor-label="LINKEDIN ↗"
+              data-cursor="magnetic"
             >
               <LinkedinIcon size={16} />
               <span className="btn-label">

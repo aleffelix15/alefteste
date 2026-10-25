@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CABEÇALHO EDITORIAL & NAVEGAÇÃO
+   CABEÇALHO EDITORIAL & NAVEGAÇÃO REATIVA AO SCROLL
    ========================================================================== */
 
 .site-header {
@@ -8,16 +8,26 @@
   z-index: 120;
   height: var(--header-height);
   background: var(--header-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line-hairline);
-  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  transform: translate3d(0, 0, 0);
+  transition:
+    transform 0.48s var(--ease-out-expo),
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+  will-change: transform;
 }
 
 .site-header.is-compact {
   background: var(--header-bg-scrolled);
   border-bottom-color: var(--line-strong);
   box-shadow: var(--shadow-md);
+}
+
+.site-header.is-collapsed:not(:focus-within):not(:has(.mobile-nav-drawer.is-open)) {
+  transform: translate3d(0, -100%, 0);
 }
 
 .header-inner {
@@ -38,12 +48,34 @@
 
 .monogram-svg {
   color: var(--text-white);
-  transition: transform 0.25s var(--ease-editorial);
+  transition: transform 0.35s var(--ease-out-expo);
+  will-change: transform;
+}
+
+@keyframes monogramStrokeDraw {
+  0% {
+    stroke-dashoffset: 68;
+    fill-opacity: 0;
+  }
+  65% {
+    stroke-dashoffset: 0;
+    fill-opacity: 0.25;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    fill-opacity: 1;
+  }
+}
+
+.monogram-stroke-path {
+  stroke-dasharray: 68;
+  stroke-dashoffset: 0;
+  animation: monogramStrokeDraw 1.2s var(--ease-out-expo) both;
 }
 
 .monogram-dot {
   color: var(--accent-electric);
-  transition: color 0.25s ease;
+  transition: color 0.25s ease, transform 0.35s var(--ease-out-expo);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -88,32 +120,54 @@
   gap: 28px;
 }
 
-/* Indicador deslizante ativo da seção atual */
+/* Sublinhado elástico GPU-First com scaleX() e transform-origin dinâmico */
 .nav-sliding-indicator {
   position: absolute;
+  left: 0;
   bottom: 4px;
+  width: 100px;
   height: 2px;
   background: linear-gradient(90deg, var(--accent-electric) 0%, var(--accent-cyan) 100%);
   border-radius: 2px;
   box-shadow: 0 0 10px var(--accent-electric-glow);
   pointer-events: none;
   opacity: 0;
+  transform: translate3d(0, 0, 0) scaleX(0);
   transition:
-    left 0.38s var(--ease-editorial),
-    width 0.38s var(--ease-editorial),
+    transform 0.48s var(--ease-out-expo),
     opacity 0.25s ease;
+  will-change: transform, opacity;
 }
 
 .nav-link {
   position: relative;
   display: inline-flex;
   align-items: center;
+  gap: 6px;
   min-height: 44px;
   padding-block: 8px;
   font-size: 0.875rem;
   font-weight: 400;
   color: var(--text-body);
   transition: color 0.2s ease;
+}
+
+.nav-active-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 8px var(--accent-electric);
+  transform: scale(0);
+  opacity: 0;
+  transition:
+    transform 0.38s var(--ease-out-expo),
+    opacity 0.28s ease;
+}
+
+.nav-link.is-active .nav-active-dot {
+  transform: scale(1);
+  opacity: 1;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -287,13 +341,12 @@
   padding: 16px 8px;
   border-bottom: 1px solid var(--line-hairline);
   color: var(--text-body);
-  transition: color 0.2s ease, border-color 0.2s ease, padding-left 0.2s ease;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 
 .mobile-nav-link.is-active {
   color: var(--text-white);
   border-bottom-color: var(--accent-electric);
-  padding-left: 14px;
 }
 
 .mobile-nav-index {
@@ -333,7 +386,7 @@
 
 @media (max-width: 768px) {
   .site-header {
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 }

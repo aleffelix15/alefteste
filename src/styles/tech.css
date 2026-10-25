@@ -4,7 +4,6 @@
 
 .tech-showcase-section {
   position: relative;
- 
   background:
     radial-gradient(60% 50% at 50% 42%, rgba(22, 119, 255, 0.08), transparent 72%),
     linear-gradient(180deg, var(--bg-obsidian) 0%, var(--bg-subtle) 50%, var(--bg-obsidian) 100%);
@@ -275,6 +274,7 @@
 
 /* Categorized Stack Blocks */
 .tech-categories-stack {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 44px;
@@ -333,7 +333,7 @@
   margin: 0;
 }
 
-/* Colorful Symbols Grid */
+/* Colorful Symbols Grid & Mouse-Tracked Proximity Glow */
 @keyframes techSymbolEntrance {
   0% {
     opacity: 0;
@@ -372,13 +372,38 @@
   border: 1px solid var(--line-hairline);
   background: var(--bg-concrete);
   box-shadow: var(--shadow-sm);
-  animation: techSymbolEntrance 0.48s var(--ease-editorial) both;
+  animation: techSymbolEntrance 0.48s var(--ease-out-expo) both;
   animation-delay: calc(var(--stagger-index, 0) * 32ms);
   transition:
     border-color 0.25s ease,
     background-color 0.25s ease,
     box-shadow 0.28s ease,
-    transform 0.28s var(--ease-editorial);
+    transform 0.28s var(--ease-out-expo);
+}
+
+/* Borda iluminada de proximidade (Mouse-Tracked Proximity Glow em 420px circle) */
+.tech-symbol-card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: radial-gradient(
+    420px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
+    var(--brand-color, var(--accent-cyan)) 0%,
+    rgba(73, 180, 255, 0.55) 28%,
+    rgba(22, 119, 255, 0.18) 52%,
+    transparent 75%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: var(--grid-glow-opacity, 0);
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
 }
 
 html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
@@ -399,7 +424,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   filter: blur(24px);
   opacity: 0.12;
   pointer-events: none;
-  transition: opacity 0.35s ease, transform 0.35s var(--ease-editorial);
+  transition: opacity 0.35s ease, transform 0.35s var(--ease-out-expo);
 }
 
 .tech-symbol-emblem-wrap {
@@ -411,33 +436,38 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   width: 62px;
   height: 62px;
   margin-bottom: 10px;
-  transition: transform 0.36s var(--ease-editorial);
+  transition: transform 0.42s var(--ease-out-expo);
+  will-change: transform;
 }
 
 .tech-emblem-svg {
   filter: drop-shadow(0 4px 10px rgba(var(--shadow-color), 0.35));
-  transition: transform 0.36s var(--ease-editorial), filter 0.3s ease;
+  transition: transform 0.36s var(--ease-out-expo), filter 0.3s ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .tech-symbol-card:hover {
     border-color: var(--line-accent);
     background: var(--bg-elevated);
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md), 0 0 18px -8px var(--accent-electric-glow);
+    box-shadow: var(--shadow-md), 0 0 22px -8px var(--accent-electric-glow);
   }
 
   .tech-symbol-card:hover .tech-symbol-halo {
-    opacity: 0.38;
-    transform: scale(1.2);
+    opacity: 0.42;
+    transform: scale(1.25);
   }
 
+  /* Micro-salto elástico no ícone no hover direto: scale(1.12) rotate(-4deg) */
   .tech-symbol-card:hover .tech-symbol-emblem-wrap {
-    transform: translate3d(0, -4px, 0) scale(1.07);
+    transform: scale(1.12) rotate(-4deg);
   }
 
   .tech-symbol-card:hover .emblem-spin-hover {
     animation: emblemOrbitSpin 8s linear infinite;
+  }
+
+  .tech-symbol-card:hover .tech-symbol-provenance {
+    color: var(--accent-cyan);
   }
 }
 .tech-symbol-card:active {
@@ -508,6 +538,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   color: var(--text-muted);
   letter-spacing: 0.04em;
   text-transform: none;
+  transition: color 0.25s ease;
 }
 
 /* Audit Dossier Drawer */

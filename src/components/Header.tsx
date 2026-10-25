@@ -18,11 +18,12 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navListRef = useRef<HTMLUListElement>(null);
+  const prevActiveSectionRef = useRef<string>("abertura");
   const [sliderStyle, setSliderStyle] = useState<React.CSSProperties>({});
   const toggleBtnRef = useRef<HTMLButtonElement>(null);
   const firstNavLinkRef = useRef<HTMLAnchorElement>(null);
 
-  // Atualiza posição do indicador deslizante ativo com suporte a resize/rotação
+  // Atualiza posição do indicador magnético ativo exclusivamente via GPU (translate3d + scaleX + transform-origin dinâmico)
   useEffect(() => {
     const updateSlider = () => {
       const list = navListRef.current;
@@ -33,9 +34,17 @@ export function Header() {
         const listRect = list.getBoundingClientRect();
         const activeRect = activeEl.getBoundingClientRect();
 
+        const prevIdx = navItems.findIndex((i) => i.id === prevActiveSectionRef.current);
+        const nextIdx = navItems.findIndex((i) => i.id === activeSection);
+        const origin = nextIdx >= prevIdx ? "left center" : "right center";
+        prevActiveSectionRef.current = activeSection;
+
+        const offsetX = activeRect.left - listRect.left;
+        const scaleRatio = Math.max(0.15, activeRect.width / 100);
+
         setSliderStyle({
-          left: `${activeRect.left - listRect.left}px`,
-          width: `${activeRect.width}px`,
+          transform: `translate3d(${offsetX.toFixed(1)}px, 0, 0) scaleX(${scaleRatio.toFixed(4)})`,
+          transformOrigin: origin,
           opacity: 1,
         });
       }
@@ -123,13 +132,14 @@ export function Header() {
           className="brand-link"
           aria-label="Álef Felix Teixeira — Início"
           data-magnetic
+          data-cursor="magnetic"
         >
           <MonogramLogo />
           <span className="brand-divider" aria-hidden="true" />
           <span className="brand-serif-name">Álef Felix</span>
         </a>
 
-        {/* Navegação Desktop com Indicador Deslizante Suave */}
+        {/* Navegação Desktop com Indicador Magnético Elástico GPU */}
         <nav className="desktop-nav" aria-label="Navegação principal">
           <ul ref={navListRef} className="nav-list">
             <span
@@ -146,8 +156,11 @@ export function Header() {
                     data-nav-id={item.id}
                     className={`nav-link ${isActive ? "is-active" : ""}`}
                     aria-current={isActive ? "location" : undefined}
+                    data-magnetic
+                    data-cursor="magnetic"
                     onClick={() => setActiveSection(item.id)}
                   >
+                    <span className="nav-active-dot" aria-hidden="true" />
                     <RollText text={item.label} />
                   </a>
                 </li>
@@ -164,7 +177,7 @@ export function Header() {
               rel="noopener noreferrer"
               className="header-social-link"
               data-magnetic
-              data-cursor-label="GITHUB"
+              data-cursor="magnetic"
             >
               <GithubIcon size={15} />
               <RollText text="GitHub" />
@@ -176,7 +189,7 @@ export function Header() {
               rel="noopener noreferrer"
               className="header-social-link"
               data-magnetic
-              data-cursor-label="LINKEDIN"
+              data-cursor="magnetic"
             >
               <LinkedinIcon size={15} />
               <RollText text="LinkedIn" />

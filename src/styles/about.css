@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CAPÍTULO 02 (SEÇÃO 03) — SOBRE MIM
+   CAPÍTULO 02 (SEÇÃO 03) — SOBRE MIM (DUPLA PROFUNDIDADE & SCROLL HIGHLIGHT)
    ========================================================================== */
 
 .about-editorial-grid {
@@ -17,6 +17,7 @@
 }
 
 .about-photo-card {
+  position: relative;
   border-radius: var(--radius-lg);
   border: 1px solid var(--line-hairline);
   background: var(--bg-concrete);
@@ -25,14 +26,34 @@
   transition:
     border-color 0.25s ease,
     box-shadow 0.25s ease,
-    transform 0.25s var(--ease-editorial);
+    transform 0.25s var(--ease-out-expo);
+}
+
+.about-depth-viewport {
+  position: relative;
+  overflow: hidden;
+}
+
+.about-photo-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.075) 1px, transparent 0);
+  background-size: 3px 3px;
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  transition: opacity 0.45s ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .about-photo-card:hover {
     border-color: var(--line-accent);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+    box-shadow: var(--shadow-md), 0 0 22px -10px var(--accent-electric-glow);
+  }
+
+  .about-photo-card:hover .about-photo-grain {
+    opacity: 0.65;
   }
 }
 
@@ -40,27 +61,43 @@
   transform: scale(0.99);
 }
 
+/* Camada de profundidade 1: studio-desk.avif (6% a -6% no scroll) */
 .about-studio-img {
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 10;
   object-fit: cover;
   filter: grayscale(100%) contrast(1.08);
-  transition: transform 0.55s var(--ease-editorial);
+  transform: scale(1.08) translate3d(0, var(--about-studio-y, 0%), 0);
+  transition:
+    transform 0.45s var(--ease-out-quart),
+    filter 0.55s var(--ease-out-expo);
+  will-change: transform, filter;
 }
 
+/* Camada de profundidade 2: alef-portrait-bw.avif (-3% a 3% no scroll) */
 .about-portrait-img {
   width: 100%;
   height: auto;
   aspect-ratio: 4 / 5;
   object-fit: cover;
-  transition: transform 0.55s var(--ease-editorial);
+  filter: grayscale(100%) contrast(1.06);
+  transform: scale(1.06) translate3d(0, var(--about-portrait-y, 0%), 0);
+  transition:
+    transform 0.45s var(--ease-out-quart),
+    filter 0.55s var(--ease-out-expo);
+  will-change: transform, filter;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .about-photo-card:hover .about-studio-img,
+  .about-photo-card:hover .about-studio-img {
+    transform: scale(1.11) translate3d(0, var(--about-studio-y, 0%), 0);
+    filter: grayscale(30%) contrast(1.18);
+  }
+
   .about-photo-card:hover .about-portrait-img {
-    transform: scale(1.02);
+    transform: scale(1.09) translate3d(0, var(--about-portrait-y, 0%), 0);
+    filter: grayscale(20%) contrast(1.16);
   }
 }
 
@@ -90,6 +127,23 @@
 .about-lead-p {
   font-size: 1.12rem;
   font-weight: 500;
+  color: var(--text-white);
+}
+
+/* Destaque Progressivo de Leitura (Editorial Scroll Highlight: 0.28 -> 1) */
+.editorial-reading-phrase {
+  opacity: var(--reading-opacity, 1);
+  transition:
+    opacity 0.28s var(--ease-out-quart),
+    color 0.28s ease;
+  will-change: opacity;
+}
+
+html.motion-ready .editorial-reading-phrase {
+  opacity: var(--reading-opacity, 0.28);
+}
+
+.editorial-reading-phrase.is-lit {
   color: var(--text-white);
 }
 
@@ -143,8 +197,8 @@
   opacity: 0.78;
   transform: translateX(-4px);
   transition:
-    opacity 0.4s var(--ease-editorial),
-    transform 0.4s var(--ease-editorial);
+    opacity 0.4s var(--ease-out-expo),
+    transform 0.4s var(--ease-out-expo);
 }
 
 .timeline-vertical-step.is-active {
@@ -200,7 +254,7 @@
     border-color 0.25s ease,
     background-color 0.25s ease,
     box-shadow 0.25s ease,
-    transform 0.25s var(--ease-editorial);
+    transform 0.25s var(--ease-out-expo);
 }
 
 .timeline-vertical-step.is-active .timeline-step-card {

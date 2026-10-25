@@ -1,11 +1,23 @@
 /* ==========================================================================
-   RODAPÉ EDITORIAL COMPLETO
+   RODAPÉ EDITORIAL COMPLETO — UNCOVER PARALLAX & ASSINATURA MONUMENTAL
    ========================================================================== */
 
 .site-footer {
-  padding-block: 56px 40px;
+  position: relative;
+  z-index: 1;
   background: var(--bg-obsidian);
   border-top: 1px solid var(--line-hairline);
+  overflow: hidden;
+}
+
+.footer-uncover-stage {
+  padding-block: 56px 40px;
+  transform: translate3d(0, var(--footer-uncover-y, 0px), 0);
+  opacity: var(--footer-uncover-opacity, 1);
+  transition:
+    transform 0.18s var(--ease-out-expo),
+    opacity 0.22s ease;
+  will-change: transform, opacity;
 }
 
 .footer-content-grid {
@@ -155,7 +167,7 @@
     border-color 0.2s ease,
     background-color 0.2s ease,
     box-shadow 0.2s ease,
-    transform 0.2s var(--ease-editorial);
+    transform 0.2s var(--ease-out-expo);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -172,6 +184,42 @@
 .footer-top-link:focus-visible {
   outline: 2px solid var(--accent-cyan);
   outline-offset: 3px;
+}
+
+/* Assinatura Monumental Editorial de Fechamento */
+.footer-monumental-wrap {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line-hairline);
+  overflow: hidden;
+}
+
+.footer-monumental-signature {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 8.5vw, 7.8rem);
+  font-weight: 700;
+  line-height: 0.88;
+  letter-spacing: -0.04em;
+  color: rgba(244, 247, 251, 0.08);
+  user-select: none;
+  transform: translate3d(0, var(--footer-sig-y, 0px), 0);
+  transition: transform 0.24s var(--ease-out-expo);
+  will-change: transform;
+}
+
+.footer-monumental-dot {
+  color: var(--accent-electric);
+  opacity: 0.5;
+}
+
+.footer-monumental-year {
+  font-size: clamp(1rem, 2.5vw, 2.2rem);
+  letter-spacing: 0.12em;
+  color: rgba(73, 180, 255, 0.35);
 }
 
 @media (max-width: 1024px) {

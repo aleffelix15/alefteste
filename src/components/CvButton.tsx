@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { cv } from "../data";
 import { trackEvent } from "../analytics";
+import { attachMagneticEffect } from "../motion";
 import { RollText } from "./RollText";
 
 interface CvButtonProps {
@@ -19,6 +20,17 @@ export function CvButton({
   className = "",
 }: CvButtonProps) {
   const [downloadState, setDownloadState] = useState<"idle" | "downloading" | "downloaded">("idle");
+  const mainBtnRef = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    const el = mainBtnRef.current;
+    if (!el || variant === "footer") return;
+    return attachMagneticEffect(el, {
+      strength: variant === "header" ? 0.18 : 0.28,
+      innerSelector: ".btn-cv-content-inner",
+      innerStrength: variant === "header" ? 0.28 : 0.42,
+    });
+  }, [variant]);
 
   if (!cv.available) {
     return null;
@@ -59,6 +71,7 @@ export function CvButton({
           href={cv.url}
           download={cv.fileName}
           className="footer-nav-link cv-link-footer"
+          data-cursor="magnetic"
           onClick={handleDownloadClick}
         >
           <span>Currículo (PDF)</span>
@@ -73,73 +86,78 @@ export function CvButton({
     return (
       <div className={`contact-cv-block ${className}`}>
         <a
+          ref={mainBtnRef}
           href={cv.url}
           download={cv.fileName}
-          className={`contact-action-btn btn-cv-contact ${
+          className={`contact-action-btn btn-cv-contact btn-cv-liquid ${
             downloadState === "downloaded" ? "is-downloaded" : ""
           } ${downloadState === "downloading" ? "is-downloading" : ""}`}
           aria-label={accessibleLabel}
-          data-magnetic
-          data-cursor-label="CURRÍCULO ↓"
+          data-cursor="magnetic"
           onClick={handleDownloadClick}
         >
-          {downloadState === "downloading" ? (
-            <>
-              <svg
-                className="cv-spinner-icon"
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                aria-hidden="true"
-              >
-                <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
-                <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round" />
-              </svg>
-              <span>Baixando…</span>
-            </>
-          ) : downloadState === "downloaded" ? (
-            <>
-              <svg
-                className="cv-check-icon"
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              <span>Baixado ✓</span>
-            </>
-          ) : (
-            <>
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-                className="btn-cv-download-icon"
-              >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" className="cv-icon-arrow" />
-                <line x1="12" y1="15" x2="12" y2="3" className="cv-icon-stem" />
-              </svg>
-              <RollText text={label} />
-              <span className="btn-arrow" aria-hidden="true">↓</span>
-            </>
-          )}
+          <span className="cv-liquid-fill" aria-hidden="true" />
+          <span className="btn-cv-content-inner">
+            {downloadState === "downloading" ? (
+              <>
+                <svg
+                  className="cv-spinner-icon"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
+                  <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round" />
+                </svg>
+                <span>Baixando…</span>
+              </>
+            ) : downloadState === "downloaded" ? (
+              <>
+                <svg
+                  className="cv-check-icon"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                <span>Baixado ✓</span>
+              </>
+            ) : (
+              <>
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                  className="btn-cv-download-icon"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <g className="cv-icon-cascade">
+                    <polyline points="7 10 12 15 17 10" className="cv-icon-arrow" />
+                    <line x1="12" y1="15" x2="12" y2="3" className="cv-icon-stem" />
+                  </g>
+                </svg>
+                <RollText text={label} />
+                <span className="btn-arrow" aria-hidden="true">↓</span>
+              </>
+            )}
+          </span>
 
           <span className="sr-only" aria-live="polite">
             {downloadState === "downloading"
@@ -162,6 +180,7 @@ export function CvButton({
                 className="contact-cv-view-link"
                 title="Visualizar currículo em nova aba do navegador"
                 aria-label="Visualizar currículo de Álef Felix Teixeira em nova aba"
+                data-cursor="magnetic"
                 onClick={handleViewClick}
               >
                 Visualizar ↗
@@ -177,72 +196,77 @@ export function CvButton({
     <div className={`cv-button-container cv-variant-${variant} ${className}`}>
       <div className="cv-action-row">
         <a
+          ref={mainBtnRef}
           href={cv.url}
           download={cv.fileName}
-          className={`btn-cv-action btn-cv-${variant} ${
+          className={`btn-cv-action btn-cv-${variant} btn-cv-liquid ${
             downloadState === "downloaded" ? "is-downloaded" : ""
           } ${downloadState === "downloading" ? "is-downloading" : ""}`}
           aria-label={accessibleLabel}
-          data-magnetic={variant !== "header"}
-          data-cursor-label="CURRÍCULO ↓"
+          data-cursor="magnetic"
           onClick={handleDownloadClick}
         >
-          {downloadState === "downloading" ? (
-            <>
-              <svg
-                className="cv-spinner-icon"
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                aria-hidden="true"
-              >
-                <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
-                <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round" />
-              </svg>
-              <span>Baixando…</span>
-            </>
-          ) : downloadState === "downloaded" ? (
-            <>
-              <svg
-                className="cv-check-icon"
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              <span>Baixado ✓</span>
-            </>
-          ) : (
-            <>
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-                className="btn-cv-download-icon"
-              >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" className="cv-icon-arrow" />
-                <line x1="12" y1="15" x2="12" y2="3" className="cv-icon-stem" />
-              </svg>
-              <RollText text={label} />
-            </>
-          )}
+          <span className="cv-liquid-fill" aria-hidden="true" />
+          <span className="btn-cv-content-inner">
+            {downloadState === "downloading" ? (
+              <>
+                <svg
+                  className="cv-spinner-icon"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
+                  <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round" />
+                </svg>
+                <span>Baixando…</span>
+              </>
+            ) : downloadState === "downloaded" ? (
+              <>
+                <svg
+                  className="cv-check-icon"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                <span>Baixado ✓</span>
+              </>
+            ) : (
+              <>
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                  className="btn-cv-download-icon"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <g className="cv-icon-cascade">
+                    <polyline points="7 10 12 15 17 10" className="cv-icon-arrow" />
+                    <line x1="12" y1="15" x2="12" y2="3" className="cv-icon-stem" />
+                  </g>
+                </svg>
+                <RollText text={label} />
+              </>
+            )}
+          </span>
 
           {/* Feedback para leitores de tela */}
           <span className="sr-only" aria-live="polite">
@@ -264,7 +288,7 @@ export function CvButton({
             title="Visualizar currículo em nova aba do navegador"
             aria-label="Visualizar currículo de Álef Felix Teixeira em nova aba"
             data-magnetic
-            data-cursor-label="VER ↗"
+            data-cursor="magnetic"
             onClick={handleViewClick}
           >
             <span>Visualizar</span>

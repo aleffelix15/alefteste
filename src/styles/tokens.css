@@ -229,12 +229,19 @@
   --radius-full: 9999px;
 
   /* Curvas & Transições Editoriais de Alta Fluidez */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-curtain: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring-smooth: cubic-bezier(0.25, 1, 0.4, 1);
-  --ease-curtain: cubic-bezier(0.76, 0, 0.24, 1);
   --duration-fast: 160ms;
   --duration-normal: 300ms;
   --duration-slow: 550ms;
+
+  /* Variáveis Globais de Inércia de Scroll */
+  --scroll-velocity: 0;
+  --scroll-skew: 0deg;
 
   /* Dimensões Globais de Layout */
   --container-max: 1340px;
@@ -255,5 +262,3 @@
     --header-height: 56px;
   }
 }
-
-

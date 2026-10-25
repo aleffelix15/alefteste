@@ -1,5 +1,5 @@
 /* ==========================================================================
-   FAIXA EDITORIAL EM MOVIMENTO CONTÍNUO (MARQUEE COM PAUSA WCAG 2.2.2)
+   FAIXA EDITORIAL REATIVA À VELOCIDADE DE SCROLL (MARQUEE WCAG 2.2.2)
    ========================================================================== */
 
 @keyframes editorialTickerScroll {
@@ -18,8 +18,9 @@
   justify-content: space-between;
   border-bottom: 1px solid var(--line-hairline);
   background: var(--bg-subtle);
-  min-height: 44px;
+  min-height: 46px;
   overflow: hidden;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .ticker-track-viewport {
@@ -27,6 +28,8 @@
   overflow: hidden;
   mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+  transform: translate3d(calc(var(--scroll-velocity, 0) * -0.45px), 0, 0);
+  will-change: transform;
 }
 
 .ticker-track {
@@ -34,12 +37,6 @@
   width: max-content;
   animation: editorialTickerScroll 34s linear infinite;
   will-change: transform;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .editorial-ticker-band:hover .ticker-track {
-    animation-play-state: paused;
-  }
 }
 
 .editorial-ticker-band:focus-within .ticker-track,
@@ -61,11 +58,38 @@
   font-size: 0.75rem;
   color: var(--text-muted);
   white-space: nowrap;
+  transform: skewX(var(--scroll-skew, 0deg));
+  transition:
+    color 0.28s ease,
+    transform 0.22s var(--ease-out-quart);
+  will-change: transform;
 }
 
 .ticker-dot {
   color: var(--accent-electric);
   font-size: 0.55rem;
+  display: inline-block;
+  transition:
+    transform 0.38s var(--ease-out-expo),
+    color 0.28s ease,
+    filter 0.28s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .editorial-ticker-band:hover {
+    background: var(--bg-concrete);
+    border-bottom-color: var(--line-accent);
+  }
+
+  .editorial-ticker-band:hover .ticker-item {
+    color: var(--text-white);
+  }
+
+  .editorial-ticker-band:hover .ticker-dot {
+    color: var(--accent-cyan);
+    transform: scale(1.45) rotate(45deg);
+    filter: drop-shadow(0 0 6px var(--accent-electric));
+  }
 }
 
 .ticker-pause-btn {
