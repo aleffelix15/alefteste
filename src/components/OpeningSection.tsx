@@ -102,13 +102,14 @@ export function OpeningSection() {
             type="image/webp"
             srcSet={`${heroData.portraitImage.base}.webp`}
           />
+          {/* FIX: React 18 forwards the lowercase HTML attribute without warning. */}
           <img
             src={`${heroData.portraitImage.base}.webp`}
             alt=""
             width={720}
             height={900}
             sizes="(max-width: 767px) 100vw, 46vw"
-            fetchPriority="high"
+            {...{ fetchpriority: "high" }}
             decoding="async"
             className="hero-backdrop-img hero-portrait-duotone"
             data-hero-parallax
