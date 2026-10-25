@@ -35,4 +35,6 @@ snap-*.png
 verso_*.png
 decode_*.png
 portfolio/
+benchmark*
+run_experiments.py
 

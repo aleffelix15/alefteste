@@ -73,20 +73,6 @@ function AnimatedCounter({
 export function OpeningSection() {
   const heroRef = useRef<HTMLElement>(null);
 
-  const handlePointerMove = (e: React.PointerEvent<HTMLElement>) => {
-    if (typeof window === "undefined") return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (!window.matchMedia("(pointer: fine)").matches) return;
-
-    const hero = heroRef.current;
-    if (!hero) return;
-    const rect = hero.getBoundingClientRect();
-    const x = (((e.clientX - rect.left) / rect.width) * 100).toFixed(1);
-    const y = (((e.clientY - rect.top) / rect.height) * 100).toFixed(1);
-    hero.style.setProperty("--hero-mouse-x", `${x}%`);
-    hero.style.setProperty("--hero-mouse-y", `${y}%`);
-  };
-
   return (
     <section
       ref={heroRef}
@@ -94,18 +80,17 @@ export function OpeningSection() {
       id="abertura"
       aria-labelledby="hero-main-title"
       data-hero-stage
-      onPointerMove={handlePointerMove}
     >
       {/* Background: Retrato real com tratamento duotone azul sutil, parallax e vinheta cinematográfica */}
       <div className="hero-backdrop-wrap" aria-hidden="true">
         <picture>
           <source
-            media="(max-width: 640px)"
+            media="(max-width: 767px)"
             type="image/avif"
             srcSet={`${heroData.portraitImage.base640}.avif`}
           />
           <source
-            media="(max-width: 640px)"
+            media="(max-width: 767px)"
             type="image/webp"
             srcSet={`${heroData.portraitImage.base640}.webp`}
           />
@@ -122,7 +107,7 @@ export function OpeningSection() {
             alt=""
             width={720}
             height={900}
-            sizes="(max-width: 640px) 100vw, 46vw"
+            sizes="(max-width: 767px) 100vw, 46vw"
             fetchPriority="high"
             decoding="async"
             className="hero-backdrop-img hero-portrait-duotone"
@@ -152,61 +137,58 @@ export function OpeningSection() {
           </span>
         </aside>
 
-        {/* Main Editorial Cover Column */}
-        <div className="hero-main-column hero-parallax-title" data-reveal>
-          {/* Selo: Disponível para oportunidades com ponto verde pulsante */}
-          <div
-            className="hero-status-pill mono hero-stagger-fade"
-            style={{ "--fade-delay": "40ms" } as React.CSSProperties}
-          >
-            <span className="status-beacon-pulse" aria-hidden="true" />
+        {/* Central Stage: Headline Editorial com Máscaras em Linha + Subtítulo + CTAs */}
+        <div className="hero-main-content">
+          <div className="hero-status-pill mono hero-parallax-meta" data-reveal>
+            <span className="status-live-dot" aria-hidden="true" />
             <span>{heroData.statusBadge}</span>
           </div>
 
-          <h1 id="hero-main-title" className="hero-serif-title">
-            <span className="line-mask hero-line-mask-3d">
+          <h1 id="hero-main-title" className="hero-headline">
+            {/* Linha 1: Álef Felix em Grotesque Display com Máscara e Cascata de Abertura */}
+            <span className="line-mask hero-line-lead">
               <span
-                className="line-inner hero-line-3d"
-                style={{ "--line-delay": "0ms" } as React.CSSProperties}
+                className="line-inner hero-emergence-item"
+                style={{ "--line-delay": "70ms" } as React.CSSProperties}
               >
                 {heroData.firstName}
               </span>
             </span>
-            <span className="line-mask hero-line-mask-3d">
+
+            {/* Linha 2: Engenharia de Software com Contraste Serifado Itálico */}
+            <span className="line-mask hero-line-sub">
               <span
-                className="line-inner hero-line-3d hero-title-accent"
-                style={{ "--line-delay": "90ms" } as React.CSSProperties}
+                className="line-inner hero-emergence-item"
+                style={{ "--line-delay": "160ms" } as React.CSSProperties}
               >
-                {heroData.lastName}
+                <em className="serif-italic-accent">Engenharia</em> de Software
               </span>
             </span>
           </h1>
 
           <p
-            className="hero-lead-statement hero-stagger-fade"
+            className="hero-statement hero-stagger-fade"
             style={{ "--fade-delay": "220ms" } as React.CSSProperties}
           >
             {heroData.statement}
           </p>
 
-          {/* Dois CTAs: "Ver projetos" e "Baixar CV" */}
+          {/* Dupla de CTAs Cinematográficos: Ver Projetos (Sheen) + Baixar CV (Liquid Fill) */}
           <div
             className="hero-actions-row hero-stagger-fade"
-            style={{ "--fade-delay": "310ms" } as React.CSSProperties}
+            style={{ "--fade-delay": "300ms" } as React.CSSProperties}
           >
             <a
               href="#projetos"
-              className="btn-white-editorial btn-sheen"
+              className="btn-editorial-primary btn-sheen"
               data-magnetic
               data-cursor="magnetic"
             >
               <RollText text={heroData.ctaPrimary} />
-              <span aria-hidden="true" className="arrow-inline">
-                →
-              </span>
+              <span aria-hidden="true" className="arrow-inline">↓</span>
             </a>
 
-            <CvButton variant="secondary" showViewLink />
+            <CvButton />
           </div>
 
           {/* Barra de Prova Rápida com Contadores Animados */}

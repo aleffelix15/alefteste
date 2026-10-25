@@ -6,6 +6,7 @@
 .contact-section {
   position: relative;
   z-index: 2;
+  contain: layout style;
   background-color: var(--bg-obsidian);
   box-shadow: 0 24px 54px -12px rgba(0, 0, 0, 0.85);
 }

@@ -4,10 +4,11 @@
 
 .hero-editorial-stage {
   position: relative;
-  min-height: calc(90vh - var(--header-height));
-  min-height: calc(90dvh - var(--header-height));
+  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   align-items: center;
+  contain: layout style;
   padding-block: 72px;
   border-bottom: 1px solid var(--line-hairline);
   background-color: var(--bg-obsidian);
@@ -30,9 +31,8 @@
   height: 100%;
   object-fit: cover;
   object-position: center top;
-  filter: grayscale(100%) contrast(1.15) brightness(0.68);
-  opacity: 0.82;
-  will-change: transform;
+  /* PERF: Removido filter grayscale/contrast/brightness e will-change; imagem já é P&B, usa opacity 0.56 */
+  opacity: 0.56;
 }
 
 /* Camada Duotone Azul */
@@ -42,13 +42,13 @@
   right: 0;
   width: 55%;
   height: 100%;
+  /* PERF: Removido mix-blend-mode: color com gradiente de opacidade controlada */
   background: linear-gradient(
     135deg,
-    rgba(22, 119, 255, 0.28) 0%,
-    rgba(73, 180, 255, 0.12) 45%,
+    rgba(22, 119, 255, 0.16) 0%,
+    rgba(73, 180, 255, 0.06) 45%,
     var(--hero-fade-88) 100%
   );
-  mix-blend-mode: color;
   pointer-events: none;
 }
 
@@ -147,11 +147,12 @@
 }
 
 /* Coluna Principal do Nome e Proposta */
+.hero-main-content,
 .hero-main-column {
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  max-width: 650px;
+  gap: 20px;
+  max-width: 680px;
 }
 
 /* Selo: Disponível para oportunidades com ponto verde pulsante */
@@ -169,6 +170,7 @@
   letter-spacing: 0.08em;
 }
 
+.status-live-dot,
 .status-beacon-pulse {
   width: 7px;
   height: 7px;
@@ -194,15 +196,38 @@
   }
 }
 
+.hero-headline,
 .hero-serif-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 700;
-  font-size: var(--text-display);
-  line-height: 0.94;
-  letter-spacing: -0.025em;
   color: var(--text-white);
   display: flex;
   flex-direction: column;
+  gap: 4px;
+  perspective: 900px;
+}
+
+.hero-line-lead {
+  font-size: clamp(2.4rem, 4.8vw, 4.6rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: var(--text-white);
+}
+
+.hero-line-sub {
+  font-size: clamp(1.6rem, 3.2vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--text-body);
+}
+
+.serif-italic-accent {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent-cyan);
 }
 
 .hero-line-mask-3d {
@@ -212,16 +237,20 @@
   margin-bottom: -0.09em;
 }
 
+/* 3D Line Emergence ao terminar o preloader */
+html.motion-ready [data-reveal] .hero-emergence-item,
 html.motion-ready [data-reveal] .line-inner.hero-line-3d,
+html.preloader-running [data-reveal] .hero-emergence-item,
 html.preloader-running [data-reveal] .line-inner.hero-line-3d {
-  transform: translate3d(0, 110%, 0) rotateX(-20deg);
+  transform: translate3d(0, 108%, 0) rotateX(-18deg);
   opacity: 0;
   transform-origin: 50% 100%;
   transition:
-    transform 1.1s var(--ease-out-expo) var(--line-delay, 0ms),
-    opacity 0.85s var(--ease-out-expo) var(--line-delay, 0ms);
+    transform 1.05s var(--ease-out-expo) var(--line-delay, 0ms),
+    opacity 0.8s var(--ease-out-expo) var(--line-delay, 0ms);
 }
 
+html.motion-ready:not(.preloader-running) [data-reveal].is-visible .hero-emergence-item,
 html.motion-ready:not(.preloader-running) [data-reveal].is-visible .line-inner.hero-line-3d {
   transform: translate3d(0, 0, 0) rotateX(0deg);
   opacity: 1;
@@ -236,11 +265,13 @@ html.motion-ready:not(.preloader-running) [data-reveal].is-visible .line-inner.h
   margin-top: 6px;
 }
 
+.hero-statement,
 .hero-lead-statement {
   font-size: clamp(0.98rem, 1.25vw, 1.14rem);
   line-height: 1.64;
   color: var(--text-body);
   max-width: 52ch;
+  margin-top: 4px;
 }
 
 /* CTAs: "Ver projetos" e "Baixar CV" */
@@ -252,6 +283,7 @@ html.motion-ready:not(.preloader-running) [data-reveal].is-visible .line-inner.h
   gap: 12px;
 }
 
+.btn-editorial-primary,
 .btn-white-editorial {
   display: inline-flex;
   align-items: center;
@@ -274,6 +306,7 @@ html.motion-ready:not(.preloader-running) [data-reveal].is-visible .line-inner.h
 }
 
 @media (hover: hover) and (pointer: fine) {
+  .btn-editorial-primary:hover,
   .btn-white-editorial:hover {
     background: var(--accent-electric-hover);
     border-color: var(--accent-cyan);
@@ -281,14 +314,17 @@ html.motion-ready:not(.preloader-running) [data-reveal].is-visible .line-inner.h
     transform: translateY(-2px);
   }
 
+  .btn-editorial-primary:hover .arrow-inline,
   .btn-white-editorial:hover .arrow-inline {
-    transform: translateX(4px);
+    transform: translateY(3px);
   }
 }
 
+.btn-editorial-primary:active,
 .btn-white-editorial:active {
   transform: scale(0.98);
 }
+.btn-editorial-primary:focus-visible,
 .btn-white-editorial:focus-visible {
   outline: 2px solid var(--accent-cyan);
   outline-offset: 3px;
@@ -333,8 +369,7 @@ html.motion-ready:not(.preloader-running) [data-reveal].is-visible .line-inner.h
   border-radius: var(--radius-md);
   border: 1px solid var(--line-hairline);
   background: var(--glass-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  /* PERF: Removido backdrop-filter para otimizar composição da primeira dobra */
   box-shadow: var(--shadow-sm);
   min-width: 140px;
 }
@@ -395,8 +430,7 @@ html.motion-ready:not(.preloader-running) [data-reveal].is-visible .line-inner.h
   font-size: 0.75rem;
   color: var(--text-muted);
   background: var(--glass-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  /* PERF: Removido backdrop-filter */
   padding: 6px 11px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--line-hairline);
@@ -409,6 +443,10 @@ html.motion-ready:not(.preloader-running) [data-reveal].is-visible .line-inner.h
 .site-preloader {
   position: fixed;
   inset: 0;
+  width: 100vw;
+  width: 100dvw;
+  height: 100vh;
+  height: 100dvh;
   z-index: 10000;
   display: flex;
   align-items: center;
@@ -592,8 +630,11 @@ html.motion-ready:not(.preloader-running) [data-reveal].is-visible .line-inner.h
 }
 
 @media (max-width: 480px) {
-  .hero-serif-title {
-    font-size: clamp(2rem, 1.8rem + 1.5vw, 2.35rem);
+  .hero-line-lead {
+    font-size: clamp(2rem, 1.8rem + 1.5vw, 2.6rem);
+  }
+  .hero-line-sub {
+    font-size: clamp(1.3rem, 1.2rem + 1vw, 1.6rem);
   }
 }
 

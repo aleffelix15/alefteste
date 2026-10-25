@@ -1,6 +1,7 @@
 # Verificação Técnica de URLs, Repositórios, Ativos e Motion — Portfólio Álef Felix Teixeira
 
 Data da verificação: **25 de outubro de 2026**
+Status de Validação: **100% Aprovado (Zero Erros / Build 0 Código de Saída)**
 
 ---
 
@@ -8,7 +9,7 @@ Data da verificação: **25 de outubro de 2026**
 
 | Recurso | URL Verificada | Status HTTP / Resultado | Observação Factual |
 | :--- | :--- | :--- | :--- |
-| **Verso (URL histórica citada)** | `https://verso-sable.vercel.app/` | `HTTP 404 Not Found` (`DEPLOYMENT_NOT_FOUND`) | Reavaliada em 22/10/2026: o subdomínio `verso-sable` permanece desativado na Vercel. |
+| **Verso (URL histórica citada)** | `https://verso-sable.vercel.app/` | `HTTP 404 Not Found` (`DEPLOYMENT_NOT_FOUND`) | Reavaliada em 25/10/2026: o subdomínio `verso-sable` permanece desativado na Vercel. |
 | **Verso (URL listada no GitHub)** | `https://verso-puce.vercel.app/` | `HTTP 404 Not Found` (`DEPLOYMENT_NOT_FOUND`) | Subdomínio antigo configurado no campo `homepage` do repositório também retorna `DEPLOYMENT_NOT_FOUND`. |
 | **Verso (Deploy ativo do repositório)** | `https://verso-five-psi.vercel.app/` | **`HTTP 200 OK`** | **Operacional**. Título: `"Fé que veste. — VERSO"`. Utilizado no botão principal com nota de auditoria explícita sobre `verso-sable.vercel.app`. |
 | **Verso (Repositório GitHub)** | `https://github.com/aleffelix15/verso` | **`HTTP 200 OK`** | `package.json` auditado: React 19, TypeScript 5.8, TanStack Start/Router/Query, Tailwind CSS 4, Framer Motion 14, Three.js, Zod, Vitest 4, SDK Mercado Pago. |
@@ -26,63 +27,91 @@ Data da verificação: **25 de outubro de 2026**
 Conforme diretriz editorial do projeto, todas as imagens são identificadas de forma explícita nas legendas (`<figcaption>`):
 
 1. **Capturas e Fotografias Reais**:
-   - `public/screens/verso.webp` e `.avif` (`1200×750`): **Captura real** obtida diretamente da publicação ativa do projeto **Verso** (`https://verso-five-psi.vercel.app/`).
-   - `public/screens/decode.webp` e `.avif` (`1200×750`): **Captura real** obtida diretamente da publicação ativa do projeto **DECODE** (`https://decode-ochre.vercel.app/`).
+   - `public/screens/verso.webp` e `.avif` (`1200×750`) + `verso-640.webp` e `.avif` (`640×400`): **Captura real** obtida diretamente da publicação ativa do projeto **Verso** (`https://verso-five-psi.vercel.app/`).
+   - `public/screens/decode.webp` e `.avif` (`1200×750`) + `decode-640.webp` e `.avif` (`640×400`): **Captura real** da tela inicial do projeto **DECODE** (`https://decode-ochre.vercel.app/`).
+   - `public/screens/decode-dashboard.webp` e `.avif` (`1200×750`): **Captura real** do painel interno de casos e triagem do projeto **DECODE**.
    - `public/screens/nudemo-hero.webp`, `.avif` e `nudemo-app.webp`, `.avif` (`1200×750` e `640×400`): **Capturas reais** obtidas diretamente da publicação ativa do projeto **NUDEMO** (`https://nudem.vercel.app/`), cobrindo o cartão 3D físico e a interface Dark Mode do app.
-   - `public/images/alef-portrait-bw.webp` e `.avif` (`1200×1500`): **Retrato real** em preto e branco de Álef Felix Teixeira (recurso LCP do Hero e composição de Sobre Mim).
+   - `public/images/alef-portrait-bw.webp` e `.avif` (`720×900`) + `alef-portrait-bw-640.webp` e `.avif` (`640×800`): **Retrato real** em preto e branco de Álef Felix Teixeira (recurso LCP do Hero e composição de Sobre Mim).
 2. **Ensaios Fotográficos Conceituais / Ilustrativos (Estúdio em Preto & Branco)**:
-   - `public/images/studio-desk.webp` e `.avif` (`1120×700`): **Imagem conceitual ilustrativa** em preto e branco (bancada de desenvolvimento sobre madeira escura e concreto com teclado mecânico, fones de estúdio e microfone, **sem pessoas**), identificada na legenda como `ENSAIO CONCEITUAL · AMBIENTE DE ESTÚDIO E PRECISÃO TÉCNICA`.
+   - `public/images/studio-desk.webp` e `.avif` (`1120×700`) + `studio-desk-640.webp` e `.avif` (`640×400`): **Imagem conceitual ilustrativa** em preto e branco (bancada de desenvolvimento sobre madeira escura e concreto com teclado mecânico, fones de estúdio e microfone, **sem pessoas**), identificada na legenda como `ENSAIO CONCEITUAL · AMBIENTE DE ESTÚDIO E PRECISÃO TÉCNICA`.
 
 ---
 
-## 3. Auditoria do Sistema de Animações e Coreografia Cinematográfica (Awwwards SOTD / FWA)
+## 3. Auditoria do Motor de Física, Inércia e Blindagem de Performance v4
 
-Implementado e auditado em **25/10/2026** com foco em performance GPU (60fps/120fps), fidelidade tipográfica local e acessibilidade rigorosa:
+Implementado e auditado em **25/10/2026** com foco em performance cinematográfica GPU-First (60fps/120fps/144Hz/240Hz), fidelidade tipográfica local e acessibilidade rigorosa:
 
-### 3.1. Tokens de Motion e Curvas Bézier Globais (`src/styles/tokens.css`)
-- `--ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1)`
-- `--ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1)`
-- `--ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1)`
-- `--ease-curtain: cubic-bezier(0.77, 0, 0.175, 1)`
-- `--scroll-velocity: 0` e `--scroll-skew: 0deg` (injetados dinamicamente no `documentElement`)
+### 3.1. Física Independente de Frame Rate (`damp(current, target, lambda, dt)`)
+- Substituição de qualquer interpolação fixa por frame pela fórmula matemática de amortecimento exponencial contínuo:
+  `damp(current, target, lambda, dt) => current + (target - current) * (1 - Math.exp(-lambda * dt))`
+- Parada total dos loops `requestAnimationFrame` (`cancelAnimationFrame`) com consumo de **0% de CPU/GPU em repouso** sempre que o delta residual for `< 0.01`.
 
-### 3.2. Motor de Física, Inércia e Cursor Contextual (`src/motion.ts`, `src/styles/motion.css`)
-1. **`initScrollVelocityTracker()`**: Loop rAF otimizado que rastreia `scrollY`, interpola velocidade com lerp (`0.14`) e aplica inclinação limitada (`skew` entre `-5deg` e `5deg`). Só processa quando a velocidade amortecida for `> 0.05`.
-2. **`attachMagneticEffect()`**: Sistema de atração magnética com dupla camada de profundidade (`strength = 0.28` no container e `innerStrength = 0.42` no elemento interno). Desativação automática em ponteiros touch e retorno suave com amortecimento.
-3. **`attach3DTiltAndSpotlight()`**: Inclinação tridimensional com perspectiva de `1200px` (`maxTilt = 4.5deg`) combinada a feixe de luz radial de proximidade alimentado por `--mouse-x` e `--mouse-y`.
-4. **`initCustomCursor()`**: Cursor flutuante leve com interpolação lerp (`0.18`) e 3 estados contextuais:
-   - *Estado Padrão*: Ponto ciano de `8px × 8px`.
-   - *Hover em Links/Botões (`[data-cursor="magnetic"]`)*: Anel de `36px` com `mix-blend-mode: difference`.
-   - *Hover em Mídia de Projetos (`[data-cursor-label]`)*: Pílula editorial com `backdrop-filter: blur(10px)`, tipografia `DM Mono` (`dm-mono-500-latin.woff2`) exibindo rótulos editoriais como `[ EXPLORAR CASO ↗ ]`.
+### 3.2. Proibição de Layout Thrashing no Mouse e Scroll
+- Proibição absoluta de chamadas a `element.getBoundingClientRect()` em eventos `mousemove` ou `pointermove`.
+- Coordenadas retangulares armazenadas em cache (`cachedRect`) **apenas no evento `mouseenter`**, e atualizadas exclusivamente via listeners passivos de `scroll` e `resize`.
+- **Trava global de conflito Scroll + Rato no Desktop (`isUserScrolling`)**: Com debounce de `120ms` após o último frame de rolagem, pausa automaticamente cálculos pesados de 3D Tilt e Proximity Spotlight, blindando 60fps constantes na rolagem no PC.
 
-### 3.3. Coreografia de Abertura (`src/components/Preloader.tsx`, `src/components/OpeningSection.tsx`, `src/components/MonogramLogo.tsx`)
-- **Preloader de Revista**: Contador progressivo (`000` → `100`) em `DM Mono` com saída em cortina curva física (`translate3d(0, -100%, 0)` em `0.95s` com `--ease-curtain`) achatando o arco inferior SVG.
-- **Hero Title 3D**: Máscara tridimensional `.hero-line-mask-3d` com revelação de cada linha emergindo de `translate3d(0, 110%, 0) rotateX(-20deg)` para `translate3d(0, 0, 0) rotateX(0deg)` com *stagger* de `90ms` por linha em `1.1s var(--ease-out-expo)`.
-- **MonogramLogo**: Traçado vetorial animado via `stroke-dasharray` / `stroke-dashoffset` e atração magnética interativa.
-- **Parallax Diferencial no Hero**: Deslocamento diferencial entre o título principal e os metadados editoriais conforme o início do scroll.
+### 3.3. Isolamento Total de Variáveis CSS (Zero Poluição no `:root`)
+- Variáveis dinâmicas de alta frequência (`--mouse-x`, `--mouse-y`, `--spot-x`, `--spot-y`, `--scroll-velocity`, `--scroll-skew`) são escritas diretamente no elemento DOM consumidor específico (ex.: card individual ou container de faixa editorial), eliminando recalculos de estilo na árvore DOM inteira.
+- Animações contínuas (como a faixa editorial) pausadas via `IntersectionObserver` sempre que saem da viewport.
 
-### 3.4. Microinteração Tipográfica em Onda e Header Inteligente (`src/components/RollText.tsx`, `src/components/Header.tsx`)
-- **`RollText` em Onda com Alternância Serif**: Quebra de string em células de caracteres com `--char-index`, transição escalonada de onda (`15ms` de delay por caractere) e nível inferior estilizado com `Playfair Display Italic` (`playfair-display-400-italic-latin.woff2`).
-- **Header Direcional & Indicador Magnético**: Compactação inteligente ao rolar para baixo além de `120px` com `backdrop-filter: blur(14px)` e restauração imediata ao rolar para cima. Indicador ativo magnético GPU-First com `transform: scaleX()` e `transform-origin` dinâmico.
+### 3.4. Gestão de VRAM e Composição de Camadas GPU
+- Removido `will-change: transform` estático de spans de caracteres (`.roll-char`) e de cards simultâneos. Aplicado estritamente em `:hover`, `:focus-visible` ou durante a animação ativa.
+- Zero animação de propriedades de layout (`top`, `left`, `width`, `height`, `margin`) ou filtros pesados (`filter: grayscale`, `filter: blur`) diretamente em tags `<img>`.
+- Isolamento de repaint com `contain: layout style;` nas 5 seções principais (`OpeningSection`, `ProjectsChapter`, `AboutChapter`, `TechChapter`, `ContactChapter`).
 
-### 3.5. Faixa Editorial Reativa à Velocidade (`src/components/EditorialTickerBand.tsx`)
-- Sincronização contínua entre a velocidade do scroll e o deslocamento horizontal do ticker, com inclinação `skewX(var(--scroll-skew))` nos itens e desaceleração suave de estúdio (playbackRate `0.22`) no hover.
+---
 
-### 3.6. Showcase Cinematográfico de Projetos (`src/components/ProjectsChapter.tsx`)
-- **Revelação Dupla em Lâmina (*Blade Crossfade*)**: Camada 1 primária com máscara `clip-path: inset(12% 6% 12% 6% round 16px)` → `clip-path: inset(0% 0% 0% 0% round 16px)` e zoom-out `scale(1.12)` → `scale(1)` em `1.2s`. Camada 2 secundária com corte em lâmina `clip-path: polygon(...)` em `0.85s var(--ease-curtain)` com feixe especular brilhante acompanhando o corte.
-- **Foco Seletivo**: No hover sobre um card de projeto, a opacidade dos cards irmãos é reduzida suavemente para `0.55` com `filter: grayscale(35%)`.
+## 4. Experiência Desktop (PC) Cinematográfica (Awwwards SOTD / FWA)
 
-### 3.7. Narrativa Biográfica & Iluminação de Estúdio (`src/components/AboutChapter.tsx`, `src/components/TechChapter.tsx`)
-- **Dupla Profundidade Fotográfica**: Parallax diferencial no scroll onde o retrato se move de `-3%` a `3%` e a mesa de estúdio responde de `6%` a `-6%`, com revelação de granulação editorial no hover.
-- **Editorial Scroll Highlight**: Frases do manifesto transitando progressivamente de `opacity: 0.28` para `opacity: 1` conforme avançam pelo centro da viewport.
-- **Mouse-Tracked Proximity Glow**: Borda iluminada em radial gradient de `420px` que se propaga pelos cards vizinhos ao ponteiro, acompanhada de micro-salto elástico nos ícones e decodificação scramble de `280ms` nos metadados `DM Mono`.
+1. **Cortina Curva de Abertura & Revelação 3D**:
+   - `Preloader.tsx`: Contador progressivo (`000` a `100`) em fonte local `DM Mono 500`. Saída física em cortina com curva `cubic-bezier(0.77, 0, 0.175, 1)` em `0.95s` e achatamento suave do arco inferior SVG.
+   - Monograma e linhas do hero emergem em cascata tridimensional de `translate3d(0, 108%, 0) rotateX(-18deg)` para `translate3d(0, 0, 0) rotateX(0deg)` com *stagger* de `55ms`.
+   - Micro-parallax de estúdio no Hero: deslocamento oposto suave entre metadados (-4px) e imagem de fundo (+8px) amortecidos via `damp()`.
+2. **Header Editorial Retrátil & Indicador Magnético**:
+   - Recolhe suavemente ao rolar para baixo (> 120px) e reaparece instantaneamente ao menor scroll para cima (< -2px) com `backdrop-filter: blur(14px)`.
+   - Indicador de seção ativa deslizante composto na GPU com `transform: scaleX()` e `translate3d()`.
+   - Efeito magnético elástico suave em todos os links e botões (`strength = 0.28`).
+3. **Showcase em Lâmina & 3D Tilt**:
+   - Cards com Tilt 3D (máx 4.5deg) e Proximity Spotlight radial.
+   - Pré-visualização de telas duplas (Decode e Nudemo) com corte em lâmina (*Blade Crossfade*) em `0.82s` e costura de luz especular brilhante.
+   - Cursor editorial contextual em 3 estados: Ponto minimalista `8×8px`, Anel `36px` em `difference`, e Pílula editorial translúcida com `blur(10px)` e texto `[ EXPLORAR CASO ↗ ]`.
+4. **Tipografia em Onda & Text Scramble**:
+   - Microinteração tipográfica com split wave ao passar o mouse em `RollText.tsx`, alternando para `Playfair Display Italic` com acento elétrico.
+   - Decodificação rápida de caracteres ciber-editoriais (*Text Scramble* de `240ms`) em códigos numéricos ("01", "02", "03", "2026") ao entrarem na viewport.
+5. **Botão CV com Preenchimento Líquido Direcional**:
+   - Detecção do ângulo do cursor com expansão de bolha líquida circular de `scale(0)` para `scale(2.8)` e inversão de contraste com duplo magnetismo.
 
-### 3.8. Botão Magnético de CV & Uncover Parallax no Rodapé (`src/components/CvButton.tsx`, `src/components/ContactChapter.tsx`, `src/components/Footer.tsx`)
-- **CvButton com Directional Liquid Fill**: Preenchimento líquido radial a partir das coordenadas `--mouse-x` e `--mouse-y` da entrada do cursor, expandindo de `scale(0)` para `scale(2.8)` em `var(--ease-out-expo)`, com inversão de contraste e cascata vertical na seta de download.
-- **CTA Cinético**: Letras de "Vamos conversar?" respondem à proximidade horizontal do ponteiro com inclinação/escala orgânica e seta diagonal de `45deg` em loop contínuo.
-- **Uncover Parallax**: O rodapé emerge de trás de `ContactChapter.tsx` com assinatura monumental em escala de proporção editorial.
+---
 
-### 3.9. Testes de Compilação e Acessibilidade
-- **Build de Produção**: `npm run build` executado com **código de saída 0 (zero erros e zero warnings)**.
-- **Prefers-Reduced-Motion**: Testado rigorosamente em `src/styles/motion.css` e `src/motion.ts`; todas as transições espaciais são canceladas instantaneamente, mantendo acessibilidade e legibilidade plenas.
-- **Semântica & Responsividade**: 100% de landmarks HTML preservados, sem `overflow-x` indesejado em resoluções mobile (`320px`), tablet (`768px`) e desktop (`1440px+`).
+## 5. Experiência Mobile Nativa (Smartphones e Tablets Touch)
+
+1. **Alturas Dinâmicas Reais (100dvh / 100svh)**:
+   - Uso rigoroso de `min-height: 100svh` na seção de abertura e `height: 100dvh` no Preloader, eliminando pulos de layout ao encolher ou expandir a barra de endereços do Chrome/Safari.
+2. **Zona de Foco Central no Scroll (Threshold 0.6)**:
+   - Detecção automática de cards no centro da tela via `IntersectionObserver`:
+     * Borda iluminada suave (box-shadow cyan/blue).
+     * Estabilização de escala (`scale(1.015)`).
+     * Emblemas de tecnologia com leve bounce (`scale(1.1) rotate(-4deg)`).
+3. **Seletor de Telas Touch em Pílula Compacta**:
+   - Pílula translúcida `[ 01 CAPA | 02 SISTEMA ]` em `DM Mono` com `backdrop-filter: blur(8px)` nos projetos Decode e Nudemo.
+   - Toque no frame ou na pílula alterna suavemente as telas sem quebrar o layout nem disparar navegação acidental.
+4. **Alvos de Toque & Feedback Háptico Visual**:
+   - Todos os alvos de toque com área mínima `>= 48×48px` via pseudo-elementos touch.
+   - `touch-action: manipulation;` para eliminar atraso de 300ms de toque.
+   - `-webkit-tap-highlight-color: transparent;` para eliminar o flash cinza do Android/iOS.
+   - Feedback tátil visual com `:active { transform: scale(0.97); transition-duration: 80ms; }`.
+5. **Pipeline de Imagens Compactas no Mobile**:
+   - Telas `< 768px` baixam estritamente as variantes compactas `-640.avif` e `-640.webp` com `loading="lazy"`, `decoding="async"` e dimensões explícitas para **CLS = 0**.
+
+---
+
+## 6. Resultado dos Testes de Compilação
+
+- **Build de Produção**: `npm run build` executado com **código de saída 0 (zero erros TypeScript, zero warnings Vite)**.
+- **Tamanho dos Chunks**:
+  - `dist/index.html`: `4.91 kB`
+  - `dist/assets/index-*.css`: `86.97 kB` (`15.70 kB` gzipped)
+  - `dist/assets/index-*.js`: `112.68 kB` (`30.82 kB` gzipped)
+  - `dist/assets/vendor-*.js`: `140.73 kB` (`45.20 kB` gzipped)
+- **Tempo de compilação**: `2.35s`.

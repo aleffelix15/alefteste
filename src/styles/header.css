@@ -8,8 +8,7 @@
   z-index: 120;
   height: var(--header-height);
   background: var(--header-bg);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  /* PERF: Removido backdrop-filter para eliminar custo de composição a cada frame de rolagem */
   border-bottom: 1px solid var(--line-hairline);
   transform: translate3d(0, 0, 0);
   transition:
@@ -385,8 +384,5 @@
 }
 
 @media (max-width: 768px) {
-  .site-header {
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
+  /* PERF: backdrop-filter removido no mobile para prevenir travamentos */
 }

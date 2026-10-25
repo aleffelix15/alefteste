@@ -28,7 +28,9 @@
   overflow: hidden;
   mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
-  transform: translate3d(calc(var(--scroll-velocity, 0) * -0.45px), 0, 0);
+  /* PERF: Aplica o deslocamento e skewX uma única vez no container pai, sem invalidar cada .ticker-item */
+  transform: translate3d(calc(var(--scroll-velocity, 0) * -0.45px), 0, 0)
+    skewX(var(--scroll-skew, 0deg));
   will-change: transform;
 }
 
@@ -39,9 +41,11 @@
   will-change: transform;
 }
 
+/* PERF: Pausar animação quando pausada, em foco ou fora da tela */
 .editorial-ticker-band:focus-within .ticker-track,
-.editorial-ticker-band.is-paused .ticker-track {
-  animation-play-state: paused;
+.editorial-ticker-band.is-paused .ticker-track,
+.editorial-ticker-band.is-offscreen .ticker-track {
+  animation-play-state: paused !important;
 }
 
 .ticker-group {
@@ -58,11 +62,8 @@
   font-size: 0.75rem;
   color: var(--text-muted);
   white-space: nowrap;
-  transform: skewX(var(--scroll-skew, 0deg));
-  transition:
-    color 0.28s ease,
-    transform 0.22s var(--ease-out-quart);
-  will-change: transform;
+  /* PERF: Removido skewX individual e will-change para evitar invalidar todas as instâncias */
+  transition: color 0.28s ease;
 }
 
 .ticker-dot {
@@ -71,8 +72,7 @@
   display: inline-block;
   transition:
     transform 0.38s var(--ease-out-expo),
-    color 0.28s ease,
-    filter 0.28s ease;
+    color 0.28s ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -88,7 +88,7 @@
   .editorial-ticker-band:hover .ticker-dot {
     color: var(--accent-cyan);
     transform: scale(1.45) rotate(45deg);
-    filter: drop-shadow(0 0 6px var(--accent-electric));
+    /* PERF: Removido drop-shadow de alto custo no hover */
   }
 }
 

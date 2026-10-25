@@ -158,10 +158,10 @@
   --hero-fade-70: rgba(var(--hero-fade-rgb), 0.7);
   --grain-color: rgba(255, 255, 255, 0.04);
 
-  /* Header & Efeitos Glass */
-  --header-bg: rgba(7, 10, 16, 0.84);
+  /* PERF: Header & Efeitos Glass com alpha elevado para eliminar necessidade de backdrop-filter pesado */
+  --header-bg: rgba(7, 10, 16, 0.94);
   --header-bg-scrolled: rgba(7, 10, 16, 0.96);
-  --glass-bg: rgba(13, 20, 32, 0.65);
+  --glass-bg: rgba(13, 20, 32, 0.88);
   --glass-bg-strong: rgba(13, 20, 32, 0.94);
 
   /* Sombras Semânticas */

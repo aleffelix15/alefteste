@@ -1,4 +1,4 @@
-import React, { useState, useRef, useLayoutEffect } from "react";
+import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 import {
   techCategories,
   techChapterData,
@@ -85,7 +85,32 @@ export function TechChapter() {
     setSelectedTier(tier);
   };
 
-  // Mouse-Tracked Proximity Glow na grade inteira
+  const cachedContainerRect = useRef<DOMRect | null>(null);
+
+  useEffect(() => {
+    const updateContainerRect = () => {
+      if (cardsContainerRef.current) {
+        cachedContainerRect.current = cardsContainerRef.current.getBoundingClientRect();
+      }
+    };
+    window.addEventListener("scroll", updateContainerRect, { passive: true });
+    window.addEventListener("resize", updateContainerRect, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", updateContainerRect);
+      window.removeEventListener("resize", updateContainerRect);
+      if (gridRafRef.current) {
+        window.cancelAnimationFrame(gridRafRef.current);
+      }
+    };
+  }, []);
+
+  const handleGridPointerEnter = () => {
+    if (cardsContainerRef.current) {
+      cachedContainerRect.current = cardsContainerRef.current.getBoundingClientRect();
+    }
+  };
+
+  // Mouse-Tracked Proximity Glow na grade inteira (Zero Layout Thrashing)
   const handleGridPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (typeof window === "undefined") return;
     if (
@@ -98,6 +123,10 @@ export function TechChapter() {
     const container = cardsContainerRef.current;
     if (!container) return;
 
+    if (!cachedContainerRect.current) {
+      cachedContainerRect.current = container.getBoundingClientRect();
+    }
+
     const clientX = e.clientX;
     const clientY = e.clientY;
 
@@ -107,19 +136,12 @@ export function TechChapter() {
 
     gridRafRef.current = window.requestAnimationFrame(() => {
       gridRafRef.current = 0;
-      const containerRect = container.getBoundingClientRect();
-      container.style.setProperty("--grid-mouse-x", `${(clientX - containerRect.left).toFixed(1)}px`);
-      container.style.setProperty("--grid-mouse-y", `${(clientY - containerRect.top).toFixed(1)}px`);
+      if (!cachedContainerRect.current) return;
+      const x = clientX - cachedContainerRect.current.left;
+      const y = clientY - cachedContainerRect.current.top;
+      container.style.setProperty("--grid-mouse-x", `${x.toFixed(1)}px`);
+      container.style.setProperty("--grid-mouse-y", `${y.toFixed(1)}px`);
       container.style.setProperty("--grid-glow-opacity", "1");
-
-      const cards = container.querySelectorAll<HTMLElement>(".tech-symbol-card");
-      cards.forEach((card) => {
-        const rect = card.getBoundingClientRect();
-        const x = clientX - rect.left;
-        const y = clientY - rect.top;
-        card.style.setProperty("--mouse-x", `${x.toFixed(1)}px`);
-        card.style.setProperty("--mouse-y", `${y.toFixed(1)}px`);
-      });
     });
   };
 
@@ -305,6 +327,7 @@ export function TechChapter() {
         <div
           ref={cardsContainerRef}
           className="tech-categories-stack"
+          onPointerEnter={handleGridPointerEnter}
           onPointerMove={handleGridPointerMove}
           onPointerLeave={handleGridPointerLeave}
         >

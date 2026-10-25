@@ -177,7 +177,16 @@ html.motion-ready [data-reveal].is-visible .project-stack-pill {
   display: inline-block;
   transition: transform 0.55s var(--ease-out-expo);
   transition-delay: calc(var(--char-index, 0) * 15ms);
-  will-change: transform;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a:hover .roll-char,
+  button:hover .roll-char,
+  a:focus-visible .roll-char,
+  button:focus-visible .roll-char,
+  .is-animating .roll-char {
+    will-change: transform;
+  }
 }
 
 .roll-char--top {
@@ -319,6 +328,12 @@ html.motion-ready [data-reveal].is-visible .project-stack-pill {
   animation: scrollBeamDrop 2.2s var(--ease-out-expo) infinite;
 }
 
+/* PERF: Pausar animações infinitas quando fora da viewport */
+.scroll-cue-line.is-offscreen::after,
+.status-beacon-pulse.is-offscreen {
+  animation-play-state: paused !important;
+}
+
 /* 12. Cortina de Revelação Fotográfica (.photo-curtain-wrap) */
 .photo-curtain-wrap {
   position: relative;
@@ -449,19 +464,19 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
       opacity 0.22s ease;
   }
 
-  /* Estado 2: Hover em Links/Botões Magnéticos -> Anel de 36px com mix-blend-mode: difference */
+  /* PERF: Removido mix-blend-mode: difference para eliminar repintura pesada a cada frame de mouse */
   .editorial-cursor.is-magnetic {
     width: 36px;
     height: 36px;
     margin-left: -18px;
     margin-top: -18px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.95);
-    mix-blend-mode: difference;
-    box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.16);
+    border: 1.5px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
   }
 
-  /* Estado 3: Hover em Mídia de Projetos -> Pílula editorial com blur 10px */
+  /* PERF: Removido backdrop-filter do cursor dinâmico; background opaco evita recomposição do framebuffer */
   .editorial-cursor.has-label {
     width: auto;
     height: auto;
@@ -471,9 +486,7 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
     margin-top: -16px;
     border-radius: var(--radius-full);
     border: 1px solid var(--accent-electric);
-    background: rgba(13, 20, 32, 0.88);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(13, 20, 32, 0.95);
     box-shadow: 0 8px 24px -6px var(--accent-electric-glow);
     mix-blend-mode: normal;
   }
