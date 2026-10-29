@@ -47,8 +47,8 @@ export type ProjectStory = {
     httpStatus: string;
     explanation: string;
   };
-  repoUrl: string;
-  repoLabel: string;
+  repoUrl?: string;
+  repoLabel?: string;
   screens: ProjectScreen[];
   verifiedFeatures: string[];
   honestLimitations: string[];
@@ -241,7 +241,6 @@ export const projects: ProjectStory[] = [
     ],
     liveUrl: "https://nudem.vercel.app",
     liveDomainLabel: "nudem.vercel.app",
-    repoUrl: "https://github.com/aleffelix15/nudem",
     repoLabel: "github.com/aleffelix15/nudem",
     screens: [
       {
@@ -409,9 +408,9 @@ export const techChapterData = {
     verifiedRepos: [
       { name: "VERSO", url: "https://github.com/aleffelix15/verso", focus: "React 19, TS 5.8, TanStack Start/Router/Query, Tailwind 4, Three.js, Framer Motion 14, Zod, Vitest 4, Prettier, Supabase REST + PostgreSQL SQL" },
       { name: "DECODE", url: "https://github.com/aleffelix15/decode", focus: "React 18, JavaScript (ES Modules), Vite 5, Tailwind CSS 3.4, Lucide React" },
-      { name: "NUDEMO", url: "https://github.com/aleffelix15/nudem", focus: "React 18, Vite 5, JavaScript (JSX), Three.js 0.160, React Three Fiber 8, Framer Motion 11, CSS com tokens, Vercel" },
+      { name: "NUDEMO", url: "https://nudem.vercel.app", focus: "React 18, Vite 5, JavaScript (JSX), Three.js 0.160, React Three Fiber 8, Framer Motion 11, CSS com tokens, Vercel" },
       { name: "BioStudy (biomed)", url: "https://github.com/aleffelix15/biomed", focus: "React 18, Supabase (@supabase/supabase-js + Deno Edge Function TS + PostgreSQL RLS), Python (scripts de dados), Vite 5, Three.js" },
-      { name: "Loja de Roupa & ConektaCell", url: "https://github.com/aleffelix15/loja-de-roupa", focus: "Next.js 16.2, React 19.2, TypeScript 5.7, Tailwind CSS 4.2, Radix UI, Zod, Vercel Analytics" },
+      { name: "Loja de Roupa & ConektaCell", url: "https://github.com/aleffelix15", focus: "Next.js 16.2, React 19.2, TypeScript 5.7, Tailwind CSS 4.2, Radix UI, Zod, Vercel Analytics" },
       { name: "alef.dev (Portfólio)", url: "https://github.com/aleffelix15/alef.dev", focus: "React 18, TypeScript 5.2, Vite 5, Tailwind CSS 3, Framer Motion, ESLint, Google Gemini API" },
     ],
     excludedFromReferenceNote:
