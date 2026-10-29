@@ -3,13 +3,11 @@ import { useState, useEffect } from "react";
 export function Preloader() {
   const [mounted, setMounted] = useState(() => {
     if (typeof window === "undefined") return false;
-    // Pular se já visitou na sessão, se for teste de performance ou prefers-reduced-motion
+    // Pular se já visitou na sessão ou se prefers-reduced-motion estiver ativo
     try {
       if (
         sessionStorage.getItem("alef_preloader_seen") === "1" ||
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-        Boolean(navigator.webdriver) ||
-        /Lighthouse|Chrome-Lighthouse|PageSpeed|moto g power/i.test(navigator.userAgent)
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
       ) {
         sessionStorage.setItem("alef_preloader_seen", "1");
         return false;
