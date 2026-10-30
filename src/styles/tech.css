@@ -779,12 +779,6 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
     min-width: 44px;
   }
 
-  .tech-tier-tabs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
   .tech-tier-btn {
     flex: 1 1 calc(50% - 8px);
     min-height: 44px;

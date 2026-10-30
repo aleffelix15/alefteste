@@ -321,8 +321,7 @@ html.motion-ready [data-reveal].is-visible .project-stack-pill {
 }
 
 /* PERF: Pausar animações infinitas quando fora da viewport */
-.scroll-cue-line.is-offscreen::after,
-.status-beacon-pulse.is-offscreen {
+.scroll-cue-line.is-offscreen::after {
   animation-play-state: paused !important;
 }
 
@@ -518,8 +517,7 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
     animation: none !important;
   }
 
-  html.motion-ready [data-reveal] .photo-curtain-wrap::after,
-  .blade-specular-seam {
+  html.motion-ready [data-reveal] .photo-curtain-wrap::after {
     display: none !important;
   }
 
@@ -559,8 +557,7 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
   html.motion-ready [data-reveal] .hero-stagger-fade,
   html.motion-ready [data-reveal] .project-stack-pill,
   html.motion-ready [data-reveal] .tech-symbol-card,
-  html.motion-ready [data-reveal] .hero-emergence-item,
-  html.motion-ready [data-reveal] .line-inner.hero-line-3d {
+  html.motion-ready [data-reveal] .hero-emergence-item {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
@@ -573,8 +570,7 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
   html.motion-ready [data-reveal] .hero-stagger-fade,
   html.motion-ready [data-reveal] .project-stack-pill,
   html.motion-ready [data-reveal] .tech-symbol-card,
-  html.motion-ready [data-reveal] .hero-emergence-item,
-  html.motion-ready [data-reveal] .line-inner.hero-line-3d {
+  html.motion-ready [data-reveal] .hero-emergence-item {
     opacity: 1 !important;
     transform: none !important;
   }

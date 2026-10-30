@@ -38,26 +38,10 @@
   overflow: hidden;
 }
 
-.about-photo-grain {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.075) 1px, transparent 0);
-  background-size: 3px 3px;
-  /* PERF: Removido mix-blend-mode: overlay; usando opacity direta de 0.2 */
-  opacity: 0.2;
-  pointer-events: none;
-  transition: opacity 0.45s ease;
-}
-
 @media (hover: hover) and (pointer: fine) {
   .about-photo-card:hover {
     border-color: var(--line-accent);
     box-shadow: var(--shadow-md), 0 0 22px -10px var(--accent-electric-glow);
-  }
-
-  .about-photo-card:hover .about-photo-grain {
-    opacity: 0.35;
   }
 }
 
