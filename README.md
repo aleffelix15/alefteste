@@ -7,7 +7,7 @@ Portfólio autoral concebido sob direção de arte Editorial Técnica & Cinemato
 - **Ambiente**: Node.js >= 20, npm
 - **Core**: React 18, TypeScript 5.5, Vite 6
 - **Estilização & Motion**: CSS puro moderno (Design Tokens, Grid, Flexbox), Web Animations API, `IntersectionObserver`, `requestAnimationFrame`
-- **Qualidade & Segurança**: Playwright (auditoria responsiva multidevice), CSP estrita, OWASP/HSTS headers, zero dependências vulneráveis
+- **Qualidade & Segurança**: CSP estrita, OWASP/HSTS headers, dependências verificadas por `npm audit` no CI
 
 ## Comandos & Scripts
 
@@ -27,7 +27,7 @@ npm run preview
 # Executar suíte de testes automatizados (segurança, integridade e assets)
 npm test
 
-# Executar auditoria responsiva estrita (14 viewports: estouros, toques, tipografia)
+# Executar auditoria responsiva opcional em 14 viewports (exige: npx playwright install chromium)
 npm run audit:responsive
 
 # Verificar vulnerabilidades em dependências

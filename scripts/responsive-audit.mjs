@@ -1,7 +1,8 @@
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import http from "node:http";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, "..");
@@ -11,13 +12,17 @@ async function loadPlaywright() {
   try {
     return await import("playwright");
   } catch {
-    const localAppData = process.env.LOCALAPPDATA || "";
-    const npxCacheDir = path.join(localAppData, "npm-cache", "_npx");
-    if (fs.existsSync(npxCacheDir)) {
+    const cacheDirs = [
+      path.join(os.homedir(), ".npm", "_npx"),
+      process.env.LOCALAPPDATA ? path.join(process.env.LOCALAPPDATA, "npm-cache", "_npx") : "",
+    ].filter(Boolean);
+
+    for (const npxCacheDir of cacheDirs) {
+      if (!fs.existsSync(npxCacheDir)) continue;
       for (const entry of fs.readdirSync(npxCacheDir)) {
         const candidate = path.join(npxCacheDir, entry, "node_modules", "playwright", "index.mjs");
         if (fs.existsSync(candidate)) {
-          return await import(`file:///${candidate.replace(/\\/g, "/")}`);
+          return await import(pathToFileURL(candidate).href);
         }
       }
     }
