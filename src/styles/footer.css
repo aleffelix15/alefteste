@@ -17,7 +17,7 @@
 
 .footer-content-grid {
   display: grid;
-  grid-template-columns: 1.6fr 1fr 1.2fr 0.8fr;
+  grid-template-columns: 1.5fr 0.9fr 1.1fr auto;
   gap: 36px;
   align-items: start;
 }
@@ -149,6 +149,8 @@
 .footer-top-link {
   display: inline-flex;
   align-items: center;
+  white-space: nowrap;
+  flex-shrink: 0;
   gap: 8px;
   min-height: 44px;
   padding: 8px 16px;

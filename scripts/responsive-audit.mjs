@@ -131,7 +131,7 @@ async function runAudit() {
 
       await context.addInitScript(() => {
         try {
-          window.sessionStorage.setItem("alef_editorial_preloader_v5", "seen");
+          window.sessionStorage.setItem("alef_preloader_seen", "1");
         } catch {
           // ignore
         }
@@ -295,19 +295,42 @@ async function runAudit() {
             }
           }
 
-          // 3. Clipped text elements (scrollWidth > clientWidth with overflow hidden/clip)
+          // 3. Clipped text elements or text overflowing its parent card/box
           if (
             hasDirectText &&
-            (style.overflowX === "hidden" || style.overflowX === "clip") &&
-            !el.classList.contains("ticker-track-viewport") &&
-            el.scrollWidth > el.clientWidth + 1
+            !el.closest(".ticker-track-viewport") &&
+            !el.closest(".contact-heading-arrow-loop")
           ) {
-            clippedTextElements.push({
-              selector: getSelector(el),
-              scrollWidth: el.scrollWidth,
-              clientWidth: el.clientWidth,
-              text: el.textContent.trim().slice(0, 40),
-            });
+            if (el.clientWidth > 0 && el.scrollWidth > el.clientWidth + 1) {
+              clippedTextElements.push({
+                selector: getSelector(el),
+                scrollWidth: el.scrollWidth,
+                clientWidth: el.clientWidth,
+                text: el.textContent.trim().slice(0, 40),
+              });
+            }
+            let anc = el.parentElement;
+            while (anc && anc !== document.body && anc !== document.documentElement) {
+              const aSt = window.getComputedStyle(anc);
+              if (aSt.overflowX === "auto" || aSt.overflowX === "scroll") break;
+              if (
+                parseFloat(aSt.borderLeftWidth) > 0 ||
+                parseFloat(aSt.borderRightWidth) > 0 ||
+                anc.matches(".proof-metric-card, .project-editorial-feature, .tech-symbol-card, .timeline-step-card, .contact-channel-card, button, a")
+              ) {
+                const aRect = anc.getBoundingClientRect();
+                if (rect.right > aRect.right + 1 || rect.left < aRect.left - 1) {
+                  clippedTextElements.push({
+                    selector: `${getSelector(el)} inside ${getSelector(anc)}`,
+                    scrollWidth: Math.round(rect.right),
+                    clientWidth: Math.round(aRect.right),
+                    text: el.textContent.trim().slice(0, 40),
+                  });
+                }
+                break;
+              }
+              anc = anc.parentElement;
+            }
           }
         }
 

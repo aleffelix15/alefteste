@@ -314,7 +314,7 @@ html.motion-ready:not(.preloader-running) [data-reveal].is-visible .hero-emergen
 .hero-proof-bar {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: stretch;
   gap: 20px;
   padding-top: 18px;
   margin-top: 8px;
@@ -331,7 +331,8 @@ html.motion-ready:not(.preloader-running) [data-reveal].is-visible .hero-emergen
   background: var(--glass-bg);
   /* PERF: Removido backdrop-filter para otimizar composição da primeira dobra */
   box-shadow: var(--shadow-sm);
-  min-width: min(140px, 100%);
+  min-width: 0;
+  max-width: 100%;
 }
 
 .proof-metric-number {
@@ -339,11 +340,13 @@ html.motion-ready:not(.preloader-running) [data-reveal].is-visible .hero-emergen
   font-weight: 700;
   color: var(--text-white);
   line-height: 1;
+  flex-shrink: 0;
 }
 
 .proof-metric-info {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .proof-metric-label {
@@ -617,11 +620,21 @@ html.motion-ready:not(.preloader-running) [data-reveal].is-visible .hero-emergen
 
   .proof-metric-card {
     flex: 1 1 calc(50% - 10px);
-    min-width: min(130px, 100%);
+    min-width: 0;
+    padding: 10px 11px;
+    gap: 9px;
   }
 
   .proof-metric-card:last-child {
     flex: 1 1 100%;
+  }
+
+  .proof-metric-number {
+    font-size: 1.35rem;
+  }
+
+  .proof-metric-label {
+    letter-spacing: 0.03em;
   }
 }
 
