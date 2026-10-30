@@ -217,8 +217,8 @@ export function TechChapter() {
           </div>
 
           <div className="tech-filter-group">
-            <span className="tech-filter-group-label mono">REPOSITÓRIO AUDITADO</span>
-            <div className="tech-filter-pills" role="group" aria-label="Filtrar por repositório auditado">
+            <span className="tech-filter-group-label mono">REPOSITÓRIO</span>
+            <div className="tech-filter-pills" role="group" aria-label="Filtrar por repositório">
               {repoFilters.map((repo) => {
                 const isActive = selectedRepo === repo.id;
                 const isPrimary = repo.id === "VERSO" || repo.id === "DECODE" || repo.id === "NUDEMO";
@@ -288,7 +288,7 @@ export function TechChapter() {
 
                       <div
                         className="tech-symbol-badges"
-                        aria-label={`Comprovado em ${item.projects.join(", ")}`}
+                        aria-label={`Utilizado em ${item.projects.join(", ")}`}
                       >
                         {item.projects.slice(0, 3).map((proj) => {
                           const isMain = proj === "VERSO" || proj === "DECODE" || proj === "NUDEMO";
@@ -325,15 +325,15 @@ export function TechChapter() {
           })}
         </div>
 
-        {/* 4. DOSSIÊ DE TRANSPARÊNCIA E AUDITORIA */}
+        {/* 4. REPOSITÓRIOS PÚBLICOS */}
         <details className="tech-audit-dossier" data-animated-details>
           <summary className="audit-summary mono" data-cursor="magnetic">
-            <span>ORIGEM AUDITADA NOS REPOSITÓRIOS GITHUB &amp; NOTA DE TRANSPARÊNCIA</span>
+            <span>ONDE USEI, NOS MEUS REPOSITÓRIOS</span>
             <span className="audit-plus" aria-hidden="true">+</span>
           </summary>
           <div className="audit-drawer tech-audit-drawer-grid">
             <div className="tech-audit-repos-col">
-              <h4 className="audit-subhead mono">REPOSITÓRIOS VERIFICADOS (PACKAGE.JSON / PYTHON / SQL)</h4>
+              <h4 className="audit-subhead mono">REPOSITÓRIOS PÚBLICOS NO GITHUB</h4>
               <ul className="tech-repo-evidence-list">
                 {techChapterData.auditTransparency.verifiedRepos.map((repo) => (
                   <li key={repo.name} className="tech-repo-evidence-item">
@@ -349,15 +349,6 @@ export function TechChapter() {
                   </li>
                 ))}
               </ul>
-            </div>
-
-            <div className="tech-audit-note-col">
-              <h4 className="audit-subhead audit-subhead-warn mono">
-                DIFERENCIAÇÃO ENTRE PROJETOS, AMBIENTE E NÃO VERIFICADOS
-              </h4>
-              <p className="audit-arch-note">
-                {techChapterData.auditTransparency.excludedFromReferenceNote}
-              </p>
             </div>
           </div>
         </details>

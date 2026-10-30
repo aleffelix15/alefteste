@@ -348,8 +348,8 @@ type TechItem = {
 
 export const techTiers: { id: "ALL" | TechTier; label: string; desc: string }[] = [
   { id: "daily", label: "Uso no dia a dia", desc: "Stack principal utilizada diariamente em produção e estudos" },
-  { id: "projects", label: "Já usei em projetos", desc: "Tecnologias comprovadas em projetos e arquiteturas auditadas" },
-  { id: "ALL", label: "Ver todas", desc: "Visão consolidada de todas as ferramentas e tecnologias auditadas" },
+  { id: "projects", label: "Já usei em projetos", desc: "Tecnologias utilizadas na prática em projetos publicados" },
+  { id: "ALL", label: "Ver todas", desc: "Visão consolidada de todas as ferramentas e tecnologias" },
 ];
 
 export const techCategories: {
@@ -387,20 +387,18 @@ export const techChapterData = {
   headlineLine1: "Ferramentas que",
   headlineAccent: "eu utilizo",
   subtitle:
-    "Tecnologias que me ajudam a transformar ideias em soluções digitais — auditadas diretamente nos manifestos (package.json, scripts Python e schemas SQL) dos meus repositórios públicos.",
+    "Tecnologias que uso para transformar ideias em soluções digitais, a partir dos meus projetos públicos no GitHub.",
   epigraph:
     "Código não é só sintaxe, é a forma que eu escolho resolver problemas.",
   auditTransparency: {
     verifiedRepos: [
-      { name: "VERSO", url: "https://github.com/aleffelix15/verso", focus: "React 19, TS 5.8, TanStack Start/Router/Query, Tailwind 4, Three.js, Framer Motion 14, Zod, Vitest 4, Prettier, Supabase REST + PostgreSQL SQL" },
-      { name: "DECODE", url: "https://github.com/aleffelix15/decode", focus: "React 18, JavaScript (ES Modules), Vite 5, Tailwind CSS 3.4, Lucide React" },
-      { name: "NUDEMO", url: "https://nudem.vercel.app", focus: "React 18, Vite 5, JavaScript (JSX), Three.js 0.160, React Three Fiber 8, Framer Motion 11, CSS com tokens, Vercel" },
-      { name: "BioStudy (biomed)", url: "https://github.com/aleffelix15/biomed", focus: "React 18, Supabase (@supabase/supabase-js + Deno Edge Function TS + PostgreSQL RLS), Python (scripts de dados), Vite 5, Three.js" },
-      { name: "Loja de Roupa & ConektaCell", url: "https://github.com/aleffelix15", focus: "Next.js 16.2, React 19.2, TypeScript 5.7, Tailwind CSS 4.2, Radix UI, Zod, Vercel Analytics" },
-      { name: "alef.dev (Portfólio)", url: "https://github.com/aleffelix15/alef.dev", focus: "React 18, TypeScript 5.2, Vite 5, Tailwind CSS 3, Framer Motion, ESLint, Google Gemini API" },
+      { name: "VERSO", url: "https://github.com/aleffelix15/verso", focus: "React 19, TypeScript 5.8, Tailwind CSS 4, Three.js, Supabase REST" },
+      { name: "DECODE", url: "https://github.com/aleffelix15/decode", focus: "React 18, JavaScript (ES Modules), Vite 5, Tailwind CSS 3.4" },
+      { name: "NUDEMO", url: "https://nudem.vercel.app", focus: "React 18, Vite 5, JavaScript (JSX), Three.js 0.160, CSS com tokens, Vercel" },
+      { name: "BioStudy (biomed)", url: "https://github.com/aleffelix15/biomed", focus: "React 18, Supabase (@supabase/supabase-js + RLS), Python (scripts de dados), Vite 5, Three.js" },
+      { name: "Loja de Roupa & ConektaCell", url: "https://github.com/aleffelix15", focus: "Next.js 16.2, React 19.2, TypeScript 5.7, Tailwind CSS 4.2, Vercel" },
+      { name: "alef.dev (Portfólio)", url: "https://github.com/aleffelix15/alef.dev", focus: "React 18, TypeScript 5.2, Vite 5, Tailwind CSS 3" },
     ],
-    excludedFromReferenceNote:
-      "Transparência de auditoria: 1) AWS, MySQL e Jest não foram encontrados nos manifestos de nenhum dos repositórios (o Verso utiliza Vitest) e por isso foram excluídos da grade comprovada. 2) VS Code, Postman, Figma e Linux são ferramentas de ambiente de estudo e desenvolvimento local, diferenciadas das dependências diretas de código.",
   },
 };
 
