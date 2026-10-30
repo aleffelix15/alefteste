@@ -363,21 +363,21 @@ export const techCategories: {
     number: "01",
     title: "Frontend & Interfaces",
     description:
-      "Construção de interfaces reativas, componentização acessível, estilização com tokens, roteamento e gráficos 3D/movimento.",
+      "Construção de interfaces reativas, componentização acessível, estilização com tokens e gráficos 3D.",
   },
   {
     id: "backend",
     number: "02",
     title: "Backend, Dados & APIs",
     description:
-      "Bancos relacionais PostgreSQL, BaaS Supabase com autenticação e políticas RLS, e scripts de automação e dados em Python.",
+      "BaaS Supabase com autenticação e políticas RLS, e scripts de automação e dados em Python.",
   },
   {
     id: "engineering",
     number: "03",
-    title: "Engenharia, Qualidade & Infraestrutura",
+    title: "Ferramentas & Deploy",
     description:
-      "SSR/Server Functions, validação de esquemas, testes automatizados, padronização de código e deploy contínuo.",
+      "Controle de versão, repositórios e deploy dos projetos.",
   },
 ];
 
