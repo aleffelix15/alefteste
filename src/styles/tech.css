@@ -469,25 +469,6 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   }
 }
 
-/* Zona de Foco Central no Mobile para Tecnologias */
-@media (pointer: coarse), (max-width: 768px) {
-  .tech-symbol-card.is-mobile-focused {
-    border-color: rgba(73, 180, 255, 0.48);
-    background: var(--bg-elevated);
-    box-shadow: 0 0 20px -6px rgba(22, 119, 255, 0.45);
-    transform: scale(1.02);
-  }
-
-  .tech-symbol-card.is-mobile-focused .tech-symbol-halo {
-    opacity: 0.45;
-    transform: scale(1.12);
-  }
-
-  .tech-symbol-card.is-mobile-focused .tech-symbol-emblem-wrap {
-    transform: scale(1.1) rotate(-4deg);
-    transition: transform 0.35s var(--ease-out-expo);
-  }
-}
 
 .tech-symbol-card:active {
   transform: scale(0.97);

@@ -320,10 +320,6 @@ html.motion-ready [data-reveal].is-visible .project-stack-pill {
   animation: scrollBeamDrop 2.2s var(--ease-out-expo) infinite;
 }
 
-/* PERF: Pausar animações infinitas quando fora da viewport */
-.scroll-cue-line.is-offscreen::after {
-  animation-play-state: paused !important;
-}
 
 /* 12. Cortina de Revelação Fotográfica (.photo-curtain-wrap) */
 .photo-curtain-wrap {
