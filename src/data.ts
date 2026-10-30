@@ -64,7 +64,7 @@ export const heroData = {
   proofMetrics: [
     { value: 12, suffix: "+", label: "Repositórios", detail: "Projetos no GitHub" },
     { value: 3, suffix: "", label: "Deploys Ativos", detail: "Vercel & Produção" },
-    { value: 24, suffix: "", label: "Tecnologias", detail: "Stack Auditada" },
+    { value: 14, suffix: "", label: "Tecnologias", detail: "Stack Principal" },
   ],
   portraitImage: {
     base: "/images/alef-portrait-bw",

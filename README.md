@@ -1,6 +1,6 @@
 # Álef Felix Teixeira — Portfólio Editorial & Engenharia de Software
 
-Portfólio autoral concebido sob direção de arte Editorial Técnica & Cinematográfica em tema escuro único, combinando tipografia editorial de alto contraste (*Playfair Display*, *Bricolage Grotesque*, *DM Mono*), fotografia documental e dados reais auditados dos projetos públicos do GitHub (`@aleffelix15`).
+Portfólio autoral concebido sob direção de arte Editorial Técnica & Cinematográfica em tema escuro único, combinando tipografia editorial de alto contraste (*Playfair Display*, *Bricolage Grotesque*, *DM Mono*), fotografia documental e dados reais dos projetos públicos do GitHub (`@aleffelix15`).
 
 ## Tech Stack & Requisitos
 
@@ -41,7 +41,7 @@ portfolio-alef-felix/
 ├── public/              # Assets estáticos (fontes woff2, favicons, OG image, PDF do CV)
 │   ├── fonts/           # Subsets de Playfair Display, Bricolage e DM Mono
 │   ├── images/          # Retratos e grafismos em AVIF/WebP
-│   └── screens/         # Capturas reais de tela dos projetos auditados
+│   └── screens/         # Capturas reais de tela dos projetos publicados
 ├── scripts/             # Scripts de automação (testes de integridade e auditoria responsiva)
 ├── src/                 # Código-fonte da aplicação
 │   ├── components/      # Componentes modulares React (Header, Chapters, Footer)
