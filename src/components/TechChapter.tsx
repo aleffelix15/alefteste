@@ -153,7 +153,7 @@ export function TechChapter() {
           </aside>
         </div>
 
-        {/* 1. SELETOR DE NÍVEIS PRINCIPAIS (3 NÍVEIS + "VER TODAS") COM ANIMAÇÃO FLIP */}
+        {/* 1. SELETOR DE NÍVEIS PRINCIPAIS COM ANIMAÇÃO FLIP */}
         <div className="tech-tiers-bar" role="tablist" aria-label="Níveis de proficiência tecnológica">
           {techTiers.map((tier) => {
             const isActive = selectedTier === tier.id;

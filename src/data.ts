@@ -333,7 +333,7 @@ export type AuditedRepoName =
   | "ConektaCell"
   | "alef.dev";
 
-export type TechTier = "daily" | "projects" | "learning";
+export type TechTier = "daily" | "projects";
 
 type TechItem = {
   index: string;
@@ -349,7 +349,6 @@ type TechItem = {
 export const techTiers: { id: "ALL" | TechTier; label: string; desc: string }[] = [
   { id: "daily", label: "Uso no dia a dia", desc: "Stack principal utilizada diariamente em produção e estudos" },
   { id: "projects", label: "Já usei em projetos", desc: "Tecnologias comprovadas em projetos e arquiteturas auditadas" },
-  { id: "learning", label: "Estudando", desc: "Tópicos de aprofundamento contínuo em engenharia de software" },
   { id: "ALL", label: "Ver todas", desc: "Visão consolidada de todas as ferramentas e tecnologias auditadas" },
 ];
 
