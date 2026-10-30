@@ -32,6 +32,13 @@
   display: inline-flex;
   flex-wrap: wrap;
   align-items: center;
+  column-gap: 0.26em;
+}
+
+.contact-kinetic-word {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
 }
 
 .contact-kinetic-char {

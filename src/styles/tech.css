@@ -650,10 +650,6 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   letter-spacing: -0.05em;
 }
 
-.tech-footer-pipe {
-  color: var(--line-strong);
-}
-
 
 @media (max-width: 1024px) {
   .tech-showcase-top {
@@ -742,9 +738,10 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   }
 
   .tech-tier-btn {
-    flex: 1 1 calc(50% - 8px);
+    flex: 1 1 100%;
     min-height: 44px;
-    justify-content: center;
+    justify-content: space-between;
+    padding: 10px 16px;
   }
 
   .tech-symbols-grid {
@@ -754,7 +751,11 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   }
 
   .tech-symbol-card {
-    padding: 14px 8px 12px;
+    padding: 14px 7px 12px;
+  }
+
+  .tech-symbol-provenance {
+    letter-spacing: -0.015em;
   }
 
   .tech-symbol-name {

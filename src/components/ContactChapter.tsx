@@ -70,7 +70,7 @@ export function ContactChapter() {
     });
   };
 
-  const headlineChars = contactData.headline.split("");
+  const headlineWords = contactData.headline.split(" ");
 
   return (
     <section
@@ -108,21 +108,23 @@ export function ContactChapter() {
                 style={{ "--line-delay": "50ms" } as React.CSSProperties}
               >
                 <span className="sr-only">{contactData.headline}</span>
-                {headlineChars.map((ch, idx) => (
-                  <span
-                    key={idx}
-                    className="contact-kinetic-char"
-                    aria-hidden="true"
-                  >
-                    {ch === " " ? "\u00A0" : ch}
+                {headlineWords.map((word, wIdx) => (
+                  <span key={wIdx} className="contact-kinetic-word" aria-hidden="true">
+                    {word.split("").map((ch, cIdx) => (
+                      <span key={cIdx} className="contact-kinetic-char">
+                        {ch}
+                      </span>
+                    ))}
+                    {wIdx === headlineWords.length - 1 && (
+                      <span className="contact-heading-arrow-loop">
+                        <span className="diagonal-arrow-track">
+                          <span className="diagonal-arrow-glyph">↗</span>
+                          <span className="diagonal-arrow-glyph diagonal-arrow-glyph--clone">↗</span>
+                        </span>
+                      </span>
+                    )}
                   </span>
                 ))}
-                <span className="contact-heading-arrow-loop" aria-hidden="true">
-                  <span className="diagonal-arrow-track">
-                    <span className="diagonal-arrow-glyph">↗</span>
-                    <span className="diagonal-arrow-glyph diagonal-arrow-glyph--clone">↗</span>
-                  </span>
-                </span>
               </span>
             </span>
           </h2>

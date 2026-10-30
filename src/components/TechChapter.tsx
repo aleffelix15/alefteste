@@ -363,7 +363,6 @@ export function TechChapter() {
           <div className="tech-footer-right">
             <span className="tech-footer-slashes">//</span>
             <span>ENGENHARIA DE SOFTWARE</span>
-            <span className="tech-footer-pipe">|</span>
           </div>
         </div>
       </div>

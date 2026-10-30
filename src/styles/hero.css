@@ -615,14 +615,14 @@ html.motion-ready:not(.preloader-running) [data-reveal].is-visible .hero-emergen
 
 @media (max-width: 768px) {
   .hero-proof-bar {
-    gap: 10px;
+    gap: 8px;
   }
 
   .proof-metric-card {
-    flex: 1 1 calc(50% - 10px);
+    flex: 1 1 calc(50% - 8px);
     min-width: 0;
-    padding: 10px 11px;
-    gap: 9px;
+    padding: 10px 8px;
+    gap: 7px;
   }
 
   .proof-metric-card:last-child {
@@ -630,11 +630,17 @@ html.motion-ready:not(.preloader-running) [data-reveal].is-visible .hero-emergen
   }
 
   .proof-metric-number {
-    font-size: 1.35rem;
+    font-size: 1.2rem;
   }
 
   .proof-metric-label {
-    letter-spacing: 0.03em;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+
+  .proof-metric-detail {
+    letter-spacing: -0.015em;
+    white-space: nowrap;
   }
 }
 
