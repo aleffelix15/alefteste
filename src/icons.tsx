@@ -107,74 +107,6 @@ function TailwindColorEmblem({ size = 56 }: IconProps) {
   );
 }
 
-function TanStackColorEmblem({ size = 56 }: IconProps) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg emblem-spin-hover">
-      {/* Outer Teal Petals */}
-      <g fill="#10B981">
-        <circle cx="32" cy="12" r="9.5" />
-        <circle cx="49" cy="22" r="9.5" />
-        <circle cx="49" cy="42" r="9.5" />
-        <circle cx="32" cy="52" r="9.5" />
-        <circle cx="15" cy="42" r="9.5" />
-        <circle cx="15" cy="22" r="9.5" />
-      </g>
-      {/* Inner Coral / Red-Orange Petals */}
-      <g fill="#FF4154">
-        <circle cx="32" cy="19" r="7.5" />
-        <circle cx="43" cy="25.5" r="7.5" />
-        <circle cx="43" cy="38.5" r="7.5" />
-        <circle cx="32" cy="45" r="7.5" />
-        <circle cx="21" cy="38.5" r="7.5" />
-        <circle cx="21" cy="25.5" r="7.5" />
-      </g>
-      {/* Warm Highlights */}
-      <circle cx="32" cy="32" r="9" fill="#FB923C" />
-      <circle cx="32" cy="32" r="4.8" fill="#18181B" />
-    </svg>
-  );
-}
-
-function ZodColorEmblem({ size = 56 }: IconProps) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
-      <defs>
-        <linearGradient id="zodHexGrad" x1="10" y1="8" x2="54" y2="56" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#8B5CF6" />
-          <stop offset="100%" stopColor="#5B21B6" />
-        </linearGradient>
-      </defs>
-      <polygon points="32,6 55,19 55,45 32,58 9,45 9,19" fill="url(#zodHexGrad)" />
-      <polygon points="32,6 55,19 32,32 9,19" fill="#A78BFA" fillOpacity="0.24" />
-      <path
-        d="M23 22H41V26.4L29.2 38.2H41.4V43H22.6V38.6L34.4 26.8H23V22Z"
-        fill="#FFFFFF"
-      />
-    </svg>
-  );
-}
-
-function VitestColorEmblem({ size = 56 }: IconProps) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
-      {/* Neon Green V */}
-      <path
-        d="M10 18L32 56L54 18H44.5L32 40L19.5 18H10Z"
-        fill="#4ADE80"
-      />
-      <path
-        d="M19.5 18L32 40V56L10 18H19.5Z"
-        fill="#22C55E"
-      />
-      {/* Golden Lightning Bolt */}
-      <path
-        d="M36 6L23 25H32.5L28 41L43 20H33.5L36 6Z"
-        fill="#FACC15"
-      />
-    </svg>
-  );
-}
-
 function ThreeColorEmblem({ size = 56 }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
@@ -188,46 +120,6 @@ function ThreeColorEmblem({ size = 56 }: IconProps) {
         <polygon points="43.5,19 46.5,30.5 36,27.5" />
         <polygon points="21,44.5 31.5,47.5 28.5,36" />
       </g>
-    </svg>
-  );
-}
-
-function FramerMotionColorEmblem({ size = 56 }: IconProps) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
-      <defs>
-        <linearGradient id="fmWaveGrad" x1="8" y1="48" x2="56" y2="16" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#A855F7" />
-          <stop offset="55%" stopColor="#6366F1" />
-          <stop offset="100%" stopColor="#38BDF8" />
-        </linearGradient>
-      </defs>
-      <path
-        d="M11 45L23 23L33 41L45 19L53 45"
-        stroke="url(#fmWaveGrad)"
-        strokeWidth="6.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <circle cx="45" cy="19" r="4" fill="#38BDF8" />
-      <circle cx="53" cy="45" r="4" fill="#3B82F6" />
-    </svg>
-  );
-}
-
-function EslintColorEmblem({ size = 56 }: IconProps) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
-      <polygon
-        points="32,6 56,19.8 56,44.2 32,58 8,44.2 8,19.8"
-        stroke="#4B32C3"
-        strokeWidth="6.5"
-        strokeLinejoin="round"
-      />
-      <polygon
-        points="32,19 44,26 44,38 32,45 20,38 20,26"
-        fill="#8080F2"
-      />
     </svg>
   );
 }
@@ -289,48 +181,6 @@ function NextjsColorEmblem({ size = 56 }: IconProps) {
   );
 }
 
-
-function LucideColorEmblem({ size = 56 }: IconProps) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
-      <path
-        d="M32 10C32 22.15 22.15 32 10 32C22.15 32 32 41.85 32 54C32 41.85 41.85 32 54 32C41.85 32 32 22.15 32 10Z"
-        stroke="#FB7185"
-        strokeWidth="4"
-        strokeLinejoin="round"
-        fill="rgba(251, 113, 133, 0.16)"
-      />
-      <circle cx="32" cy="32" r="4" fill="#FDA4AF" />
-    </svg>
-  );
-}
-
-
-
-
-
-
-function PostgresColorEmblem({ size = 56 }: IconProps) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
-      <path
-        d="M32 10C18 10 11 19 13 33C14.5 43 22 49 28 49V55C28 57 35 57 36 53V45C45 45 52 37 51 25C50 14 43 10 32 10Z"
-        fill="#336791"
-        stroke="#E2E8F0"
-        strokeWidth="2.2"
-      />
-      <path
-        d="M24 22C20 24 19 32 23 36M40 22C44 24 45 32 41 36M32 24V44"
-        stroke="#E2E8F0"
-        strokeWidth="2.2"
-        strokeLinecap="round"
-      />
-      <circle cx="27" cy="26" r="2" fill="#FFFFFF" />
-      <circle cx="37" cy="26" r="2" fill="#FFFFFF" />
-    </svg>
-  );
-}
-
 function SupabaseColorEmblem({ size = 56 }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
@@ -352,28 +202,6 @@ function SupabaseColorEmblem({ size = 56 }: IconProps) {
         d="M28.5 55.5C30.1 57.5 33.2 56.4 33.2 53.8V30H13.8C11.1 30 9.6 33.1 11.3 35.2L28.5 55.5Z"
         fill="url(#supaGrad1)"
       />
-    </svg>
-  );
-}
-
-
-
-
-
-function PrettierColorEmblem({ size = 56 }: IconProps) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="tech-emblem-svg">
-      <g strokeLinecap="round" strokeWidth="4">
-        <line x1="14" y1="14" x2="36" y2="14" stroke="#38BDF8" />
-        <line x1="42" y1="14" x2="50" y2="14" stroke="#64748B" />
-        <line x1="14" y1="21" x2="26" y2="21" stroke="#F43F5E" />
-        <line x1="32" y1="21" x2="48" y2="21" stroke="#A855F7" />
-        <line x1="14" y1="28" x2="42" y2="28" stroke="#FACC15" />
-        <line x1="14" y1="35" x2="34" y2="35" stroke="#10B981" />
-        <line x1="14" y1="42" x2="24" y2="42" stroke="#F97316" />
-        <line x1="30" y1="42" x2="42" y2="42" stroke="#38BDF8" />
-        <line x1="14" y1="49" x2="28" y2="49" stroke="#EC4899" />
-      </g>
     </svg>
   );
 }
@@ -430,29 +258,12 @@ export function getColorTechEmblem(name: string, size = 56) {
       return <ViteColorEmblem size={size} />;
     case "Tailwind CSS":
       return <TailwindColorEmblem size={size} />;
-    case "Lucide React":
-      return <LucideColorEmblem size={size} />;
     case "Python":
       return <PythonColorEmblem size={size} />;
-    case "PostgreSQL":
-      return <PostgresColorEmblem size={size} />;
     case "Supabase":
       return <SupabaseColorEmblem size={size} />;
-    case "TanStack":
-    case "TanStack Query":
-      return <TanStackColorEmblem size={size} />;
-    case "Zod":
-      return <ZodColorEmblem size={size} />;
-    case "Vitest":
-      return <VitestColorEmblem size={size} />;
-    case "Prettier":
-      return <PrettierColorEmblem size={size} />;
     case "Three.js":
       return <ThreeColorEmblem size={size} />;
-    case "Framer Motion":
-      return <FramerMotionColorEmblem size={size} />;
-    case "ESLint":
-      return <EslintColorEmblem size={size} />;
     case "Git":
       return <GitColorEmblem size={size} />;
     case "GitHub":
