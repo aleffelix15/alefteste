@@ -11,7 +11,8 @@
 }
 
 .footer-uncover-stage {
-  padding-block: 56px 40px;
+  padding-top: 56px;
+  padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
 }
 
 .footer-content-grid {
@@ -221,6 +222,14 @@
 
   .footer-col-top {
     justify-content: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-nav-link,
+  .footer-social-link {
+    min-width: 44px;
+    min-height: 44px;
   }
 }
 

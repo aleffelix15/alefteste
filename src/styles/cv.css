@@ -254,12 +254,14 @@
 }
 
 .cv-badge-tiny {
+  display: inline-block;
   padding: 1px 5px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--line-hairline);
   background: var(--bg-concrete);
   color: var(--accent-cyan);
-  font-size: 0.58rem;
+  font-size: 0.75rem;
+  line-height: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {

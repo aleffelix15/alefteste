@@ -443,7 +443,7 @@ html.motion-ready [data-chapter-section].is-chapter-drawn::after {
   .editorial-cursor-label {
     font-family: var(--font-mono);
     font-weight: 500;
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     letter-spacing: 0.1em;
     color: var(--text-white);
     max-width: 0;

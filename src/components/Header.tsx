@@ -140,7 +140,36 @@ export function Header() {
   useEffect(() => {
     if (!mobileMenuOpen) return;
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeMenu();
+      if (e.key === "Escape") {
+        closeMenu();
+        return;
+      }
+      if (e.key === "Tab") {
+        const drawerEl = document.getElementById("mobile-nav-drawer");
+        const toggleEl = toggleBtnRef.current;
+        if (!drawerEl || !toggleEl) return;
+
+        const drawerFocusables = Array.from(
+          drawerEl.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')
+        );
+        const focusables = [toggleEl, ...drawerFocusables];
+        if (focusables.length === 0) return;
+
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first || !focusables.includes(document.activeElement as HTMLElement)) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last || !focusables.includes(document.activeElement as HTMLElement)) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);

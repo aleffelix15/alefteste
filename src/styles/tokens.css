@@ -1,9 +1,11 @@
 /* ==========================================================================
    BREAKPOINTS CANÔNICOS (Referência para Media Queries)
+   - --bp-small-mobile: 380px (celulares compactos em retrato)
    - --bp-mobile:  480px  (celulares em retrato estreitos até padrão)
    - --bp-tablet:  768px  (transição mobile largo / tablet retrato)
    - --bp-desktop: 1024px (tablet paisagem / desktop padrão)
    - --bp-wide:    1280px (telas largas)
+   - paisagem baixa: (max-height: 500px) and (orientation: landscape)
    ========================================================================== */
 
 /* ==========================================================================
@@ -260,5 +262,18 @@
   :root {
     --container-pad: 16px;
     --header-height: 56px;
+  }
+}
+
+@media (max-width: 380px) {
+  :root {
+    --container-pad: 14px;
+    --header-height: 54px;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  :root {
+    --header-height: 52px;
   }
 }

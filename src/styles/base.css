@@ -134,7 +134,8 @@ button {
   width: 100%;
   max-width: var(--container-max);
   margin-inline: auto;
-  padding-inline: var(--container-pad);
+  padding-left: max(var(--container-pad), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--container-pad), env(safe-area-inset-right, 0px));
 }
 
 .mono {
@@ -211,6 +212,30 @@ main:focus {
   .editorial-chapter {
     padding-block: 60px;
   }
+
+  h1,
+  h2,
+  h3,
+  .section-serif-heading,
+  .project-serif-title,
+  .tech-display-heading,
+  .contact-serif-heading {
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+}
+
+@media (max-width: 380px) {
+  .editorial-chapter {
+    padding-block: var(--space-12);
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .editorial-chapter {
+    padding-block: var(--space-10);
+  }
 }
 
 .section-marker {
@@ -272,6 +297,15 @@ main:focus {
 }
 
 @media (pointer: coarse), (max-width: 768px) {
+  .link-underlined-editorial {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 44px;
+    min-width: 44px;
+    padding-block: var(--space-2);
+  }
+
   .screen-switch-btn::after,
   .mobile-pill-btn::after,
   .projects-quick-pill::after,

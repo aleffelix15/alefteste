@@ -66,8 +66,9 @@
 
 .ticker-dot {
   color: var(--accent-electric);
-  font-size: 0.55rem;
+  font-size: 0.75rem;
   display: inline-block;
+  transform: scale(0.73);
   transition:
     transform 0.38s var(--ease-out-expo),
     color 0.28s ease;
@@ -85,7 +86,7 @@
 
   .editorial-ticker-band:hover .ticker-dot {
     color: var(--accent-cyan);
-    transform: scale(1.45) rotate(45deg);
+    transform: scale(1.06) rotate(45deg);
     /* PERF: Removido drop-shadow de alto custo no hover */
   }
 }

@@ -85,30 +85,23 @@ export function OpeningSection() {
       <div className="hero-backdrop-wrap" aria-hidden="true">
         <picture>
           <source
-            media="(max-width: 767px)"
             type="image/avif"
-            srcSet={`${heroData.portraitImage.base640}.avif`}
-          />
-          <source
-            media="(max-width: 767px)"
-            type="image/webp"
-            srcSet={`${heroData.portraitImage.base640}.webp`}
-          />
-          <source
-            type="image/avif"
-            srcSet={`${heroData.portraitImage.base}.avif`}
+            srcSet={`${heroData.portraitImage.base640}.avif 640w, ${heroData.portraitImage.base}.avif 720w`}
+            sizes="(max-width: 1024px) 100vw, min(580px, 46vw)"
           />
           <source
             type="image/webp"
-            srcSet={`${heroData.portraitImage.base}.webp`}
+            srcSet={`${heroData.portraitImage.base640}.webp 640w, ${heroData.portraitImage.base}.webp 720w`}
+            sizes="(max-width: 1024px) 100vw, min(580px, 46vw)"
           />
           {/* FIX: React 18 forwards the lowercase HTML attribute without warning. */}
           <img
             src={`${heroData.portraitImage.base}.webp`}
+            srcSet={`${heroData.portraitImage.base640}.webp 640w, ${heroData.portraitImage.base}.webp 720w`}
             alt=""
             width={720}
             height={900}
-            sizes="(max-width: 767px) 100vw, 46vw"
+            sizes="(max-width: 1024px) 100vw, min(580px, 46vw)"
             {...{ fetchpriority: "high" }}
             decoding="async"
             className="hero-backdrop-img hero-portrait-duotone"

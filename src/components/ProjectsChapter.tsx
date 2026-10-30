@@ -192,25 +192,19 @@ export function ProjectsChapter() {
                     <div className="project-blade-layer project-blade-layer--primary">
                       <picture className="project-img-primary screen-fade-picture">
                         <source
-                          media="(max-width: 767px)"
-                          type="image/webp"
-                          srcSet={`${primaryScreen.base}-640.webp`}
-                        />
-                        <source
-                          media="(max-width: 767px)"
                           type="image/avif"
-                          srcSet={`${primaryScreen.base}-640.avif`}
+                          srcSet={`${primaryScreen.base}-640.avif 640w, ${primaryScreen.base}.avif 1200w`}
+                          sizes="(max-width: 1024px) calc(100vw - 40px), 840px"
                         />
                         <source
                           type="image/webp"
-                          srcSet={`${primaryScreen.base}.webp`}
-                        />
-                        <source
-                          type="image/avif"
-                          srcSet={`${primaryScreen.base}.avif`}
+                          srcSet={`${primaryScreen.base}-640.webp 640w, ${primaryScreen.base}.webp 1200w`}
+                          sizes="(max-width: 1024px) calc(100vw - 40px), 840px"
                         />
                         <img
                           src={`${primaryScreen.base}.webp`}
+                          srcSet={`${primaryScreen.base}-640.webp 640w, ${primaryScreen.base}.webp 1200w`}
+                          sizes="(max-width: 1024px) calc(100vw - 40px), 840px"
                           alt={primaryScreen.alt}
                           width={1200}
                           height={750}
@@ -229,30 +223,32 @@ export function ProjectsChapter() {
                       aria-hidden="true"
                     >
                       <picture className="project-img-secondary">
-                        {secondaryScreen.id !== "decode-dashboard" && (
-                          <>
-                            <source
-                              media="(max-width: 767px)"
-                              type="image/webp"
-                              srcSet={`${secondaryScreen.base}-640.webp`}
-                            />
-                            <source
-                              media="(max-width: 767px)"
-                              type="image/avif"
-                              srcSet={`${secondaryScreen.base}-640.avif`}
-                            />
-                          </>
-                        )}
-                        <source
-                          type="image/webp"
-                          srcSet={`${secondaryScreen.base}.webp`}
-                        />
                         <source
                           type="image/avif"
-                          srcSet={`${secondaryScreen.base}.avif`}
+                          srcSet={
+                            secondaryScreen.id !== "decode-dashboard"
+                              ? `${secondaryScreen.base}-640.avif 640w, ${secondaryScreen.base}.avif 1200w`
+                              : `${secondaryScreen.base}.avif 1200w`
+                          }
+                          sizes="(max-width: 1024px) calc(100vw - 40px), 840px"
+                        />
+                        <source
+                          type="image/webp"
+                          srcSet={
+                            secondaryScreen.id !== "decode-dashboard"
+                              ? `${secondaryScreen.base}-640.webp 640w, ${secondaryScreen.base}.webp 1200w`
+                              : `${secondaryScreen.base}.webp 1200w`
+                          }
+                          sizes="(max-width: 1024px) calc(100vw - 40px), 840px"
                         />
                         <img
                           src={`${secondaryScreen.base}.webp`}
+                          srcSet={
+                            secondaryScreen.id !== "decode-dashboard"
+                              ? `${secondaryScreen.base}-640.webp 640w, ${secondaryScreen.base}.webp 1200w`
+                              : `${secondaryScreen.base}.webp 1200w`
+                          }
+                          sizes="(max-width: 1024px) calc(100vw - 40px), 840px"
                           alt=""
                           width={1200}
                           height={750}

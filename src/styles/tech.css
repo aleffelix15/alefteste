@@ -4,6 +4,7 @@
 
 .tech-showcase-section {
   position: relative;
+  overflow: hidden;
   contain: layout style;
   background:
     radial-gradient(60% 50% at 50% 42%, rgba(22, 119, 255, 0.08), transparent 72%),
@@ -175,8 +176,10 @@
 }
 
 .tier-bullet {
+  display: inline-block;
   color: var(--line-strong);
-  font-size: 0.55rem;
+  font-size: 0.75rem;
+  transform: scale(0.73);
   transition: color 0.2s ease;
 }
 
@@ -218,6 +221,8 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .tech-filter-group-label {
@@ -230,6 +235,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .tech-filter-pill {
@@ -580,6 +587,10 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   box-shadow: var(--shadow-sm);
 }
 
+.tech-audit-dossier:not([open]) > :not(summary) {
+  display: none;
+}
+
 .tech-audit-drawer-grid {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
@@ -605,7 +616,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
 
 .tech-repo-evidence-link {
   color: var(--accent-cyan);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   border-bottom: 1px solid rgba(73, 180, 255, 0.35);
   transition: color 0.2s ease, border-color 0.2s ease;
 }
@@ -643,7 +654,7 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   align-items: center;
   gap: 14px;
   flex: 1;
-  min-width: 240px;
+  min-width: min(240px, 100%);
 }
 
 .tech-footer-square {
@@ -716,6 +727,19 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
     row-gap: 20px;
   }
 
+  .tech-filter-pill {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .tech-repo-evidence-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    min-width: 44px;
+    padding-block: var(--space-2);
+  }
+
   .tech-footer-rule {
     display: none;
   }
@@ -728,9 +752,16 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
     margin-bottom: 24px;
   }
 
+  .tech-filter-group {
+    width: 100%;
+    min-width: 0;
+  }
+
   .tech-filter-pills {
     display: flex;
     flex-wrap: nowrap;
+    width: 100%;
+    max-width: 100%;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
@@ -744,7 +775,8 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
     scroll-snap-align: start;
     flex-shrink: 0;
     white-space: nowrap;
-    min-height: 40px;
+    min-height: 44px;
+    min-width: 44px;
   }
 
   .tech-tier-tabs {
@@ -786,5 +818,20 @@ html.motion-ready [data-reveal]:not(.is-visible) .tech-symbol-card {
   .audit-summary {
     font-size: 0.75rem;
     line-height: 1.4;
+  }
+}
+
+@media (max-width: 380px) {
+  .tech-tier-btn {
+    flex: 1 1 100%;
+  }
+
+  .tech-symbols-grid {
+    grid-template-columns: 1fr;
+    row-gap: 14px;
+  }
+
+  .tech-symbol-card {
+    padding: 16px 14px;
   }
 }

@@ -64,25 +64,19 @@ export function AboutChapter() {
                 <div className="photo-curtain-wrap about-depth-viewport">
                   <picture>
                     <source
-                      media="(max-width: 767px)"
-                      type="image/webp"
-                      srcSet={`${aboutData.studioDeskImage.base}-640.webp`}
-                    />
-                    <source
-                      media="(max-width: 767px)"
                       type="image/avif"
-                      srcSet={`${aboutData.studioDeskImage.base}-640.avif`}
+                      srcSet={`${aboutData.studioDeskImage.base}-640.avif 640w, ${aboutData.studioDeskImage.base}.avif 1120w`}
+                      sizes="(max-width: 768px) calc(100vw - 40px), (max-width: 1024px) 60vw, 370px"
                     />
                     <source
                       type="image/webp"
-                      srcSet={`${aboutData.studioDeskImage.base}.webp`}
-                    />
-                    <source
-                      type="image/avif"
-                      srcSet={`${aboutData.studioDeskImage.base}.avif`}
+                      srcSet={`${aboutData.studioDeskImage.base}-640.webp 640w, ${aboutData.studioDeskImage.base}.webp 1120w`}
+                      sizes="(max-width: 768px) calc(100vw - 40px), (max-width: 1024px) 60vw, 370px"
                     />
                     <img
                       src={`${aboutData.studioDeskImage.base}.webp`}
+                      srcSet={`${aboutData.studioDeskImage.base}-640.webp 640w, ${aboutData.studioDeskImage.base}.webp 1120w`}
+                      sizes="(max-width: 768px) calc(100vw - 40px), (max-width: 1024px) 60vw, 370px"
                       alt={aboutData.studioDeskImage.alt}
                       width={1120}
                       height={700}
@@ -104,25 +98,19 @@ export function AboutChapter() {
                 <div className="photo-curtain-wrap about-depth-viewport">
                   <picture>
                     <source
-                      media="(max-width: 767px)"
-                      type="image/webp"
-                      srcSet={`${aboutData.realPortraitImage.base}-640.webp`}
-                    />
-                    <source
-                      media="(max-width: 767px)"
                       type="image/avif"
-                      srcSet={`${aboutData.realPortraitImage.base}-640.avif`}
+                      srcSet={`${aboutData.realPortraitImage.base}-640.avif 640w, ${aboutData.realPortraitImage.base}.avif 720w`}
+                      sizes="(max-width: 768px) calc(100vw - 40px), (max-width: 1024px) 36vw, 210px"
                     />
                     <source
                       type="image/webp"
-                      srcSet={`${aboutData.realPortraitImage.base}.webp`}
-                    />
-                    <source
-                      type="image/avif"
-                      srcSet={`${aboutData.realPortraitImage.base}.avif`}
+                      srcSet={`${aboutData.realPortraitImage.base}-640.webp 640w, ${aboutData.realPortraitImage.base}.webp 720w`}
+                      sizes="(max-width: 768px) calc(100vw - 40px), (max-width: 1024px) 36vw, 210px"
                     />
                     <img
                       src={`${aboutData.realPortraitImage.base}.webp`}
+                      srcSet={`${aboutData.realPortraitImage.base}-640.webp 640w, ${aboutData.realPortraitImage.base}.webp 720w`}
+                      sizes="(max-width: 768px) calc(100vw - 40px), (max-width: 1024px) 36vw, 210px"
                       alt={aboutData.realPortraitImage.alt}
                       width={720}
                       height={900}

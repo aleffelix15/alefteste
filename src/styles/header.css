@@ -367,6 +367,7 @@
 .mobile-nav-socials .header-social-link,
 .mobile-nav-socials .btn-cv-header {
   min-height: 44px;
+  min-width: 44px;
   display: inline-flex;
   align-items: center;
 }
@@ -383,4 +384,47 @@
 
 @media (max-width: 768px) {
   /* PERF: backdrop-filter removido no mobile para prevenir travamentos */
+  .btn-cv-header {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 380px) {
+  .header-inner {
+    gap: var(--space-2);
+  }
+
+  .brand-link {
+    gap: var(--space-2);
+  }
+
+  .brand-serif-name {
+    font-size: 1rem;
+  }
+
+  .mobile-menu-toggle {
+    padding: 8px 10px;
+    gap: 6px;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .mobile-nav-drawer {
+    padding-top: var(--space-2);
+    padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .mobile-nav-link {
+    min-height: 44px;
+    padding: var(--space-2);
+  }
+
+  .mobile-nav-title {
+    font-size: var(--text-xl);
+  }
+
+  .mobile-nav-socials {
+    padding-top: var(--space-4);
+  }
 }
