@@ -395,15 +395,6 @@ export function ProjectsChapter() {
                             ))}
                           </ul>
                         </div>
-
-                        {project.requestedUrlNote && (
-                          <p className="audit-url-note">
-                            <strong className="mono">
-                              Nota sobre {project.requestedUrlNote.url} ({project.requestedUrlNote.checkedAt}):
-                            </strong>{" "}
-                            {project.requestedUrlNote.explanation}
-                          </p>
-                        )}
                       </div>
                     )}
                   </div>

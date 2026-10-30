@@ -35,18 +35,12 @@ export type ProjectStory = {
   number: string;
   name: string;
   tagline: string;
-  status: "Demo auditada" | "Publicado";
+  status: "Publicado";
   summary: string;
   architectureNote: string;
   stack: string[];
   liveUrl: string;
   liveDomainLabel: string;
-  requestedUrlNote?: {
-    url: string;
-    checkedAt: string;
-    httpStatus: string;
-    explanation: string;
-  };
   repoUrl?: string;
   repoLabel?: string;
   screens: ProjectScreen[];
@@ -100,7 +94,7 @@ export const projects: ProjectStory[] = [
     number: "01.",
     name: "VERSO",
     tagline: "E-commerce de streetwear (projeto demonstrativo).",
-    status: "Demo auditada",
+    status: "Publicado",
     summary:
       "Loja digital autoral de streetwear com catálogo interativo, coleções (drops), favoritos salvos localmente no navegador, sacola persistente e cálculo de frete no servidor.",
     architectureNote:
@@ -118,13 +112,6 @@ export const projects: ProjectStory[] = [
     ],
     liveUrl: "https://verso-five-psi.vercel.app/",
     liveDomainLabel: "verso-five-psi.vercel.app",
-    requestedUrlNote: {
-      url: "https://verso-sable.vercel.app/",
-      checkedAt: "22/10/2026",
-      httpStatus: "HTTP 404 (DEPLOYMENT_NOT_FOUND)",
-      explanation:
-        "A URL histórica verso-sable.vercel.app retorna HTTP 404 na Vercel. O botão 'Visitar projeto' abre diretamente o deploy ativo e verificado do mesmo repositório em verso-five-psi.vercel.app (HTTP 200 OK).",
-    },
     repoUrl: "https://github.com/aleffelix15/verso",
     repoLabel: "github.com/aleffelix15/verso",
     screens: [
@@ -224,7 +211,7 @@ export const projects: ProjectStory[] = [
     number: "03.",
     name: "NUDEMO",
     tagline: "Landing page 3D de conceito de redesign: conta, cartão e Pix num só app.",
-    status: "Demo auditada",
+    status: "Publicado",
     summary:
       "Conceito de redesign independente inspirado no Nubank, com cartão 3D em tempo real, mockup de app vetorial e foco em acessibilidade e performance de carregamento.",
     architectureNote:

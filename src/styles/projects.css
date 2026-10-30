@@ -553,20 +553,6 @@
   color: var(--accent-electric);
 }
 
-.audit-url-note {
-  padding: 10px 12px;
-  border-radius: var(--radius-md);
-  border: 1px dashed var(--line-strong);
-  background: var(--bg-obsidian);
-  font-size: 0.78rem;
-  line-height: 1.5;
-  color: var(--text-muted);
-}
-
-.audit-url-note strong {
-  color: var(--text-white);
-}
-
 /* Barra de Ações Diretas */
 .project-links-bar {
   display: flex;
