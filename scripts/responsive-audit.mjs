@@ -464,6 +464,9 @@ async function runAudit() {
   }
   console.log(`\nTotal de ocorrências encontradas: ${totalIssues}`);
   console.log(`Relatório detalhado salvo em: ${reportJsonPath}`);
+  if (mode !== "before" && totalIssues > 0) {
+    process.exit(1);
+  }
 }
 
 runAudit().catch((err) => {
